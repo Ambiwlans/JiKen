@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% block head %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% block styles %}
+		{{ bootstrap.load_css() }}
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
+    {% endblock %}
+
+    <title>{% block title %}JiKen{% endblock %}</title>
+	<link rel="shortcut icon" href="{{ url_for('static', filename='fav.ico') }}">
+    {% endblock %}
+  </head>
+  <body>
+
+	<br><br><br><br>
+    {% block content %}
+	{% endblock %}
+
+    {% block foot %}
+		{% include 'footer.html' %}
+	{% endblock foot %}
+	
+    {% block scripts %}
+		{{ bootstrap.load_js() }}
+    {% endblock %}
+  </body>
+</html>
