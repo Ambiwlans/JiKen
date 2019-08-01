@@ -22,9 +22,9 @@
     {% block content %}
 	{% endblock %}
 
-    {% block foot %}
-		{% include 'footer.html' %}
-	{% endblock foot %}
+    {%- block foot -%}
+		{%- include 'footer.html' -%}
+	{%- endblock foot -%}
 	
     {% block scripts %}
 		{{ bootstrap.load_js() }}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="container text-center">
+    	<h1>JiKen</h1>
+    	<br><br>
+		<h1 class="question">刀</h1>
+		<a class="btn btn-success btn-lg" role="btn" href="/test?a=TRUE">Know it</a>
+		<a class="btn btn-danger btn-lg" role="btn" href="/test?a=FALSE">Don't Know</a>
+		
+		<p>History:</p>
+		<p>{{session['anslist']}}</p>
+	</div>
+	<br>
+	<br>
+
+{% endblock content %}
+

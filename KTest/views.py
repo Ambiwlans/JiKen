@@ -15,10 +15,26 @@ from flask import request, render_template, redirect, url_for, session, abort
 from . import app, db
 
 
-
-##########################################
-### VIEWS
-##########################################
 @app.route("/")
 def home():
     return render_template('home.html')
+
+@app.route("/test")
+def test():
+    
+    ans = request.args.get('a')
+    question = request.args.get('q')
+    
+    print(type(ans))
+    if ans is None:
+        session['anslist'] = []
+        print("R2")
+    else:
+        anslist = session['anslist']
+        anslist.append(ans)
+        ##TODO - do stuff with this list
+        session['anslist'] = anslist
+        print(session['anslist'])
+        
+    #print(session['anslist'])
+    return render_template('test.html')

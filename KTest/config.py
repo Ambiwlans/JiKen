@@ -14,6 +14,8 @@ class DevelopmentConfig:
     # Flask
     DEBUG = True
     
+    SECRET_KEY = 'Ionceateawholeham'
+    
     # SQLAlchemy
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
