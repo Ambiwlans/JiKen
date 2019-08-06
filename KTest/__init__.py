@@ -22,6 +22,7 @@ app = Flask(__name__)
 app.config.from_object('KTest.config.Config')
     
 db = SQLAlchemy(app)
+ 
 
 # Setup Bootstrap 4.1.0 with jquery 3.3.1
 Bootstrap(app)
@@ -45,6 +46,6 @@ Bootstrap(app)
 #atexit.register(lambda: scheduler.shutdown())
 
 # Late import so modules can import their dependencies properly (proto-blueprint)
-#from . import views
-
 from . import views, models
+
+db.create_all()

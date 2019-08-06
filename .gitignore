@@ -60,3 +60,5 @@ target/
 \.spyproject/
 
 switching apps\.txt
+
+*.db

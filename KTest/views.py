@@ -9,7 +9,7 @@
 from flask import request, render_template, redirect, url_for, session, abort
 
 #Models
-#from .Models.models import Question, QuestionLog, TestLog
+from .models import TestMaterial
 
 #Session
 from . import app, db
@@ -17,6 +17,11 @@ from . import app, db
 
 @app.route("/")
 def home():
+    newit = TestMaterial(
+            question = "弾",
+            answer = "bullet")
+    db.session.add(newit)
+    db.session.commit()
     return render_template('home.html')
 
 @app.route("/test")

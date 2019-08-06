@@ -19,38 +19,56 @@ from sqlalchemy.orm import relationship, backref
 ### Tests
 ###############################################################################
     
+#TODO ? include metauser data for ML
 class TestLog(db.Model):
     __tablename__ = 'testlog'
     
     #Meta
     id = Column(Integer, primary_key=True)
     
+    #Core
+#    timezone = 
+#    browserdata =
+    
     #Related
-    questions = relationship("Test")
+    questions = relationship("QuestionLog", back_populates="testlog")
 
+#TODO ? include time data for ML
 class QuestionLog(db.Model):
     __tablename__ = 'questionlog'
     
     #Meta
     id = Column(Integer, primary_key=True)
     
-#    testlogid = Column(ForeignKey)
-    
     #Core
-#    questionid = Column(ForeignKey)
-    answer = Column(Boolean)
+    testlogid = Column(Integer, ForeignKey('testlog.id'), nullable=False)
+    testmaterialid = Column(Integer, ForeignKey('testmaterial.id'), nullable=False)
+    score = Column(Boolean)
     
+#    timegiven = 
+#    timeanswered = 
+#    timeelapsed = 
+    
+    #Related
+    testlog = relationship("TestLog", back_populates="questions")
+    testmaterial = relationship("TestMaterial")
+
+#TODO ? Expand for answers in other languages/forms (kana vs English vs French) 
+#TODO - drop pointless relationships
 # List of all the questions
-    # ie. "字", "蝙"
-class Question(db.Model):
-    __tablename__ = 'question'
+    # ie. "字 - ji", "蝙 - kou"
+class TestMaterial(db.Model):
+    __tablename__ = 'testmaterial'
     
     #Meta
     id = Column(Integer, primary_key=True)
     
     #Core
-    body = Column(String)
-
+    question = Column(String)       # 剣
+    answer =  Column(String)        # blade
+    
+    #Related
+#    questions = relationship("QuestionLog", back_populates="testmaterial")
 
 
 
