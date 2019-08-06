@@ -17,29 +17,47 @@ from . import app, db
 
 @app.route("/")
 def home():
-    newit = TestMaterial(
-            question = "弾",
-            answer = "bullet")
-    db.session.add(newit)
-    db.session.commit()
+#    newit = TestMaterial(
+#            question = "弾",
+#            answer = "bullet")
+#    db.session.add(newit)
+#    db.session.commit()
     return render_template('home.html')
 
+#TODO - replace anslist/session storage with DB usage
 @app.route("/test")
 def test():
     
-    ans = request.args.get('a')
-    question = request.args.get('q')
+    #Get previous answer/score
+    score = request.args.get('a')
+    testmaterialid = request.args.get('q')
     
-    print(type(ans))
-    if ans is None:
+    if score is None:
+        # New Session
         session['anslist'] = []
         print("R2")
     else:
+        # Add score to existing session
         anslist = session['anslist']
-        anslist.append(ans)
+        anslist.append(score)
         ##TODO - do stuff with this list
         session['anslist'] = anslist
         print(session['anslist'])
         
-    #print(session['anslist'])
-    return render_template('test.html')
+    #Get updated statistics and next question
+    newquestion = db.session.query(TestMaterial).get(len(session['anslist'])+1)
+    
+    session['anslist']
+    ##print(session['anslist'])
+    return render_template('test.html', question = newquestion)
+
+
+
+
+
+
+
+
+
+
+
