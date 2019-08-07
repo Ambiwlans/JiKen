@@ -8,48 +8,66 @@
 #Flask
 from flask import request, render_template, redirect, url_for, session, abort
 
+#SQLAlch
+#from sqlalchemy import desc
+
 #Models
-from .models import TestMaterial
+from .models import TestMaterial, \
+    TestLog, QuestionLog
 
 #Session
 from . import app, db
 
+##########################################
+### ROUTES
+##########################################
 
 @app.route("/")
 def home():
-#    newit = TestMaterial(
-#            question = "弾",
-#            answer = "bullet")
-#    db.session.add(newit)
-#    db.session.commit()
     return render_template('home.html')
 
-#TODO - replace anslist/session storage with DB usage
 @app.route("/test")
 def test():
     
-    #Get previous answer/score
+    ###
+    ### Collect Data/Setup
+    ###
+    
+    #Get answer/score
     score = request.args.get('a')
     testmaterialid = request.args.get('q')
     
-    if score is None:
-        # New Session
-        session['anslist'] = []
-        print("R2")
+    if score is None or session['testlogid'] is None:
+        # New Test, new log
+        newTest = TestLog()
+        db.session.add(newTest)
+        db.session.commit()
+        session['testlogid'] = newTest.id
+        print("New Sess:" + str(session['testlogid']))
     else:
-        # Add score to existing session
-        anslist = session['anslist']
-        anslist.append(score)
-        ##TODO - do stuff with this list
-        session['anslist'] = anslist
-        print(session['anslist'])
+        # Log score
+        answered = QuestionLog(
+                testlogid = session['testlogid'],
+                testmaterialid = testmaterialid,
+                score = bool(int(score)))
+        db.session.add(answered)
+        db.session.commit()
         
-    #Get updated statistics and next question
-    newquestion = db.session.query(TestMaterial).get(len(session['anslist'])+1)
+    ###
+    ### Handle Data, Prep output
+    ###
     
-    session['anslist']
-    ##print(session['anslist'])
-    return render_template('test.html', question = newquestion)
+    history = db.session.query(QuestionLog).filter(QuestionLog.testlogid==session['testlogid'])
+    
+    #Get updated statistics and next question
+    newquestion = db.session.query(TestMaterial).get(history.count() +1)
+    
+    #Get some history to show
+    oldquestions = history.order_by(QuestionLog.id.desc()).limit(10)
+    
+#    for q in oldquestions:
+#        print("Old Q:" + str(q.testmaterial.id))
+    return render_template('test.html', question = newquestion, oldquestions = oldquestions)
 
 
 

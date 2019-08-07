@@ -1,12 +1,20 @@
 /* 
 TODO
-	- styling
+    - make colours match
 */
 
-/* Sticky footer styles
+/* Test formatting
 -------------------------------------------------- */
 .question {
     font-size: 128px;
+}
+
+.ansTrue {
+    color: #28a745;
+}
+
+.ansFalse {
+    color: #dc3545;
 }
 
 /* Sticky footer styles
@@ -28,9 +36,8 @@ body {
 }
 
 
-/* Custom page CSS
+/* General Styling
 -------------------------------------------------- */
-/* Not required for template or sticky footer method. */
 
 .container {
   width: auto;

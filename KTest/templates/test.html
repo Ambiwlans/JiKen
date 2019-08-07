@@ -4,11 +4,14 @@
     	<h1><a href="/">JiKen</a></h1>
     	<br><br>
 		<h1 class="question">{{question.question}}</h1>
-		<a class="btn btn-success btn-lg" role="btn" href="/test?a=TRUE">Know it</a>
-		<a class="btn btn-danger btn-lg" role="btn" href="/test?a=FALSE">Don't Know</a>
+		<br>
+		<a class="btn btn-success btn-lg" role="btn" href="/test?a=1&q={{question.id}}">Know it</a>
+		<a class="btn btn-danger btn-lg" role="btn" href="/test?a=0&q={{question.id}}">Don't Know</a>
 		
 		<p>History:</p>
-		<p>{{session['anslist']}}</p>
+		<p>{% for q in oldquestions %}
+            <span class="ans{{q.score}}">{{q.testmaterial.question}}</span>{{ "," if not loop.last }} 		
+		{% endfor %}</p>
 	</div>
 	<br>
 	<br>

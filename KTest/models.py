@@ -53,8 +53,8 @@ class QuestionLog(db.Model):
     testlog = relationship("TestLog", back_populates="questions")
     testmaterial = relationship("TestMaterial")
 
+#TODO - Include statistical data here? Leave it in ML binary blob?
 #TODO ? Expand for answers in other languages/forms (kana vs English vs French) 
-#TODO - drop pointless relationships
 # List of all the questions
     # ie. "字 - ji", "蝙 - kou"
 class TestMaterial(db.Model):
@@ -67,8 +67,6 @@ class TestMaterial(db.Model):
     question = Column(String)       # 剣
     answer =  Column(String)        # blade
     
-    #Related
-#    questions = relationship("QuestionLog", back_populates="testmaterial")
 
 
 
