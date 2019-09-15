@@ -1,0 +1,33 @@
+#TODO1 - unify colour scheme
+#TODO1 - add about section - credit kanji data sources
+#TODO - fix description - no longer using ML
+
+#TODO1 - clicking kanji should 'flip' the card to the other definitions
+
+#TODO2 - fix the bottom links
+#TODO2 - upgrade to full kanji list w/ definitions
+
+#TODO4 - add 'share' buttons for sharing score on social media
+#TODO4 - full mobile support
+    # looks good on verious devices/sizes
+    # share buttons work
+    # touch centric design
+
+#TODO4 - allow kanji reordering on the basis of first question (unbiased) responses
+
+
+#TODO5 - Deployment!
+
+
+
+
+
+Expanded ideas:
+- hotkey support for browser
+- ads
+- patreon? probably not worth
+- multiple language support! <-important. should work for at least japanese
+- eventual switch to a slightly better ML version
+- support flashcards other than kanji (vocab?)
+- other direction testing (definitions to kanji)
+- snazzy animations for flips

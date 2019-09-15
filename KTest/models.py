@@ -34,11 +34,13 @@ class TestLog(db.Model):
     questions = relationship("QuestionLog", back_populates="testlog")
 
 #TODO ? include time data for ML
+#TODO ? Switch to a composite key to qnum + testlogid the primary key, and ditch the id
 class QuestionLog(db.Model):
     __tablename__ = 'questionlog'
     
     #Meta
     id = Column(Integer, primary_key=True)
+    #qnum = Column(Integer)                      
     
     #Core
     testlogid = Column(Integer, ForeignKey('testlog.id'), nullable=False)
@@ -53,7 +55,7 @@ class QuestionLog(db.Model):
     testlog = relationship("TestLog", back_populates="questions")
     testmaterial = relationship("TestMaterial")
 
-#TODO - Include statistical data here? Leave it in ML binary blob?
+#TODO ? Include statistical data here? Leave it in ML binary blob?
 #TODO ? Expand for answers in other languages/forms (kana vs English vs French) 
 # List of all the questions
     # ie. "字 - ji", "蝙 - kou"
