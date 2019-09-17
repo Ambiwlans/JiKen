@@ -1,5 +1,4 @@
 #TODO1 - unify colour scheme
-#TODO1 - add about section - credit kanji data sources
 #TODO - fix description - no longer using ML
 
 #TODO2 - fix the bottom links
