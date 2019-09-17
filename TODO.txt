@@ -2,10 +2,10 @@
 #TODO1 - add about section - credit kanji data sources
 #TODO - fix description - no longer using ML
 
-#TODO1 - clicking kanji should 'flip' the card to the other definitions
-
 #TODO2 - fix the bottom links
 #TODO2 - upgrade to full kanji list w/ definitions
+
+#TODO3 - stop using BRs as padding
 
 #TODO4 - add 'share' buttons for sharing score on social media
 #TODO4 - full mobile support

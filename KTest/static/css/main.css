@@ -1,6 +1,15 @@
-/* 
-TODO
+/* TODO
     - make colours match
+*/
+
+/* Colour scheme
+
+Background (White)
+Highlight (green)
+
+Good - 28a745
+Bad - dc3545
+
 */
 
 /* Test formatting
@@ -15,6 +24,11 @@ TODO
 
 .ansFalse {
     color: #dc3545;
+}
+
+.flashcard {
+    margin:50px 0px 50px 0px;
+    height: 150px;
 }
 
 /* Sticky footer styles
@@ -39,8 +53,3 @@ body {
 /* General Styling
 -------------------------------------------------- */
 
-.container {
-  width: auto;
-  max-width: 680px;
-  padding: 0 15px;
-}

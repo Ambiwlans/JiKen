@@ -52,8 +52,9 @@ def home():
 #TODO - replace magic number 400 in line: p0 = [0.05,400]
 #TODO2 - show user the graph? 
     # Add vertical lines for answered questions
+#TODO2 - clean up views
 #TODO3 - error bars? Ask questions at point of largest error bars?
-#TODO4 - clientside math?
+#TODO4 - clientside the math?
 #TODO5 - avoid recalculating everything each question - modify rather than redo
 #TODO5 - clear out superfluous DEV code
     

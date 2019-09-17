@@ -2,9 +2,16 @@
 {% block content %}
 	<div class="container text-center">
     	<h1><a href="/">JiKen</a></h1>
-    	<br><br>
-		<h1 class="question">{{question.question}}</h1>
-		<br>
+    	
+    	<div class="flashcard" ontouchstart="this.classList.toggle('hover');">
+            <div class="frontside container ">
+                <h1 class="question">{{question.question}}</h1>
+            </div>
+            <div class="backside container">
+                <h1 class="answer">{{question.answer}}</h1>
+            </div>
+        </div>
+
 		<a class="btn btn-success btn-lg" role="btn" href="/test?a=1&q={{question.id}}">Know it</a>
 		<a class="btn btn-danger btn-lg" role="btn" href="/test?a=0&q={{question.id}}">Don't Know</a>
 		
@@ -16,5 +23,6 @@
 	<br>
 	<br>
 
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/flip.css')}}">
 {% endblock content %}
 
