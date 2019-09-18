@@ -1,10 +1,11 @@
-#TODO1 - unify colour scheme
-#TODO - fix description - no longer using ML
+
 
 #TODO2 - fix the bottom links
+#TODO2 - switch card flip to tap
 #TODO2 - upgrade to full kanji list w/ definitions
 
 #TODO3 - stop using BRs as padding
+#TODO3 - replace homelink with image
 
 #TODO4 - add 'share' buttons for sharing score on social media
 #TODO4 - full mobile support
@@ -16,8 +17,6 @@
 
 
 #TODO5 - Deployment!
-
-
 
 
 
