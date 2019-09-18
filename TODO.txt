@@ -1,10 +1,4 @@
-#TODO - finish up stuff in view
-
-#TODO - put something in the readme.
-
-#TODO1 - show user estimates, certainty
-#TODO1 - don't allow repeat questions
-
+#TODO - finish up stuff in view!
 
 #TODO2 - fix the bottom links
 #TODO2 - switch card flip to tap
