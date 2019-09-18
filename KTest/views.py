@@ -46,12 +46,15 @@ def home():
     return render_template('home.html')
 
 #TODO - allow more variance/fuzzier selection (rather than exactly mid)
-#TODO - don't allow repeats
+#TODO - allow a wrap/better kanji selection when hitting an already answered on
 #TODO - more optimistic selections (1 wrong, 30 right shouldn't result in a tight selection)
+
+#TODO - show the estimate + variance
 #TODO - tidy the 'handle data' section
 #TODO - replace magic number 400 in line: p0 = [0.05,400]
 #TODO2 - show user the graph? 
     # Add vertical lines for answered questions
+    # use chart.js?
 #TODO2 - clean up views
 #TODO3 - error bars? Ask questions at point of largest error bars?
 #TODO4 - clientside the math?
@@ -98,6 +101,7 @@ def test():
     
     xdata = []
     ydata = []
+    
     if history.count() == 0:
         newquestion = db.session.query(TestMaterial).order_by(func.random()).first()
     else:
@@ -142,9 +146,13 @@ def test():
         print ("Mid point is letter: " + str(mid))
         print ("Mid point val: " + str(y[mid]))
         
-        newquestion = db.session.query(TestMaterial)[mid]
-#        newquestion = db.session.query(TestMaterial).order_by(func.random())[0]
-#        newquestion = db.session.query(TestMaterial).first()
+            
+        while history.filter(QuestionLog.testmaterialid==mid).first():
+            mid += 1
+            if mid == 999: break   #biggest kanji atm TODO
+            print("Already answered" + str(mid))
+            
+        newquestion = db.session.query(TestMaterial).filter(TestMaterial.id == mid).first()
         
     #Get some history to show
     oldquestions = history.order_by(QuestionLog.id.desc()).limit(10)

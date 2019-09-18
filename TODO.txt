@@ -1,3 +1,9 @@
+#TODO - finish up stuff in view
+
+#TODO - put something in the readme.
+
+#TODO1 - show user estimates, certainty
+#TODO1 - don't allow repeat questions
 
 
 #TODO2 - fix the bottom links
