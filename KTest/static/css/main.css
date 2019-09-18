@@ -54,16 +54,6 @@ body {
 /* General Styling
 -------------------------------------------------- */
 
-.home-link {
-    color: #267f00;
-}
-
-.home-link:hover {
-  text-decoration: none;
-  color: #267f00;
-}
-
-
 .btn-success {
     background-color: #267f00;
 }
