@@ -66,9 +66,18 @@ class TestMaterial(db.Model):
     id = Column(Integer, primary_key=True)
     
     #Core
-    question = Column(String)       # 剣
-    answer =  Column(String)        # blade
+    kanji = Column(String)       # 剣
+    meaning =  Column(String)        # blade
     
+    onyomi = Column(String)
+    kunyomi = Column(String)
+    grade = Column(String)
+    jlpt = Column(String)
+    kanken = Column(String)
+    
+    #Statistical
+    frequency = Column(Integer)
+    my_rank = Column(Integer)
 
 
 

@@ -5,10 +5,10 @@
     	
     	<div class="flashcard" ontouchstart="this.classList.toggle('hover');">
             <div class="frontside container ">
-                <h1 class="question">{{question.question}}</h1>
+                <h1 class="question">{{question.kanji}}</h1>
             </div>
             <div class="backside container">
-                <h1 class="answer">{{question.answer}}</h1>
+                <h1 class="answer">{{question.meaning}}</h1>
             </div>
         </div>
 
@@ -17,7 +17,7 @@
 		
 		<p>History:</p>
 		<p>{% for q in oldquestions %}
-            <span class="ans{{q.score}}">{{q.testmaterial.question}}</span>{{ "," if not loop.last }} 		
+            <span class="ans{{q.score}}">{{q.TestMaterial.kanji}}</span>{{ "," if not loop.last }} 		
 		{% endfor %}</p>
 	</div>
 	<br>

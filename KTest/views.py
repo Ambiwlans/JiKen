@@ -33,6 +33,62 @@ from . import app, db
 ### HELPER FN
 ##########################################
 
+#DEV - TEMP
+@app.route("/calc_ranks")
+def calc_ranks():
+    data = db.session.query(TestMaterial).all()
+    cur_rank = db.session.query(TestMaterial).filter(TestMaterial.frequency is not None).count()
+#    print("Cur rank: " + str(cur_rank))
+    
+    for item in data:
+#        if "Kyōiku-Jōyō (1st" in item.grade:
+#            item.grade = 1
+#        elif "Kyōiku-Jōyō (2nd" in item.grade:
+#            item.grade = 2
+#        elif "Kyōiku-Jōyō (3rd" in item.grade:
+#            item.grade = 3
+#        elif "Kyōiku-Jōyō (4th" in item.grade:
+#            item.grade = 4
+#        elif "Kyōiku-Jōyō (5th" in item.grade:
+#            item.grade = 5
+#        elif "Kyōiku-Jōyō (6th" in item.grade:
+#            item.grade = 6
+#        elif "Jōyō (1st" in item.grade:
+#            item.grade = 7
+#        elif "Jōyō (2nd" in item.grade:
+#            item.grade = 8
+#        elif "Jōyō (3rd" in item.grade:
+#            item.grade = 9
+#        elif "Kyōiku-Jōyō (high" in item.grade:
+#            item.grade = 10
+#        elif "Hyōgaiji (former Jinmeiyō candidate)" in item.grade:
+#            item.grade = 11
+#        elif "Jinmeiyō (used in names)" in item.grade:
+#            item.grade = 13
+#        else:
+#            item.grade = 14
+#            
+#        if "1" in (item.jlpt or ""):
+#            item.jlpt = 1
+#        elif "2" in (item.jlpt or ""):
+#            item.jlpt = 2
+#        elif "3" in (item.jlpt or ""):
+#            item.jlpt = 3
+#        elif "4" in (item.jlpt or ""):
+#            item.jlpt = 4
+#        elif "5" in (item.jlpt or ""):
+#            item.jlpt = 5
+#        else:
+#            item.jlpt = 6
+            
+        item.my_rank = int(item.frequency or 0)
+        
+        if item.frequency is None:
+            
+            item.my_rank = 7000    
+            
+    return render_template('home.html')    
+    
 def sigmoid(x, t, a):
     y = 1 / (1 + np.exp(t*(x-a)))
     return y
@@ -52,6 +108,7 @@ def home():
 #TODO - show the estimate + variance
 #TODO - tidy the 'handle data' section
 #TODO - replace magic number 400 in line: p0 = [0.05,400]
+    # at minimum, switch all magic numbers to constants
 #TODO2 - show user the graph? 
     # Add vertical lines for answered questions
     # use chart.js?
@@ -60,7 +117,7 @@ def home():
 #TODO4 - clientside the math?
 #TODO5 - avoid recalculating everything each question - modify rather than redo
 #TODO5 - clear out superfluous DEV code
-    
+
 @app.route("/test")
 def test():
     
@@ -92,7 +149,7 @@ def test():
     ### Handle Data, Prep output
     ###
     
-    history = db.session.query(QuestionLog).filter(QuestionLog.testlogid==session['testlogid'])
+    history = db.session.query(QuestionLog, TestMaterial).join(TestMaterial).filter(QuestionLog.testlogid==session['testlogid'])
     
     
     #Get updated statistics and next question
@@ -105,13 +162,13 @@ def test():
     if history.count() == 0:
         newquestion = db.session.query(TestMaterial).order_by(func.random()).first()
     else:
-        result = history.all()
+        result = history.order_by(TestMaterial.my_rank.desc()).all()
         print("RESULT: " + str(result))
         
         
         for r in result:
-            xdata.append(r.testmaterialid)
-            ydata.append(r.score)
+            xdata.append(r.TestMaterial.my_rank)
+            ydata.append(r.QuestionLog.score)
 
         print("Xdata: " + str(xdata))
         print("Ydata: " + str(ydata))
@@ -122,9 +179,9 @@ def test():
         
         p0 = [0.05,400] # 400 should be the kanji 50% of people on avg know
 
-        popt, pcov = curve_fit(sigmoid, xdata, ydata, p0, sigma=[.5]*len(xdata), bounds=([0.001, 2], [.1,1500]), method='dogbox')
+        popt, pcov = curve_fit(sigmoid, xdata, ydata, p0, sigma=[.5]*len(xdata), bounds=([0.001, 2], [.1,5000]), method='dogbox')
         
-        x = np.linspace(0, 1500, 1500)
+        x = np.linspace(0, 5000, 5000)
         y = sigmoid(x, *popt)
 
         #DEV
@@ -132,7 +189,7 @@ def test():
         plt.plot(xdata, ydata, 'o', label='data')
         plt.plot(x,y, label='fit')
         plt.ylim(0, 1)
-        plt.xlim(-100, 1500)
+        plt.xlim(-100, 3000)
         plt.legend(loc='best')
         fig.savefig('C:/Users/Angelo/Documents/Code/Python/KTest/testimagepython.png')
         
@@ -140,7 +197,7 @@ def test():
         mid = 0
         while y[mid] > .5:
             mid += 1
-            if mid == 999: break   #biggest kanji atm TODO
+            if mid == 6000: break   #biggest kanji atm TODO
             
 
         print ("Mid point is letter: " + str(mid))
@@ -149,10 +206,10 @@ def test():
             
         while history.filter(QuestionLog.testmaterialid==mid).first():
             mid += 1
-            if mid == 999: break   #biggest kanji atm TODO
+            if mid == 6000: break   #biggest kanji atm TODO
             print("Already answered" + str(mid))
             
-        newquestion = db.session.query(TestMaterial).filter(TestMaterial.id == mid).first()
+        newquestion = db.session.query(TestMaterial).filter(TestMaterial.my_rank == mid).first()
         
     #Get some history to show
     oldquestions = history.order_by(QuestionLog.id.desc()).limit(10)
