@@ -13,7 +13,7 @@ from sqlalchemy import func #desc
 
 #Math
 import numpy as np
-from scipy.optimize import curve_fit
+from scipy.optimize import curve_fit, minimize
 from bisect import bisect
 
 #DEV Graphing
@@ -37,7 +37,7 @@ from . import app, db
 @app.route("/calc_ranks")
 def calc_ranks():
     data = db.session.query(TestMaterial).all()
-    cur_rank = db.session.query(TestMaterial).filter(TestMaterial.frequency is not None).count()
+#    cur_rank = db.session.query(TestMaterial).filter(TestMaterial.frequency is not None).count()
 #    print("Cur rank: " + str(cur_rank))
     
     for item in data:
@@ -90,8 +90,39 @@ def calc_ranks():
     return render_template('home.html')    
     
 def sigmoid(x, t, a):
-    y = 1 / (1 + np.exp(t*(x-a)))
+    y = 1 / (1 + np.exp(t*(x-a))) #2**x
     return y
+
+def sigmoid_cost_regularized(params, true_X, true_Y):
+    
+    t, a = params
+    
+    pred_Y = sigmoid(true_X, t, a)
+    
+    #Ranges: 
+        # Unregularized cost is 0~1
+        # cost of 1 means that the prediction is 100% wrong
+        
+        # reg should be 0~.1
+        
+        # 0<t<inf
+        # t is very steep > .1
+        # t is shallow < .001
+        
+        # 0<a<6000
+        # ~400 is average but this value need not be particularly penalized
+        
+    #penalties for overly flat or steep slopes, a far from the average
+    reg = t + (1/t)/10000 + abs(a - 400)/100000  #TODO replace 400
+    if t < 0: reg += 10
+    if a < 0: reg += 10
+#    if a > 3000: reg += a - 3000
+
+    regweight = 1
+    print("")
+    print(str(t)+" + "+str(a))
+    print(str(np.mean((pred_Y - true_Y)**2)) + " + " + str(reg * regweight))
+    return np.mean((pred_Y - true_Y)**2) + reg * regweight
 
 ##########################################
 ### ROUTES
@@ -101,6 +132,8 @@ def sigmoid(x, t, a):
 def home():
     return render_template('home.html')
 
+#TODO - bias first question towards more commonly known ones
+#TODO - bug - allowing repeats again
 #TODO - allow more variance/fuzzier selection (rather than exactly mid)
 #TODO - allow a wrap/better kanji selection when hitting an already answered on
 #TODO - more optimistic selections (1 wrong, 30 right shouldn't result in a tight selection)
@@ -161,6 +194,8 @@ def test():
     
     if history.count() == 0:
         newquestion = db.session.query(TestMaterial).order_by(func.random()).first()
+        session['t'] = 0.05
+        session['a'] = 400  # 400 should be the kanji 50% of people on avg know
     else:
         result = history.order_by(TestMaterial.my_rank.desc()).all()
         print("RESULT: " + str(result))
@@ -174,30 +209,41 @@ def test():
         print("Ydata: " + str(ydata))
         
         #Create new LOBF
+            #minimized using BFGS
             #fit to Sigmoid fn:  1/(1 + e^(t(x-a)))
-            # minimize t?
         
-        p0 = [0.05,400] # 400 should be the kanji 50% of people on avg know
-
-        popt, pcov = curve_fit(sigmoid, xdata, ydata, p0, sigma=[.5]*len(xdata), bounds=([0.001, 2], [.1,5000]), method='dogbox')
+        p0 = [session['t'], session['a']]
         
+#        popt, pcov = curve_fit(sigmoid, xdata, ydata, p0, sigma=[.5]*len(xdata), bounds=([0.001, 2], [.1,5000]), method='dogbox')
+        
+#        perr = np.sqrt(np.diag(pcov))
+        
+        res = minimize(sigmoid_cost_regularized, p0, args=(xdata,ydata))
+        
+        session['t'] = res.x[0]
+        session['a'] = res.x[1]
+        
+        print (res.x)
         x = np.linspace(0, 5000, 5000)
-        y = sigmoid(x, *popt)
-
+        y = sigmoid(x, *res.x)
+        
         #DEV
         fig = plt.figure()
         plt.plot(xdata, ydata, 'o', label='data')
         plt.plot(x,y, label='fit')
+        
+#        plt.fill_between(x, y - perr, y + perr, color='gray', alpha=0.2)
+        
         plt.ylim(0, 1)
         plt.xlim(-100, 3000)
         plt.legend(loc='best')
         fig.savefig('C:/Users/Angelo/Documents/Code/Python/KTest/testimagepython.png')
-        
+        plt.close('all')
   
-        mid = 0
+        mid = 1
         while y[mid] > .5:
             mid += 1
-            if mid == 6000: break   #biggest kanji atm TODO
+            if mid == 3000: break   #biggest kanji atm TODO
             
 
         print ("Mid point is letter: " + str(mid))
@@ -206,7 +252,7 @@ def test():
             
         while history.filter(QuestionLog.testmaterialid==mid).first():
             mid += 1
-            if mid == 6000: break   #biggest kanji atm TODO
+            if mid == 3000: break   #biggest kanji atm TODO
             print("Already answered" + str(mid))
             
         newquestion = db.session.query(TestMaterial).filter(TestMaterial.my_rank == mid).first()
