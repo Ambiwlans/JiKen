@@ -15,6 +15,14 @@ from sqlalchemy import Boolean, DateTime, Column, Integer, \
 # Database
 from sqlalchemy.orm import relationship, backref
     
+
+###############################################################################
+### Consts
+###############################################################################
+
+default_kanji = 400 # 400 should be the kanji 50% of people on avg know
+default_tightness = 0.05
+
 ###############################################################################
 ### Tests
 ###############################################################################

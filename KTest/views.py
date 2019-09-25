@@ -24,6 +24,7 @@ import matplotlib.pyplot as plt
 #Models
 from .models import TestMaterial, \
     TestLog, QuestionLog
+from .models import default_kanji, default_tightness
 
 #Session
 from . import app, db
@@ -113,7 +114,7 @@ def sigmoid_cost_regularized(params, true_X, true_Y):
         # ~400 is average but this value need not be particularly penalized
         
     #penalties for overly flat or steep slopes, a far from the average
-    reg = t + (1/t)/10000 + abs(a - 400)/100000  #TODO replace 400
+    reg = t + (1/t)/10000 + abs(a - default_kanji)/100000
     if t < 0: reg += 10
     if a < 0: reg += 10
 #    if a > 3000: reg += a - 3000
@@ -133,15 +134,12 @@ def home():
     return render_template('home.html')
 
 #TODO - bias first question towards more commonly known ones
-#TODO - bug - allowing repeats again
 #TODO - allow more variance/fuzzier selection (rather than exactly mid)
 #TODO - allow a wrap/better kanji selection when hitting an already answered on
 #TODO - more optimistic selections (1 wrong, 30 right shouldn't result in a tight selection)
 
 #TODO - show the estimate + variance
 #TODO - tidy the 'handle data' section
-#TODO - replace magic number 400 in line: p0 = [0.05,400]
-    # at minimum, switch all magic numbers to constants
 #TODO2 - show user the graph? 
     # Add vertical lines for answered questions
     # use chart.js?
@@ -194,8 +192,8 @@ def test():
     
     if history.count() == 0:
         newquestion = db.session.query(TestMaterial).order_by(func.random()).first()
-        session['t'] = 0.05
-        session['a'] = 400  # 400 should be the kanji 50% of people on avg know
+        session['t'] = default_tightness
+        session['a'] = default_kanji
     else:
         result = history.order_by(TestMaterial.my_rank.desc()).all()
         print("RESULT: " + str(result))
@@ -250,7 +248,7 @@ def test():
         print ("Mid point val: " + str(y[mid]))
         
             
-        while history.filter(QuestionLog.testmaterialid==mid).first():
+        while history.filter(TestMaterial.my_rank==mid).first():
             mid += 1
             if mid == 3000: break   #biggest kanji atm TODO
             print("Already answered" + str(mid))
