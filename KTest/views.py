@@ -169,10 +169,12 @@ def test():
         print("New Sess:" + str(session['testlogid']))
     else:
         # Log score
+        score = bool(int(score))
+    
         answered = QuestionLog(
                 testlogid = session['testlogid'],
                 testmaterialid = testmaterialid,
-                score = bool(int(score)))
+                score = score)
         db.session.add(answered)
         db.session.commit()
         
@@ -238,22 +240,30 @@ def test():
         fig.savefig('C:/Users/Angelo/Documents/Code/Python/KTest/testimagepython.png')
         plt.close('all')
   
-        mid = 1
-        while y[mid] > .5:
-            mid += 1
-            if mid == 3000: break   #biggest kanji atm TODO
+        print(score)
+        print(y[500])
+#        ff=bc
+        # 
+        for tgt in range(1, 3000):
+            # do a range with probablistic questioning
+            # Failed last question, give easy question
+            if score == 0 and y[tgt] < .7: 
+                print("break")
+                break
             
+                
+            # Got last question right, ask hard question
+            elif score == 1 and y[tgt] < .3: break
 
-        print ("Mid point is letter: " + str(mid))
-        print ("Mid point val: " + str(y[mid]))
+        print ("Selected letter #" + str(tgt))
         
             
-        while history.filter(TestMaterial.my_rank==mid).first():
-            mid += 1
-            if mid == 3000: break   #biggest kanji atm TODO
-            print("Already answered" + str(mid))
+        while history.filter(TestMaterial.my_rank==tgt).first():
+            tgt += 1
+            if tgt == 3000: break   #biggest kanji atm TODO
+            print("Already answered" + str(tgt))
             
-        newquestion = db.session.query(TestMaterial).filter(TestMaterial.my_rank == mid).first()
+        newquestion = db.session.query(TestMaterial).filter(TestMaterial.my_rank == tgt).first()
         
     #Get some history to show
     oldquestions = history.order_by(QuestionLog.id.desc()).limit(10)
