@@ -1,8 +1,13 @@
 #TODO - finish up stuff in view!
 
+#TODO - section by section cleaning
+    - commenting
+    - data structuring
+    - algorithms/code flow/refactoring
+    - variable names, constants
+    
 #TODO2 - switch card flip to tap
 
-#TODO3 - better 'answer' side layout, more info
 #TODO3 - stop using BRs as padding
 
 #TODO3 - show graphs, score
@@ -14,7 +19,7 @@
     # touch centric design
 
 #TODO4 - allow kanji reordering on the basis of first question (unbiased) responses
-
+    # better my_rank selection, have it update weekly
 
 #TODO5 - Deployment!
 

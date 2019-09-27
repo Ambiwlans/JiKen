@@ -4,11 +4,21 @@
     	<a href="/"><img src="/static/img/jiken-sm.png"></a>
     	
     	<div class="flashcard" ontouchstart="this.classList.toggle('hover');">
-            <div class="frontside container ">
-                <h1 class="question">{{question.kanji}}</h1>
+            <div class="frontside container">
+                {% if question.my_rank != 7000 %}
+                    <p class="my_rank">{{question.my_rank}}</p>
+                {% endif %}
+                
+                {% if question.jlpt != '6' %}
+                    <p class="jlpt">N{{question.jlpt}}</p>
+                {% endif %}
+                <h1 class="kanji">{{question.kanji}}</h1>
             </div>
             <div class="backside container">
-                <h1 class="answer">{{question.meaning}}</h1>
+                <h1 class="meaning">{{question.meaning}}</h1>
+                <h4 class="onyomi">{{question.onyomi}}</h3>
+                <h4 class="kunyomi">{{question.kunyomi}}</h3>
+                <a href="https://jisho.org/search/{{question.kanji}} %23kanji" class="more">...more</p>
             </div>
         </div>
 

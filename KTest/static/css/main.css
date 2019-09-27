@@ -15,10 +15,60 @@ Bad - dc3545 (default) -> #B40020
 
 /* Test formatting
 -------------------------------------------------- */
-.question {
+.flashcard {
+    margin: 50px 0px;
+    height: 150px;
+}
+
+/* Front */
+.frontside {
+    right: 0px;
+    width: 250px;
+    margin: 0px auto;
+}
+
+.kanji {
     font-size: 128px;
 }
 
+.my_rank {
+    font-size: 12px;
+    float: left;
+}
+
+.jlpt {
+    font-size: 12px;
+    float: right;
+}
+
+/* Back */
+.backside {
+    right: 0px;
+    width: 600px;
+    margin: 0px auto;
+    overflow: auto;
+}
+
+.meaning {
+    font-size: 24px;
+}
+
+.onyomi {
+    font-size: 16px;
+}
+
+.kunyomi {
+    font-size: 16px;
+}
+
+.more {
+    font-size: 12px;
+    float: right;
+    right: 5px;
+    bottom: 5px;
+}
+
+/* Other */
 .ansTrue {
     color: #267f00;
 }
@@ -27,10 +77,7 @@ Bad - dc3545 (default) -> #B40020
     color: #B40020;
 }
 
-.flashcard {
-    margin:50px 0px 50px 0px;
-    height: 150px;
-}
+
 
 /* Sticky footer styles
 -------------------------------------------------- */

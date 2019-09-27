@@ -41,7 +41,7 @@ def calc_ranks():
 #    cur_rank = db.session.query(TestMaterial).filter(TestMaterial.frequency is not None).count()
 #    print("Cur rank: " + str(cur_rank))
     
-    for item in data:
+#    for item in data:
 #        if "Kyōiku-Jōyō (1st" in item.grade:
 #            item.grade = 1
 #        elif "Kyōiku-Jōyō (2nd" in item.grade:
@@ -82,11 +82,13 @@ def calc_ranks():
 #        else:
 #            item.jlpt = 6
             
-        item.my_rank = int(item.frequency or 0)
+#        item.meaning = item.meaning.replace(";","; ")
         
-        if item.frequency is None:
-            
-            item.my_rank = 7000    
+#        item.my_rank = int(item.frequency or 0)
+#        
+#        if item.frequency is None:
+#            
+#            item.my_rank = 7000    
             
     return render_template('home.html')    
     
@@ -134,7 +136,7 @@ def home():
     return render_template('home.html')
 
 #TODO - bias first question towards more commonly known ones
-#TODO - allow more variance/fuzzier selection (rather than exactly mid)
+
 #TODO - allow a wrap/better kanji selection when hitting an already answered on
 #TODO - more optimistic selections (1 wrong, 30 right shouldn't result in a tight selection)
 
