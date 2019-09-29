@@ -22,8 +22,8 @@
             </div>
         </div>
 
-		<a class="btn btn-success btn-lg" role="btn" href="/test?a=1&q={{question.id}}">Know it</a>
-		<a class="btn btn-danger btn-lg" role="btn" href="/test?a=0&q={{question.id}}">Don't Know</a>
+		<a class="btn btn-success btn-lg" id="know" role="btn" href="/test?a=1&q={{question.id}}">Know it</a>
+		<a class="btn btn-danger btn-lg" id="dunno" role="btn" href="/test?a=0&q={{question.id}}">Don't Know</a>
 		
 		<p>History:</p>
 		<p>{% for q in oldquestions %}
@@ -34,5 +34,6 @@
 	<br>
 
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/flip.css')}}">
+    <script type="text/javascript" src="{{url_for('static', filename='js/hotkeys.js')}}"></script>
 {% endblock content %}
 

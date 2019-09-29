@@ -7,7 +7,9 @@
     - variable names, constants
     
 #TODO2 - switch card flip to tap
-
+    # add a hotkey to flip
+    #? flip end over end?
+    
 #TODO3 - stop using BRs as padding
 
 #TODO3 - show graphs, score
@@ -26,7 +28,7 @@
 
 
 Expanded ideas:
-- hotkey support for browser
+- Historical rankings "You are #5/34830 tests!"
 - ads
 - patreon? probably not worth
 - multiple language support! <-important. should work for at least japanese
