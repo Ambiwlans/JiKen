@@ -27,7 +27,7 @@
 		
 		<p>History:</p>
 		<p>{% for q in oldquestions %}
-            <span class="ans{{q.score}}">{{q.TestMaterial.kanji}}</span>{{ "," if not loop.last }} 		
+            <span class="ans{{q.QuestionLog.score}}">{{q.TestMaterial.kanji}}</span>{{ "," if not loop.last }} 		
 		{% endfor %}</p>
 	</div>
 	<br>

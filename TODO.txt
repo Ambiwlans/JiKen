@@ -1,5 +1,3 @@
-
-
 #TODO - finish up stuff in view!
 
 #TODO - section by section cleaning
@@ -10,12 +8,18 @@
     - move defaults/constants to DB / config.py
 
 #TODO - tweak cost algorithm    
+    - include a term that penalizes variance from avg_t
+    
+#TODO - show kanken and grade levels on front card
+    - give them mouseovers?
     
 #TODO2 - switch card flip to tap
     # add a hotkey to flip
     #? flip end over end?
     
 #TODO3 - stop using BRs as padding
+
+#TODO3 - occasional recalc of: default a,t and all my_ranks
 
 #TODO3 - show graphs, score
     - can the already generated graph be used or just pass variables and graph in JS?
