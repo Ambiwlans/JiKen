@@ -10,18 +10,11 @@ from . import db
 
 # Data Types
 from sqlalchemy import Boolean, DateTime, Column, Integer, \
-                       String, ForeignKey, Text    
+                       String, ForeignKey, Text, Numeric    
 
 # Database
 from sqlalchemy.orm import relationship, backref
     
-
-###############################################################################
-### Consts
-###############################################################################
-
-default_kanji = 400 # 400 should be the kanji 50% of people on avg know
-default_tightness = 0.05
 
 ###############################################################################
 ### Tests
@@ -35,6 +28,9 @@ class TestLog(db.Model):
     id = Column(Integer, primary_key=True)
     
     #Core
+    a = Column(Integer)                   # predicted number of kanji known
+    t = Column(Numeric(asdecimal=False))  # predicted spread
+    
 #    timezone = 
 #    browserdata =
     
@@ -87,7 +83,17 @@ class TestMaterial(db.Model):
     frequency = Column(Integer)
     my_rank = Column(Integer)
 
-
+# Meta information
+    # Only 1 row, stored in DB for convenience
+class MetaStatistics(db.Model):
+    __tablename__ = 'metastatistics'
+    
+    #Meta
+    id = Column(Integer, primary_key=True)
+    
+    #Core
+    default_kanji = Column(Integer, default= 400)       # Number of kanji people know on avg
+    default_tightness = Column(Numeric(asdecimal=False), default= 0.05)  # typical knowledge spread
 
 
 

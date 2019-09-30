@@ -1,3 +1,5 @@
+
+
 #TODO - finish up stuff in view!
 
 #TODO - section by section cleaning
@@ -5,6 +7,9 @@
     - data structuring
     - algorithms/code flow/refactoring
     - variable names, constants
+    - move defaults/constants to DB / config.py
+
+#TODO - tweak cost algorithm    
     
 #TODO2 - switch card flip to tap
     # add a hotkey to flip
@@ -13,8 +18,9 @@
 #TODO3 - stop using BRs as padding
 
 #TODO3 - show graphs, score
+    - can the already generated graph be used or just pass variables and graph in JS?
 
-#TODO4 - add 'share' buttons for sharing score on social media
+#TODO4 - add 'share' buttons for sharing score on social media (FB) or a SS of the test state?
 #TODO4 - full mobile support
     # looks good on verious devices/sizes
     # share buttons work
@@ -22,7 +28,8 @@
 
 #TODO4 - allow kanji reordering on the basis of first question (unbiased) responses
     # better my_rank selection, have it update weekly
-
+    # use unbiased 1st questions ranks, frequency ranks, jlpt, kanken and lastly biased ranks. Randomly order anything left.
+    
 #TODO5 - Deployment!
 
 

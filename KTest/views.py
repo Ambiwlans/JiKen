@@ -23,8 +23,8 @@ import matplotlib.pyplot as plt
 
 #Models
 from .models import TestMaterial, \
-    TestLog, QuestionLog
-from .models import default_kanji, default_tightness
+    TestLog, QuestionLog, \
+    MetaStatistics
 
 #Session
 from . import app, db
@@ -116,7 +116,7 @@ def sigmoid_cost_regularized(params, true_X, true_Y):
         # ~400 is average but this value need not be particularly penalized
         
     #penalties for overly flat or steep slopes, a far from the average
-    reg = t + (1/t)/10000 + abs(a - default_kanji)/100000
+    reg = t + (1/t)/10000 + abs(a - db.session.query(MetaStatistics).first().default_kanji)/100000
     if t < 0: reg += 10
     if a < 0: reg += 10
 #    if a > 3000: reg += a - 3000
@@ -138,7 +138,6 @@ def home():
 #TODO - bias first question towards more commonly known ones
 
 #TODO - allow a wrap/better kanji selection when hitting an already answered on
-#TODO - more optimistic selections (1 wrong, 30 right shouldn't result in a tight selection)
 
 #TODO - show the estimate + variance
 #TODO - tidy the 'handle data' section
@@ -164,7 +163,10 @@ def test():
     
     if score is None or session['testlogid'] is None:
         # New Test, new log
-        newTest = TestLog()
+        newTest = TestLog(
+                a = db.session.query(MetaStatistics).first().default_kanji,
+                t = db.session.query(MetaStatistics).first().default_tightness)
+        
         db.session.add(newTest)
         db.session.commit()
         session['testlogid'] = newTest.id
@@ -196,8 +198,8 @@ def test():
     
     if history.count() == 0:
         newquestion = db.session.query(TestMaterial).order_by(func.random()).first()
-        session['t'] = default_tightness
-        session['a'] = default_kanji
+        db.session.query(TestLog).get(session['testlogid']).a = session['a'] = db.session.query(MetaStatistics).first().default_kanji
+        db.session.query(TestLog).get(session['testlogid']).t = session['t'] = db.session.query(MetaStatistics).first().default_tightness
     else:
         result = history.order_by(TestMaterial.my_rank.desc()).all()
         print("RESULT: " + str(result))
@@ -222,8 +224,8 @@ def test():
         
         res = minimize(sigmoid_cost_regularized, p0, args=(xdata,ydata))
         
-        session['t'] = res.x[0]
-        session['a'] = res.x[1]
+        db.session.query(TestLog).get(session['testlogid']).a = session['a'] = res.x[1]
+        db.session.query(TestLog).get(session['testlogid']).t = session['t'] = res.x[0]
         
         print (res.x)
         x = np.linspace(0, 5000, 5000)
@@ -237,7 +239,7 @@ def test():
 #        plt.fill_between(x, y - perr, y + perr, color='gray', alpha=0.2)
         
         plt.ylim(0, 1)
-        plt.xlim(-100, 3000)
+        plt.xlim(-100, 5000)
         plt.legend(loc='best')
         fig.savefig('C:/Users/Angelo/Documents/Code/Python/KTest/testimagepython.png')
         plt.close('all')
