@@ -8,6 +8,7 @@
 
     {% block styles %}
 		{{ bootstrap.load_css() }}
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
     {% endblock %}
@@ -29,7 +30,7 @@
     {% endblock %}
   </head>
   <body>
-    <br><br>
+      <br>
     {% block content %}
 	{% endblock %}
 

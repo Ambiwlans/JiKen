@@ -11,15 +11,11 @@ from flask import request, render_template, redirect, url_for, session, abort
 #SQLAlch
 from sqlalchemy import func #desc
 
+import json
+
 #Math
 import numpy as np
 from scipy.optimize import curve_fit, minimize
-from bisect import bisect
-
-#DEV Graphing
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 
 #Models
 from .models import TestMaterial, \
@@ -135,21 +131,10 @@ def sigmoid_cost_regularized(params, true_X, true_Y):
 def home():
     return render_template('home.html')
 
-#TODO - bias first question towards more commonly known ones
-
-#TODO - allow a wrap/better kanji selection when hitting an already answered on
-
-#TODO - show the estimate + variance
-#TODO - tidy the 'handle data' section
-#TODO2 - show user the graph? 
-    # Add vertical lines for answered questions
-    # use chart.js?
-#TODO2 - clean up views
+    
+#TODO2 - bias first question towards more commonly known ones
 #TODO3 - error bars? Ask questions at point of largest error bars?
-#TODO4 - clientside the math?
 #TODO5 - avoid recalculating everything each question - modify rather than redo
-#TODO5 - clear out superfluous DEV code
-
 @app.route("/test")
 def test():
     
@@ -218,10 +203,6 @@ def test():
         
         p0 = [session['t'], session['a']]
         
-#        popt, pcov = curve_fit(sigmoid, xdata, ydata, p0, sigma=[.5]*len(xdata), bounds=([0.001, 2], [.1,5000]), method='dogbox')
-        
-#        perr = np.sqrt(np.diag(pcov))
-        
         res = minimize(sigmoid_cost_regularized, p0, args=(xdata,ydata))
         
         db.session.query(TestLog).get(session['testlogid']).a = session['a'] = res.x[1]
@@ -230,24 +211,10 @@ def test():
         print (res.x)
         x = np.linspace(0, 5000, 5000)
         y = sigmoid(x, *res.x)
-        
-        #DEV
-        fig = plt.figure()
-        plt.plot(xdata, ydata, 'o', label='data')
-        plt.plot(x,y, label='fit')
-        
-#        plt.fill_between(x, y - perr, y + perr, color='gray', alpha=0.2)
-        
-        plt.ylim(0, 1)
-        plt.xlim(-100, 5000)
-        plt.legend(loc='best')
-        fig.savefig('C:/Users/Angelo/Documents/Code/Python/KTest/testimagepython.png')
-        plt.close('all')
-  
+          
         print(score)
         print(y[500])
-#        ff=bc
-        # 
+
         for tgt in range(1, 3000):
             # do a range with probablistic questioning
             # Failed last question, give easy question
@@ -268,13 +235,16 @@ def test():
             print("Already answered" + str(tgt))
             
         newquestion = db.session.query(TestMaterial).filter(TestMaterial.my_rank == tgt).first()
+
         
     #Get some history to show
-    oldquestions = history.order_by(QuestionLog.id.desc()).limit(10)
-    
-#    for q in oldquestions:
-#        print("Old Q:" + str(q.testmaterial.id))
-    return render_template('test.html', question = newquestion, oldquestions = oldquestions)
+    oldquestions = history.order_by(QuestionLog.id.desc()).limit(50)
+    rightanswers = oldquestions.from_self().filter(QuestionLog.score == 1).all()
+    rightanswers = [i.TestMaterial.my_rank for i in rightanswers]
+    wronganswers = oldquestions.from_self().filter(QuestionLog.score == 0).all()
+    wronganswers = [i.TestMaterial.my_rank for i in wronganswers]
+    oldquestions = oldquestions.limit(10)
+    return render_template('test.html', question = newquestion, oldquestions = oldquestions, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers))
 
 
 

@@ -25,15 +25,35 @@
 		<a class="btn btn-success btn-lg" id="know" role="btn" href="/test?a=1&q={{question.id}}">Know it</a>
 		<a class="btn btn-danger btn-lg" id="dunno" role="btn" href="/test?a=0&q={{question.id}}">Don't Know</a>
 		
-		<p>History:</p>
+		<br>
+        <canvas id="myChart" width="500" height="100"></canvas>
+
 		<p>{% for q in oldquestions %}
             <span class="ans{{q.QuestionLog.score}}">{{q.TestMaterial.kanji}}</span>{{ "," if not loop.last }} 		
-		{% endfor %}</p>
+		{% endfor %}</p>		
 	</div>
-	<br>
-	<br>
 
+    
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/flip.css')}}">
     <script type="text/javascript" src="{{url_for('static', filename='js/hotkeys.js')}}"></script>
+    {%- include 'chart.js' -%}
+
+
 {% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

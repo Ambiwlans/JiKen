@@ -1,28 +1,25 @@
-#TODO - finish up stuff in view!
-
-#TODO - section by section cleaning
+#TODO - CLEANUP
     - commenting
     - data structuring
     - algorithms/code flow/refactoring
     - variable names, constants
     - move defaults/constants to DB / config.py
 
-#TODO - tweak cost algorithm    
-    - include a term that penalizes variance from avg_t
-    
-#TODO - show kanken and grade levels on front card
+#TODO - HTML/Layout/UI
+    - show kanken and grade levels on front card
     - give them mouseovers?
+    - switch card flip to tap
+        - add a hotkey to flip
+        ? flip end over end?    
+    - show current score and confidence?
     
-#TODO2 - switch card flip to tap
-    # add a hotkey to flip
-    #? flip end over end?
+#TODO - finish up stuff in view!
     
-#TODO3 - stop using BRs as padding
-
-#TODO3 - occasional recalc of: default a,t and all my_ranks
-
-#TODO3 - show graphs, score
-    - can the already generated graph be used or just pass variables and graph in JS?
+#TODO - FITNESS ALGORITHM
+    - tweak cost algorithm    
+        - include a term that penalizes variance from avg_t
+    - find confidence levels?
+        
 
 #TODO4 - add 'share' buttons for sharing score on social media (FB) or a SS of the test state?
 #TODO4 - full mobile support
@@ -30,15 +27,18 @@
     # share buttons work
     # touch centric design
 
-#TODO4 - allow kanji reordering on the basis of first question (unbiased) responses
-    # better my_rank selection, have it update weekly
-    # use unbiased 1st questions ranks, frequency ranks, jlpt, kanken and lastly biased ranks. Randomly order anything left.
+#TODO4 - CRON
+    - recalc of: default a, t and my_ranks
+    - use unbiased 1st questions ranks, frequency ranks, jlpt, kanken and lastly biased ranks. Randomly order anything left.
+    - a, t can be simple averages?
+    - remove /calc_ranks from view
     
 #TODO5 - Deployment!
 
 
 
 Expanded ideas:
+- add example words to stop ambiguity
 - Historical rankings "You are #5/34830 tests!"
 - ads
 - patreon? probably not worth
@@ -47,3 +47,4 @@ Expanded ideas:
 - support flashcards other than kanji (vocab?)
 - other direction testing (definitions to kanji)
 - snazzy animations for flips
+- clientside the math
