@@ -15,6 +15,7 @@ import json
 
 #Math
 import numpy as np
+import random
 from scipy.optimize import minimize
 
 #Models
@@ -89,6 +90,11 @@ def calc_ranks():
             
     return render_template('home.html')    
     
+# inverse of the logistical/sigmoid fn
+def logit(y, t, a):
+    x = (np.log((1/y) - 1))/t + a
+    return x
+
 def sigmoid(x, t, a):
     y = 1 / (1 + np.exp(t*(x-a))) #2**x
     return y
@@ -139,6 +145,7 @@ def home():
     
 #TODO2 - bias first question towards more commonly known ones
 #TODO3 - error bars? Ask questions at point of largest error bars?
+    # calc by having an error graph bumped (250 letter wide) by avg difference from answers?
 #TODO5 - avoid recalculating everything each question - modify rather than redo
 @app.route("/test")
 def test():
@@ -190,15 +197,10 @@ def test():
         db.session.query(TestLog).get(session['testlogid']).t = session['t'] = db.session.query(MetaStatistics).first().default_tightness
     else:
         result = history.order_by(TestMaterial.my_rank.desc()).all()
-        print("RESULT: " + str(result))
-        
         
         for r in result:
             xdata.append(r.TestMaterial.my_rank)
             ydata.append(r.QuestionLog.score)
-
-        print("Xdata: " + str(xdata))
-        print("Ydata: " + str(ydata))
         
         # Get new LOBF (a, t values)
             #minimized using BFGS, custom cost fn
@@ -215,15 +217,12 @@ def test():
 
         # Select next question
         
-        for x in range(1, 3000):          
-            # do a range with probablistic questioning
-            
-            # Failed last question, give easy question
-            if score == 0 and sigmoid(x, *res.x) < .7: break
-            # Got last question right, ask hard question
-            elif score == 1 and sigmoid(x, *res.x) < .3: break
+        # left half of graph if last question wrong, right half if right
+        x = int(logit(random.random()/2 + (1 - score) * 0.5, *res.x))
         
+        if x > 3000: x = 3000       #TODO - get rid of this clipping
             
+        # don't ask repeats
         while history.filter(TestMaterial.my_rank==x).first():
             x += 1
             if x == 3000: break

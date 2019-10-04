@@ -17,7 +17,7 @@
     
 #TODO - FITNESS ALGORITHM
     - tweak cost algorithm    
-        - include a term that penalizes variance from avg_t
+        - include a term that penalizes variance from avg_t based on size of a
     - find confidence levels?
         
 
