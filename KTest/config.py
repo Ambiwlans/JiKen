@@ -22,5 +22,8 @@ class DevelopmentConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     
+    # App
+    GRAPH_MAX_X = 4000
+    
 #Easy switch for different configs
 Config = DevelopmentConfig

@@ -32,6 +32,7 @@
     - use unbiased 1st questions ranks, frequency ranks, jlpt, kanken and lastly biased ranks. Randomly order anything left.
     - a, t can be simple averages?
     - remove /calc_ranks from view
+    - add a #answered col to the testdata and metadata
     
 #TODO5 - Deployment!
 

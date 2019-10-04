@@ -15,7 +15,7 @@ import json
 
 #Math
 import numpy as np
-from scipy.optimize import curve_fit, minimize
+from scipy.optimize import minimize
 
 #Models
 from .models import TestMaterial, \
@@ -30,6 +30,7 @@ from . import app, db
 ### HELPER FN
 ##########################################
 
+#TODO - move elsewhere ... maybe init
 #DEV - TEMP
 @app.route("/calc_ranks")
 def calc_ranks():
@@ -92,13 +93,10 @@ def sigmoid(x, t, a):
     y = 1 / (1 + np.exp(t*(x-a))) #2**x
     return y
 
-def sigmoid_cost_regularized(params, true_X, true_Y):
-    
-    t, a = params
-    
-    pred_Y = sigmoid(true_X, t, a)
-    
-    #Ranges: 
+#TODO - better account for the avg t val
+#TODO - some fn between a and t? (t is expected to be smaller with small a)
+# Custom cost fn
+    # Expected Ranges: 
         # Unregularized cost is 0~1
         # cost of 1 means that the prediction is 100% wrong
         
@@ -110,7 +108,12 @@ def sigmoid_cost_regularized(params, true_X, true_Y):
         
         # 0<a<6000
         # ~400 is average but this value need not be particularly penalized
-        
+def sigmoid_cost_regularized(params, true_X, true_Y):
+    
+    t, a = params
+    
+    pred_Y = sigmoid(true_X, t, a)
+    
     #penalties for overly flat or steep slopes, a far from the average
     reg = t + (1/t)/10000 + abs(a - db.session.query(MetaStatistics).first().default_kanji)/100000
     if t < 0: reg += 10
@@ -118,9 +121,10 @@ def sigmoid_cost_regularized(params, true_X, true_Y):
 #    if a > 3000: reg += a - 3000
 
     regweight = 1
-    print("")
-    print(str(t)+" + "+str(a))
-    print(str(np.mean((pred_Y - true_Y)**2)) + " + " + str(reg * regweight))
+
+#    print("Cost:")
+#    print("t: " + str(t) + " -- a:" + str(a))
+#    print(str(np.mean((pred_Y - true_Y)**2)) + " + " + str(reg * regweight))
     return np.mean((pred_Y - true_Y)**2) + reg * regweight
 
 ##########################################
@@ -131,6 +135,7 @@ def sigmoid_cost_regularized(params, true_X, true_Y):
 def home():
     return render_template('home.html')
 
+#TODO - replace 3000 with full selection (need to fill out my_ranks)
     
 #TODO2 - bias first question towards more commonly known ones
 #TODO3 - error bars? Ask questions at point of largest error bars?
@@ -139,10 +144,9 @@ def home():
 def test():
     
     ###
-    ### Collect Data/Setup
+    ### Log Answer/Score
     ###
     
-    #Get answer/score
     score = request.args.get('a')
     testmaterialid = request.args.get('q')
     
@@ -176,12 +180,11 @@ def test():
     
     #Get updated statistics and next question
     
-    #For the first question, ask a random kanji (for data gathering purposes)
-    
     xdata = []
     ydata = []
     
-    if history.count() == 0:
+    if score is None:
+        #For the first question, ask a random kanji (for data gathering purposes)
         newquestion = db.session.query(TestMaterial).order_by(func.random()).first()
         db.session.query(TestLog).get(session['testlogid']).a = session['a'] = db.session.query(MetaStatistics).first().default_kanji
         db.session.query(TestLog).get(session['testlogid']).t = session['t'] = db.session.query(MetaStatistics).first().default_tightness
@@ -197,48 +200,42 @@ def test():
         print("Xdata: " + str(xdata))
         print("Ydata: " + str(ydata))
         
-        #Create new LOBF
-            #minimized using BFGS
+        # Get new LOBF (a, t values)
+            #minimized using BFGS, custom cost fn
             #fit to Sigmoid fn:  1/(1 + e^(t(x-a)))
+            #update our db and the session data
         
-        p0 = [session['t'], session['a']]
+        p0 = [session['t'], session['a']]       # use last LOBF as starting point for new one
         
         res = minimize(sigmoid_cost_regularized, p0, args=(xdata,ydata))
         
         db.session.query(TestLog).get(session['testlogid']).a = session['a'] = res.x[1]
         db.session.query(TestLog).get(session['testlogid']).t = session['t'] = res.x[0]
         
-        print (res.x)
-        x = np.linspace(0, 5000, 5000)
-        y = sigmoid(x, *res.x)
-          
-        print(score)
-        print(y[500])
 
-        for tgt in range(1, 3000):
+        # Select next question
+        
+        for x in range(1, 3000):          
             # do a range with probablistic questioning
-            # Failed last question, give easy question
-            if score == 0 and y[tgt] < .7: 
-                print("break")
-                break
             
-                
+            # Failed last question, give easy question
+            if score == 0 and sigmoid(x, *res.x) < .7: break
             # Got last question right, ask hard question
-            elif score == 1 and y[tgt] < .3: break
-
-        print ("Selected letter #" + str(tgt))
+            elif score == 1 and sigmoid(x, *res.x) < .3: break
         
             
-        while history.filter(TestMaterial.my_rank==tgt).first():
-            tgt += 1
-            if tgt == 3000: break   #biggest kanji atm TODO
-            print("Already answered" + str(tgt))
-            
-        newquestion = db.session.query(TestMaterial).filter(TestMaterial.my_rank == tgt).first()
+        while history.filter(TestMaterial.my_rank==x).first():
+            x += 1
+            if x == 3000: break
+            print("Already answered" + str(x))
+        
+        print ("Selected letter #" + str(x))
+        newquestion = db.session.query(TestMaterial).filter(TestMaterial.my_rank == x).first()
 
         
     #Get some history to show
-    oldquestions = history.order_by(QuestionLog.id.desc()).limit(50)
+    oldquestions = history.order_by(QuestionLog.id.desc()).limit(100)
+    
     rightanswers = oldquestions.from_self().filter(QuestionLog.score == 1).all()
     rightanswers = [i.TestMaterial.my_rank for i in rightanswers]
     wronganswers = oldquestions.from_self().filter(QuestionLog.score == 0).all()
