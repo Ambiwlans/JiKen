@@ -220,6 +220,7 @@ def test():
         # left half of graph if last question wrong, right half if right
         x = int(logit(random.random()/2 + (1 - score) * 0.5, *res.x))
         
+        if x < 1 : x = 1
         if x > 3000: x = 3000       #TODO - get rid of this clipping
             
         # don't ask repeats

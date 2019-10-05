@@ -7,17 +7,16 @@
 
 #TODO - HTML/Layout/UI
     - show kanken and grade levels on front card
-    - give them mouseovers?
-    - switch card flip to tap
-        - add a hotkey to flip
-        ? flip end over end?    
+    ? give them mouseovers?
+    ? flip end over end?    
     - show current score and confidence?
     
-#TODO - finish up stuff in view!
+#TODO - finish up stuff in view! models!
     
-#TODO - FITNESS ALGORITHM
+#TODO - ALGORITHMS
     - tweak cost algorithm    
         - include a term that penalizes variance from avg_t based on size of a
+        - should consider how many questions answered so far
     - find confidence levels?
         
 

@@ -4,7 +4,7 @@
 
 -------------------------------------------------- */
 
-.flashcard:hover .backside, .flashcard.hover .backside {
+.flipped .backside {
 -webkit-transform: rotateY(0deg);
 -moz-transform: rotateY(0deg);
 -o-transform: rotateY(0deg);
@@ -12,7 +12,7 @@
 transform: rotateY(0deg);
 }
  
-.flashcard:hover .frontside, .flashcard.hover .frontside {
+.flipped .frontside{
 -webkit-transform: rotateY(180deg);
 -moz-transform: rotateY(180deg);
 -o-transform: rotateY(180deg);
@@ -29,6 +29,7 @@ transform: rotateY(180deg);
 -ms-transform-style: preserve-3d;
 transition: 1s;
 transform-style: preserve-3d;
+cursor: pointer;
 }
  
 .frontside, .backside {

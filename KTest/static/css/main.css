@@ -16,7 +16,7 @@ Bad - dc3545 (default) -> #B40020
 /* Test formatting
 -------------------------------------------------- */
 .flashcard {
-    margin: 50px 0px;
+    margin: 30px 0px;
     height: 150px;
 }
 
@@ -78,7 +78,7 @@ Bad - dc3545 (default) -> #B40020
 }
 
 canvas {
-    margin: 50px, 0px;
+    margin: 100px, 0px;
     height: 100px;
     width: 500px;
 }

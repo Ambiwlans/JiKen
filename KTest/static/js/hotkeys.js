@@ -1,3 +1,13 @@
+function flip(){
+    if ($(".flipped")[0])
+    {
+        $(".flipped").removeClass("flipped");
+    }
+    else
+    {
+        $(".flashcard").addClass("flipped");
+    }
+}
 document.onkeydown=function(e){
     if(e.which == 37)   // Pressing left, click 'know' button
     {
@@ -7,8 +17,8 @@ document.onkeydown=function(e){
     {
         window.location.href = $("#dunno").attr("href"); 
     }
-    if(e.which == 40)   // Pressing down, flip card
+    if(e.which == 40 || e.which == 32)   // Pressing down or space, flip card
     {
-   
+        flip();
     }
 }
