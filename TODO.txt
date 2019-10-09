@@ -14,10 +14,10 @@
 #TODO - finish up stuff in view! models!
     
 #TODO - ALGORITHMS
-    - tweak cost algorithm    
-        - include a term that penalizes variance from avg_t based on size of a
-        - should consider how many questions answered so far
+    - add up for an actual prediction to display
+        - do this client side
     - find confidence levels?
+    ? weight increase for easy/common kanji?
         
 
 #TODO4 - add 'share' buttons for sharing score on social media (FB) or a SS of the test state?

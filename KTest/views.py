@@ -17,6 +17,7 @@ import json
 import numpy as np
 import random
 from scipy.optimize import minimize
+from scipy.stats import norm
 
 #Models
 from .models import TestMaterial, \
@@ -99,8 +100,6 @@ def sigmoid(x, t, a):
     y = 1 / (1 + np.exp(t*(x-a))) #2**x
     return y
 
-#TODO - better account for the avg t val
-#TODO - some fn between a and t? (t is expected to be smaller with small a)
 # Custom cost fn
     # Expected Ranges: 
         # Unregularized cost is 0~1
@@ -114,24 +113,46 @@ def sigmoid(x, t, a):
         
         # 0<a<6000
         # ~400 is average but this value need not be particularly penalized
-def sigmoid_cost_regularized(params, true_X, true_Y):
-    
+def sigmoid_cost_regularized(params, true_X, true_Y, default_t, default_a):
     t, a = params
     
     pred_Y = sigmoid(true_X, t, a)
     
+    # Calculate the sample bias correcting array
+        # Cortes, C., Mohri, M., Riley, M., & Rostamizadeh, A. (2008, October). Sample selection bias correction theory. In International conference on algorithmic learning theory (pp. 38-53). Springer, Berlin, Heidelberg.
+            # https://cs.nyu.edu/~mohri/pub/bias.pdf
+    
+    #Fit a line across whole dataset
+        # using a gaussian distribution for a close enough estimate (reality will be slightly left biased and have a clipped top)
+        # Invert the dist for cost weights to correct sample bias    
+    mean,std=norm.fit(true_X)
+    dist = norm(mean,std)
+    
     #penalties for overly flat or steep slopes, a far from the average
-    reg = t + (1/t)/10000 + abs(a - db.session.query(MetaStatistics).first().default_kanji)/100000
-    if t < 0: reg += 10
-    if a < 0: reg += 10
-#    if a > 3000: reg += a - 3000
-
-    regweight = 1
+    reg = (abs(a - default_a)/50000)/len(true_X)
+    print("dif in a")
+    print((abs(a - default_a)/50000)/len(true_X))
+    if t > default_t:
+        reg += (np.log((t / default_t))/10)/(len(true_X)**.5)        #steeper than default (ease off slowly with more data)
+        print("steeper")
+        print((np.log((t / default_t))/10)/(len(true_X)**.5))
+    else:
+        reg += (np.log((default_t / t))/10)/(len(true_X)**2)                    #shallower than default (ease off quickly with more data)
+        print("shallower")
+        print((np.log((default_t / t))/10)/(len(true_X)**2))
+    
+    reg += np.log(t+1)/(len(true_X)**.5)
+    
+    if t < 0: reg = 1000
+    if a < 0: reg = 1000
 
 #    print("Cost:")
-#    print("t: " + str(t) + " -- a:" + str(a))
-#    print(str(np.mean((pred_Y - true_Y)**2)) + " + " + str(reg * regweight))
-    return np.mean((pred_Y - true_Y)**2) + reg * regweight
+#    print("t: " + str(t) + " -- a: " + str(a))
+#    print("default_t: " + str(default_t) + " -- default_a: " + str(default_a))
+#    print(str(np.mean((pred_Y - true_Y)**2)) + " + " + str(reg))
+#    print(str(np.mean(((pred_Y - true_Y)**2)/dist.pdf(true_X))*(np.mean(dist.pdf(true_X)))) + " + " + str(reg))
+    return np.mean(((pred_Y - true_Y)**2)/dist.pdf(true_X))*(np.mean(dist.pdf(true_X))) + reg
+#    return np.mean(((pred_Y - true_Y)**2)) + reg
 
 ##########################################
 ### ROUTES
@@ -209,7 +230,7 @@ def test():
         
         p0 = [session['t'], session['a']]       # use last LOBF as starting point for new one
         
-        res = minimize(sigmoid_cost_regularized, p0, args=(xdata,ydata))
+        res = minimize(sigmoid_cost_regularized, p0, args=(xdata, ydata, p0[0], p0[1]))
         
         db.session.query(TestLog).get(session['testlogid']).a = session['a'] = res.x[1]
         db.session.query(TestLog).get(session['testlogid']).t = session['t'] = res.x[0]
@@ -217,8 +238,11 @@ def test():
 
         # Select next question
         
-        # left half of graph if last question wrong, right half if right
-        x = int(logit(random.random()/2 + (1 - score) * 0.5, *res.x))
+        # left half of graph if last question wrong, right half if right (skew selection slightly away from the middle)
+        if score == 1:
+            x = int(logit((random.random()**.5)/2, *res.x))
+        elif score == 0:
+            x = int(logit((random.random()**.5)/(-2) + 1, *res.x))
         
         if x < 1 : x = 1
         if x > 3000: x = 3000       #TODO - get rid of this clipping
