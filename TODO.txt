@@ -4,7 +4,8 @@
     - algorithms/code flow/refactoring
     - variable names, constants
     - move defaults/constants to DB / config.py
-
+    - error catching
+    
 #TODO - HTML/Layout/UI
     - show kanken and grade levels on front card
     ? give them mouseovers?

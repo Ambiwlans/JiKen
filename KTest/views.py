@@ -65,7 +65,7 @@ def calc_ranks():
 #            item.grade = 11
 #        elif "Jinmeiyō (used in names)" in item.grade:
 #            item.grade = 13
-#        else:
+#        elif "i" in item.grade:
 #            item.grade = 14
 #            
 #        if "1" in (item.jlpt or ""):

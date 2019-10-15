@@ -9,9 +9,14 @@
                     <p class="my_rank">{{question.my_rank}}</p>
                 {% endif %}
                 
-                {% if question.jlpt != '6' %}
-                    <p class="jlpt">N{{question.jlpt}}</p>
-                {% endif %}
+                <div class="top-right">
+                    {% if question.jlpt != '6' %}
+                        <p class="jlpt">N{{question.jlpt}}</p>
+                    {% endif %}
+                    {% if question.grade|int < 100 %}
+                        <p class="grade">Gr{{question.grade|int}}</p>
+                    {% endif %}
+                </div>
                 <h1 class="kanji">{{question.kanji}}</h1>
             </div>
             <div class="backside container">
