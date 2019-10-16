@@ -266,11 +266,21 @@ def test():
         if x > 3000: x = 3000       #TODO - get rid of this clipping
             
         # don't ask repeats
-        while history.filter(TestMaterial.my_rank==x).first():
-            x += 1
-            if x == 3000: break
+        searchkey = 1
+        while history.filter(TestMaterial.my_rank==x).first() or x < 1 or x > 3000:
             print("Already answered" + str(x))
-        
+            x += searchkey
+            
+            if searchkey > 0:
+                searchkey = -searchkey - 1
+            else:
+                searchkey = -searchkey + 1
+            
+            if x > 3000 and x + searchkey < 1: 
+                print("Have asked every question!")
+                x = 1
+                break;
+                
         print ("Selected letter #" + str(x))
         newquestion = db.session.query(TestMaterial).filter(TestMaterial.my_rank == x).first()
 
