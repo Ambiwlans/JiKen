@@ -15,9 +15,6 @@
 #TODO - finish up stuff in view! models!
     
 #TODO - ALGORITHMS
-    - add up for an actual prediction to display
-        - do this client side
-    - find confidence levels?
     ? weight increase for easy/common kanji?
         
 

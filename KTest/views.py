@@ -18,6 +18,7 @@ import numpy as np
 import random
 from scipy.optimize import minimize
 from scipy.stats import norm
+from scipy.integrate import quad
 
 #Models
 from .models import TestMaterial, \
@@ -96,8 +97,9 @@ def logit(y, t, a):
     x = (np.log((1/y) - 1))/t + a
     return x
 
-def sigmoid(x, t, a):
-    y = 1 / (1 + np.exp(t*(x-a))) #2**x
+# e term allows a warp to find upper/lower bounds
+def sigmoid(x, t, a, e):
+    y = (1 / (1 + np.exp(t*(x-a)))) ** e
     return y
 
 # Custom cost fn
@@ -116,7 +118,7 @@ def sigmoid(x, t, a):
 def sigmoid_cost_regularized(params, true_X, true_Y, default_t, default_a):
     t, a = params
     
-    pred_Y = sigmoid(true_X, t, a)
+    pred_Y = sigmoid(true_X, t, a, 1)
     
     # Calculate the sample bias correcting array
         # Cortes, C., Mohri, M., Riley, M., & Rostamizadeh, A. (2008, October). Sample selection bias correction theory. In International conference on algorithmic learning theory (pp. 38-53). Springer, Berlin, Heidelberg.
@@ -130,21 +132,23 @@ def sigmoid_cost_regularized(params, true_X, true_Y, default_t, default_a):
     
     #penalties for overly flat or steep slopes, a far from the average
     reg = (abs(a - default_a)/50000)/len(true_X)
-    print("dif in a")
-    print((abs(a - default_a)/50000)/len(true_X))
+#    print("dif in a")
+#    print((abs(a - default_a)/50000)/len(true_X))
+    
+    if t <= 0: t = 1; reg = 1000
+    if a <= 0: a = 1; reg = 1000
+    
     if t > default_t:
         reg += (np.log((t / default_t))/10)/(len(true_X)**.5)        #steeper than default (ease off slowly with more data)
-        print("steeper")
-        print((np.log((t / default_t))/10)/(len(true_X)**.5))
+#        print("steeper")
+#        print((np.log((t / default_t))/10)/(len(true_X)**.5))
     else:
         reg += (np.log((default_t / t))/10)/(len(true_X)**2)                    #shallower than default (ease off quickly with more data)
-        print("shallower")
-        print((np.log((default_t / t))/10)/(len(true_X)**2))
+#        print("shallower")
+#        print((np.log((default_t / t))/10)/(len(true_X)**2))
     
     reg += np.log(t+1)/(len(true_X)**.5)
     
-    if t < 0: reg = 1000
-    if a < 0: reg = 1000
 
 #    print("Cost:")
 #    print("t: " + str(t) + " -- a: " + str(a))
@@ -210,6 +214,7 @@ def test():
     
     xdata = []
     ydata = []
+    pred = [0,0,0]
     
     if score is None:
         #For the first question, ask a random kanji (for data gathering purposes)
@@ -235,10 +240,23 @@ def test():
         db.session.query(TestLog).get(session['testlogid']).a = session['a'] = res.x[1]
         db.session.query(TestLog).get(session['testlogid']).t = session['t'] = res.x[0]
         
-
+        
+        # Predict known kanji
+        
+        #[mid, upper, lower]
+        raw_pred = [int(logit(.5, *res.x)),quad(sigmoid,0,5000,args=(*res.x,.5))[0],quad(sigmoid,0,5000,args=(*res.x,2))[0]]
+        
+        #fixed to clear all the knowns
+        pred = raw_pred[:]
+        for r in result:
+            pred[0] += r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, 1)
+            pred[1] += r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, .5)
+            pred[2] += r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, 2)
+            
+        
         # Select next question
         
-        # left half of graph if last question wrong, right half if right (skew selection slightly away from the middle)
+        # left half of graph if last question wrong, right half if correct (skew selection slightly away from the middle)
         if score == 1:
             x = int(logit((random.random()**.5)/2, *res.x))
         elif score == 0:
@@ -265,7 +283,7 @@ def test():
     wronganswers = oldquestions.from_self().filter(QuestionLog.score == 0).all()
     wronganswers = [i.TestMaterial.my_rank for i in wronganswers]
     oldquestions = oldquestions.limit(10)
-    return render_template('test.html', question = newquestion, oldquestions = oldquestions, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers))
+    return render_template('test.html', question = newquestion, oldquestions = oldquestions, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), pred = pred)
 
 
 
