@@ -7,16 +7,11 @@
     - error catching
     
 #TODO - HTML/Layout/UI
-    - show kanken and grade levels on front card
-    ? give them mouseovers?
-    ? flip end over end?    
-    - show current score and confidence?
+    - show kanken and JLPT levels on mousover (based on lower bound estimate)
+    - resize chart as needed? 0~ (x,y=0)
+    - mouseovers for the extra data/numbers
     
-#TODO - finish up stuff in view! models!
-    
-#TODO - ALGORITHMS
-    ? weight increase for easy/common kanji?
-        
+#TODO - finish up stuff in view! models!        
 
 #TODO4 - add 'share' buttons for sharing score on social media (FB) or a SS of the test state?
 #TODO4 - full mobile support
@@ -33,7 +28,7 @@
     
 #TODO5 - Deployment!
 
-
+--------------------------
 
 Expanded ideas:
 - add example words to stop ambiguity
@@ -41,8 +36,10 @@ Expanded ideas:
 - ads
 - patreon? probably not worth
 - multiple language support! <-important. should work for at least japanese
-- eventual switch to a slightly better ML version
+- eventual switch to a slightly better ML algorithm
+    - allow asymmetries
 - support flashcards other than kanji (vocab?)
 - other direction testing (definitions to kanji)
 - snazzy animations for flips
 - clientside the math
+- 

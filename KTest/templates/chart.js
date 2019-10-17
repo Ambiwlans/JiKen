@@ -23,6 +23,9 @@ var myLineChart = new Chart(ctx, {
         }]
     },
     options: {
+        tooltips: {
+            enabled: false
+        },
         scales: {
             xAxes: [{
                 type: 'linear',
@@ -33,7 +36,13 @@ var myLineChart = new Chart(ctx, {
             }],
             yAxes: [{
                 ticks: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    callback: function(value, index, values) {
+                        if (value == 0 || value == .5 || value == 1){
+                            return (value * 100) + '%';
+                        }
+                        return '';
+                    }
                 }
             }]
         },

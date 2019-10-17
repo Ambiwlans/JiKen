@@ -70,19 +70,44 @@ Bad - dc3545 (default) -> #B40020
 }
 
 /* Results */
-.ansTrue {
-    color: #267f00;
+
+.pred {
+    height: 64px;
+    line-height:48px;
+    margin: 10px 0px;
 }
 
-.ansFalse {
-    color: #B40020;
+.pred-header {
+    line-height:12px;
+    font-variant: small-caps;
+    letter-spacing: 3px;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0;
+}
+.predmain {
+    vertical-align:middle;
+    font-size: 48px;
+    font-weight: 700;
 }
 
+.predrange {
+    vertical-align:middle;
+    font-size: 12px;
+}
 canvas {
     margin: 100px, 0px;
     height: 100px;
     width: 500px;
 }
+
+/*.ansTrue {
+    color: #267f00;
+}
+
+.ansFalse {
+    color: #B40020;
+}*/
 
 
 /* Sticky footer styles
