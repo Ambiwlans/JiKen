@@ -52,7 +52,7 @@ var myLineChart = new Chart(ctx, {
     }
 });
 
-console.log({{ rightanswers|safe }}.forEach(rightPoints))
+//console.log({{ rightanswers|safe }}.forEach(rightPoints))
 
 function makePrediction() {
     var pred = [];

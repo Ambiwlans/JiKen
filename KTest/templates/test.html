@@ -7,23 +7,23 @@
     	<div class="flashcard" onclick="flip()">
             <div class="frontside container">
                 {% if question.my_rank != 7000 %}
-                    <p class="my_rank">{{question.my_rank}}</p>
+                    <p class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji number determined by commonness and complexity">{{question.my_rank}}</p>
                 {% endif %}
                 
                 <div class="top-right">
                     {% if question.jlpt != '6' %}
-                        <p class="jlpt">N{{question.jlpt}}</p>
+                        <p class="jlpt" data-toggle="tooltip" data-placement="right" title="JLPT grade level">N{{question.jlpt}}</p>
                     {% endif %}
                     {% if question.grade != '14' %}
-                        <p class="grade">Gr{{question.grade|int}}</p>
+                        <p class="grade" data-toggle="tooltip" data-placement="right" title="Jōyō grade level">Gr{{question.grade|int}}</p>
                     {% endif %}
                 </div>
                 <h1 class="kanji">{{question.kanji}}</h1>
             </div>
             <div class="backside container">
                 <h1 class="meaning">{{question.meaning}}</h1>
-                <h4 class="onyomi">{{question.onyomi}}</h3>
-                <h4 class="kunyomi">{{question.kunyomi}}</h3>
+                <h4 class="onyomi">{{question.onyomi}}</h4>
+                <h4 class="kunyomi">{{question.kunyomi}}</h4>
                 <a href="https://jisho.org/search/{{question.kanji}} %23kanji" class="more">...more</p>
             </div>
         </div>
@@ -39,8 +39,8 @@
     	
     	<div class="container pred">
         	<p class="pred-header">Estimates</p>
-        	<span class="predrange">{{pred[2]}}&nbsp; &nbsp; - &nbsp; &nbsp;</span>
-        	<span class="predmain" data-toggle="tooltip" data-placement="top" title="You're ready for N1 or Kanken 1!">{{pred[0]}}</span>
+        	<span class="predrange"><span class="predrange predmin">{{pred[2]}}</span>&nbsp; &nbsp; - &nbsp; &nbsp;</span>
+        	<span class="predmain" data-toggle="tooltip" data-placement="top" data-html="true" title="{{pred[0]}}">{{pred[0]}}</span>
         	<span class="predrange">&nbsp; &nbsp; - &nbsp; &nbsp;{{pred[1]}}</span>
     	</div>
     	
@@ -58,16 +58,19 @@
 		</p>		
 		-->
 	</div>
-
-    
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/flip.css')}}">
-    <script type="text/javascript" src="{{url_for('static', filename='js/hotkeys.js')}}"></script>
-    {%- include 'chart.js' -%}
-
-
 {% endblock content %}
 
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/flip.css')}}">
+{% endblock %}
 
+{% block scripts %}
+    {{super()}}
+    <script type="text/javascript" src="{{url_for('static', filename='js/hotkeys.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/tooltip.js')}}"></script>
+    {%- include 'chart.js' -%}
+{% endblock %}
 
 
 

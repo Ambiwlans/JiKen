@@ -26,6 +26,13 @@
     - remove /calc_ranks from view
     - add a #answered col to the testdata and metadata
     
+#TODO4 - BUGS
+    - Error catching to ensure the DB is ALWAYS flushed
+        - sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
+        - may need to drop sqlite?
+    - the algo is not very responsive to change ... stubborn?
+        - got trapped in a flat estimation ... how? lol
+        
 #TODO5 - Deployment!
 
 --------------------------
