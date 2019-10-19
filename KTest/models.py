@@ -33,6 +33,8 @@ class TestLog(db.Model):
     
 #    timezone = 
 #    browserdata =
+#    ip = 
+#    start_time
     
     #Related
     questions = relationship("QuestionLog", back_populates="testlog")

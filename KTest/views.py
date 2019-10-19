@@ -30,79 +30,23 @@ from . import app, db
 
 
 ##########################################
-### HELPER FN
+### HELPER FNs
 ##########################################
 
-#TODO - move elsewhere ... maybe init
-#DEV - TEMP
-@app.route("/calc_ranks")
-def calc_ranks():
-    data = db.session.query(TestMaterial).all()
-#    cur_rank = db.session.query(TestMaterial).filter(TestMaterial.frequency is not None).count()
-#    print("Cur rank: " + str(cur_rank))
-    
-#    for item in data:
-#        if "Kyōiku-Jōyō (1st" in item.grade:
-#            item.grade = 1
-#        elif "Kyōiku-Jōyō (2nd" in item.grade:
-#            item.grade = 2
-#        elif "Kyōiku-Jōyō (3rd" in item.grade:
-#            item.grade = 3
-#        elif "Kyōiku-Jōyō (4th" in item.grade:
-#            item.grade = 4
-#        elif "Kyōiku-Jōyō (5th" in item.grade:
-#            item.grade = 5
-#        elif "Kyōiku-Jōyō (6th" in item.grade:
-#            item.grade = 6
-#        elif "Jōyō (1st" in item.grade:
-#            item.grade = 7
-#        elif "Jōyō (2nd" in item.grade:
-#            item.grade = 8
-#        elif "Jōyō (3rd" in item.grade:
-#            item.grade = 9
-#        elif "Kyōiku-Jōyō (high" in item.grade:
-#            item.grade = 10
-#        elif "Hyōgaiji (former Jinmeiyō candidate)" in item.grade:
-#            item.grade = 11
-#        elif "Jinmeiyō (used in names)" in item.grade:
-#            item.grade = 13
-#        elif "i" in item.grade:
-#            item.grade = 14
-#            
-#        if "1" in (item.jlpt or ""):
-#            item.jlpt = 1
-#        elif "2" in (item.jlpt or ""):
-#            item.jlpt = 2
-#        elif "3" in (item.jlpt or ""):
-#            item.jlpt = 3
-#        elif "4" in (item.jlpt or ""):
-#            item.jlpt = 4
-#        elif "5" in (item.jlpt or ""):
-#            item.jlpt = 5
-#        else:
-#            item.jlpt = 6
-            
-#        item.meaning = item.meaning.replace(";","; ")
-        
-#        item.my_rank = int(item.frequency or 0)
-#        
-#        if item.frequency is None:
-#            
-#            item.my_rank = 7000    
-            
-    return render_template('home.html')    
-    
-# inverse of the logistical/sigmoid fn
-def logit(y, t, a):
-    x = (np.log((1/y) - 1))/t + a
-    return x
-
+# Our sigmoid/logistic function that we fit to the data
 # e term allows a warp to find upper/lower bounds
 def sigmoid(x, t, a, e):
     y = (1 / (1 + np.exp(t*(x-a)))) ** e
     return y
 
+# Inverse of the logistical/sigmoid fn
+    # used to grab x vals given y on our sigmoid
+def logit(y, t, a):
+    x = (np.log((1/y) - 1))/t + a
+    return x
+
 # Custom cost fn
+    # used to fit our curve
     # Expected Ranges: 
         # Unregularized cost is 0~1
         # cost of 1 means that the prediction is 100% wrong
@@ -156,7 +100,6 @@ def sigmoid_cost_regularized(params, true_X, true_Y, default_t, default_a):
 #    print(str(np.mean((pred_Y - true_Y)**2)) + " + " + str(reg))
 #    print(str(np.mean(((pred_Y - true_Y)**2)/dist.pdf(true_X))*(np.mean(dist.pdf(true_X)))) + " + " + str(reg))
     return np.mean(((pred_Y - true_Y)**2)/dist.pdf(true_X))*(np.mean(dist.pdf(true_X))) + reg
-#    return np.mean(((pred_Y - true_Y)**2)) + reg
 
 ##########################################
 ### ROUTES
@@ -166,11 +109,7 @@ def sigmoid_cost_regularized(params, true_X, true_Y, default_t, default_a):
 def home():
     return render_template('home.html')
 
-#TODO - replace 3000 with full selection (need to fill out my_ranks)
-    
 #TODO2 - bias first question towards more commonly known ones
-#TODO3 - error bars? Ask questions at point of largest error bars?
-    # calc by having an error graph bumped (250 letter wide) by avg difference from answers?
 #TODO5 - avoid recalculating everything each question - modify rather than redo
 @app.route("/test")
 def test():

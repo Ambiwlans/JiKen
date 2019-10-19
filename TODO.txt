@@ -7,17 +7,8 @@
     - error catching
     
 #TODO - HTML/Layout/UI
-    - show kanken and JLPT levels on mousover (based on lower bound estimate)
-    - resize chart as needed? 0~ (x,y=0)
-    - mouseovers for the extra data/numbers
-    
-#TODO - finish up stuff in view! models!        
-
-#TODO4 - add 'share' buttons for sharing score on social media (FB) or a SS of the test state?
-#TODO4 - full mobile support
-    # looks good on verious devices/sizes
-    # share buttons work
-    # touch centric design
+    ? resize chart as needed? 0~ (x,y=0)
+    - looks good on mobile? (test sizes, touch controls, )
 
 #TODO4 - CRON
     - recalc of: default a, t and my_ranks
@@ -34,10 +25,13 @@
         - got trapped in a flat estimation ... how? lol
         
 #TODO5 - Deployment!
-
+    - alpha testing
+    - going public
+    
 --------------------------
 
 Expanded ideas:
+- add 'share' buttons (esp for mobile) ... FB. (use a SS of test state?)
 - add example words to stop ambiguity
 - Historical rankings "You are #5/34830 tests!"
 - ads
