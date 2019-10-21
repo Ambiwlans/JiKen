@@ -181,18 +181,18 @@ def test():
         
         
         # Predict known kanji
-        
-        #[mid, upper, lower]
-        raw_pred = [int(logit(.5, *res.x)),
-                    int(quad(sigmoid,0,app.config['MAX_X'],args=(*res.x,.5))[0]),
-                    int(quad(sigmoid,0,app.config['MAX_X'],args=(*res.x,2))[0])]
-        
-        #fixed to clear all the knowns
-        pred = raw_pred[:]
-        for r in result:
-            pred[0] += int(r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, 1))
-            pred[1] += int(r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, .5))
-            pred[2] += int(r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, 2))
+        if len(result) > 10:
+            #[mid, upper, lower]
+            raw_pred = [int(logit(.5, *res.x)),
+                        int(quad(sigmoid,0,app.config['MAX_X'],args=(*res.x,.5))[0]),
+                        int(quad(sigmoid,0,app.config['MAX_X'],args=(*res.x,2))[0])]
+            
+            #fixed to clear all the knowns
+            pred = raw_pred[:]
+            for r in result:
+                pred[0] += int(r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, 1))
+                pred[1] += int(r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, .5))
+                pred[2] += int(r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, 2))
             
         
         # Select next question
