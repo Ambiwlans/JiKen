@@ -184,8 +184,8 @@ def test():
         
         #[mid, upper, lower]
         raw_pred = [int(logit(.5, *res.x)),
-                    int(quad(sigmoid,0,5000,args=(*res.x,.5))[0]),
-                    int(quad(sigmoid,0,5000,args=(*res.x,2))[0])]
+                    int(quad(sigmoid,0,app.config['MAX_X'],args=(*res.x,.5))[0]),
+                    int(quad(sigmoid,0,app.config['MAX_X'],args=(*res.x,2))[0])]
         
         #fixed to clear all the knowns
         pred = raw_pred[:]
@@ -204,11 +204,11 @@ def test():
             x = int(logit((random.random()**.5)/(-2) + 1, *res.x))
         
         if x < 1 : x = 1
-        if x > 3000: x = 3000       #TODO - get rid of this clipping
+        if x > app.config['MAX_X']: x = app.config['MAX_X']
             
         # don't ask repeats
         searchkey = 1
-        while history.filter(TestMaterial.my_rank==x).first() or x < 1 or x > 3000:
+        while history.filter(TestMaterial.my_rank==x).first() or x < 1 or x > app.config['MAX_X']:
             print("Already answered" + str(x))
             x += searchkey
             
@@ -217,7 +217,7 @@ def test():
             else:
                 searchkey = -searchkey + 1
             
-            if x > 3000 and x + searchkey < 1: 
+            if x > app.config['MAX_X'] and x + searchkey < 1: 
                 print("Have asked every question!")
                 x = 1
                 break;

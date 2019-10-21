@@ -24,6 +24,7 @@ class DevelopmentConfig:
     
     # App
     GRAPH_MAX_X = 4000
+    MAX_X = 6183
     
 #Easy switch for different configs
 Config = DevelopmentConfig

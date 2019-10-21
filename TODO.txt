@@ -5,18 +5,12 @@
     - variable names, constants
     - move defaults/constants to DB / config.py
     - error catching
-    
-#TODO - HTML/Layout/UI
-    ? resize chart as needed? 0~ (x,y=0)
     - looks good on mobile? (test sizes, touch controls, )
-
-#TODO4 - CRON
-    - recalc of: default a, t and my_ranks
-    - use unbiased 1st questions ranks, frequency ranks, jlpt, kanken and lastly biased ranks. Randomly order anything left.
-    - a, t can be simple averages?
-    - remove /calc_ranks from view
-    - add a #answered col to the testdata and metadata
-    
+        
+#TODO4 - RANKS
+    - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
+        - keep moves small even at the high end to avoid abuse by individuals
+        
 #TODO4 - BUGS
     - Error catching to ensure the DB is ALWAYS flushed
         - sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
@@ -30,7 +24,8 @@
     
 --------------------------
 
-Expanded ideas:
+Expansion ideas:
+- resize chart as needed? 0~ (x,y=0)
 - add 'share' buttons (esp for mobile) ... FB. (use a SS of test state?)
 - add example words to stop ambiguity
 - Historical rankings "You are #5/34830 tests!"

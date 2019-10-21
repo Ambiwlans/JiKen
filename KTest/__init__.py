@@ -16,6 +16,7 @@ from sqlalchemy import func
 
 from flask_bootstrap import Bootstrap
 
+import numpy as np
 
 # Setup Flask App
 app = Flask(__name__)
@@ -35,6 +36,8 @@ db.create_all()
 # Reformat base DB taken from KANJIDIC
 def initial_DB_reformat():
     data = db.session.query(models.TestMaterial).all()    
+    ranks = [r for r, in db.session.query(models.TestMaterial.my_rank)]
+    
     for item in data:
         if "Kyōiku-Jōyō (1st" in item.grade:
             item.grade = 1
@@ -76,9 +79,39 @@ def initial_DB_reformat():
         else:
             item.jlpt = 6
             
-        item.meaning = item.meaning.replace(";","; ")
-
-#initial_DB_reformat
+#        item.meaning = item.meaning.replace(";","; ")
+        
+    # Find some good starting point for rankings of kanji
+    for i in range(len(data)):
+        # Use the frequency rates as a base
+        ranks[i] = int(data[i].frequency or 0)
+        
+        if data[i].frequency is None:
+            ranks[i] = 4000
+        
+        # Penalize based on JLPT, kanken, jouyou levels
+        ranks[i] += int(data[i].grade) * 50
+        ranks[i] -= (int(data[i].jlpt)-6) * 50
+        if data[i].kanken:
+            ranks[i] -= (int(data[i].kanken)+1) * 50 if data[i].kanken.isdigit() else 0
+            if data[i].kanken == "pre-2":
+                ranks[i] -= 3 * 50
+            elif data[i].kanken == "2":
+                ranks[i] += 50
+            elif data[i].kanken == "pre-1":
+                ranks[i] -= 1 * 50
+    
+    t = np.array(ranks).argsort()
+    ranks = (t.argsort() + 1).tolist()
+    
+    for i in range(len(data)):
+        data[i].my_rank = ranks[i]
+    
+    print("Initial DB reform complete!")
+            
+        
+        
+#initial_DB_reformat()
 
 # Setup cron/scheduler to update kanji ranks and defaults
 def update_meta():
@@ -92,32 +125,12 @@ def update_meta():
         .group_by(models.TestLog) \
         .having(func.count_(models.TestLog.questions)>25)[0][0]
     db.session.commit()
-    
-    # update our ranks
-    data = db.session.query(models.TestMaterial).all()    
-    ranks = [r for r, in db.session.query(models.TestMaterial.my_rank)]
-    
-#    cur_rank = db.session.query(TestMaterial).filter(TestMaterial.frequency is not None).count()
-#    print("Cur rank: " + str(cur_rank))
-    
-    for i in range(len(data)):
-        # Use the frequency rates as a base
-        ranks[i] = int(data[i].frequency or 0)
-        
-        if data[i].frequency is None:
-            ranks[i] = 7000
-        
-        # Penalize based on JLPT, kanken, jouyou levels
-        
-        #
-        data[i].my_rank = ranks[i]
-    db.session.commit()
-        
-    print("Successfully Updated Ranks, Meta vals")
+            
+    print("Successfully Updated Meta vals")
         
 update_meta() 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=update_meta, trigger="interval", days=10)
+scheduler.add_job(func=update_meta, trigger="interval", days=1)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
