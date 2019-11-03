@@ -59,9 +59,12 @@ def logit(y, t, a):
         
         # 0<a<6000
         # ~400 is average but this value need not be particularly penalized
-def sigmoid_cost_regularized(params, true_X, true_Y, default_t, default_a):
-    t, a = params
+def sigmoid_cost_regularized(params, true_X, true_Y, last_t, last_a):
+    reg = 0
+    t, a = params    
+    i = len(true_X)
     
+    # Get predictions from our sigmoid    
     pred_Y = sigmoid(true_X, t, a, 1)
     
     # Calculate the sample bias correcting array
@@ -71,35 +74,43 @@ def sigmoid_cost_regularized(params, true_X, true_Y, default_t, default_a):
     #Fit a line across whole dataset
         # using a gaussian distribution for a close enough estimate (reality will be slightly left biased and have a clipped top)
         # Invert the dist for cost weights to correct sample bias    
+    
     mean,std=norm.fit(true_X)
     dist = norm(mean,std)
+    weights = dist.pdf(true_X)
     
-    #penalties for overly flat or steep slopes, a far from the average
-    reg = (abs(a - default_a)/50000)/len(true_X)
-#    print("dif in a")
-#    print((abs(a - default_a)/50000)/len(true_X))
+    if i == 1:
+        weights = 1
+        
+    #Regularization penalties
     
-    if t <= 0: t = 1; reg = 1000
-    if a <= 0: a = 1; reg = 1000
+    #Clip OOB values
+    if t <= 0: return 100
+    if a < 1: return 100
     
-    if t > default_t:
-        reg += (np.log((t / default_t))/10)/(len(true_X)**.5)        #steeper than default (ease off slowly with more data)
-#        print("steeper")
-#        print((np.log((t / default_t))/10)/(len(true_X)**.5))
-    else:
-        reg += (np.log((default_t / t))/10)/(len(true_X)**2)                    #shallower than default (ease off quickly with more data)
-#        print("shallower")
-#        print((np.log((default_t / t))/10)/(len(true_X)**2))
+    #Penalize very large jumps
+    reg += np.log((t / last_t) + (last_t / t) - 1) / i       
+    reg += (abs(a - last_a) / last_a) / (4 * i)
+    print("Jump size penalty")
+    print(np.log((t / last_t) + (last_t / t) - 1) / i   )
+    print((abs(a - last_a) / last_a) / (4 * i))
+            
+    #Penalize shallowness while a is small
+    reg += (np.log((0.01/t)+3)) / (((last_a/150)**3 + 1) * (i**.75))
+    print("Shallowness penalty")
+    print((np.log((0.01/t)+3)) / (((last_a/150)**3 + 1) * (i**.75)))
     
-    reg += np.log(t+1)/(len(true_X)**.5)
-    
+    #Penalize steepness while a is large
+    reg += (np.log((t / 0.01)+3)) / (10 * (i**.75))
+    print("Steepness penalty")
+    print((np.log((t / 0.01)+3)) / (10 * (i**.75)))
 
-#    print("Cost:")
-#    print("t: " + str(t) + " -- a: " + str(a))
-#    print("default_t: " + str(default_t) + " -- default_a: " + str(default_a))
-#    print(str(np.mean((pred_Y - true_Y)**2)) + " + " + str(reg))
-#    print(str(np.mean(((pred_Y - true_Y)**2)/dist.pdf(true_X))*(np.mean(dist.pdf(true_X)))) + " + " + str(reg))
-    return np.mean(((pred_Y - true_Y)**2)/dist.pdf(true_X))*(np.mean(dist.pdf(true_X))) + reg
+
+    print("Cost:")
+    print("t: " + str(t) + " -- a: " + str(a))
+    print("last_t: " + str(last_t) + " -- last_a: " + str(last_a))
+    print(str(np.mean(((pred_Y - true_Y)**2)/weights)*(np.mean(weights))) + " + " + str(reg))
+    return np.mean(((pred_Y - true_Y)**2)/weights)*(np.mean(weights)) + reg
 
 ##########################################
 ### ROUTES
@@ -174,7 +185,8 @@ def test():
         
         p0 = [session['t'], session['a']]       # use last LOBF as starting point for new one
         
-        res = minimize(sigmoid_cost_regularized, p0, args=(xdata, ydata, p0[0], p0[1]))
+        res = minimize(sigmoid_cost_regularized, p0, args=(xdata, ydata, p0[0], p0[1]),method="Nelder-Mead")
+            #,options={'eps': [0.0001,1]})#, bounds=[(0,10),(1,7000)])
         
         db.session.query(TestLog).get(session['testlogid']).a = session['a'] = res.x[1]
         db.session.query(TestLog).get(session['testlogid']).t = session['t'] = res.x[0]
@@ -183,18 +195,18 @@ def test():
         # Predict known kanji
         if len(result) > 10:
             #[mid, upper, lower]
-            raw_pred = [int(logit(.5, *res.x)),
-                        int(quad(sigmoid,0,app.config['MAX_X'],args=(*res.x,.5))[0]),
-                        int(quad(sigmoid,0,app.config['MAX_X'],args=(*res.x,2))[0])]
-            
+            pred = [(quad(sigmoid,0,app.config['MAX_X'],args=(*res.x,1))[0]),
+                        (quad(sigmoid,0,app.config['MAX_X'],args=(*res.x,.5))[0]),
+                        (quad(sigmoid,0,app.config['MAX_X'],args=(*res.x,2))[0])]
             #fixed to clear all the knowns
-            pred = raw_pred[:]
             for r in result:
-                pred[0] += int(r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, 1))
-                pred[1] += int(r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, .5))
-                pred[2] += int(r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, 2))
+                pred[0] += (r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, 1))
+                pred[1] += (r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, .5))
+                pred[2] += (r.QuestionLog.score - sigmoid(r.TestMaterial.my_rank, *res.x, 2))
             
-        
+            pred = list(map(int,pred))
+            print(pred)
+            
         # Select next question
         
         # left half of graph if last question wrong, right half if correct (skew selection slightly away from the middle)

@@ -36,7 +36,6 @@
 		<!-- Predictions -->    	
     	{% if pred[0] !=0 %}
     	
-    	
     	<div class="container pred">
         	<p class="pred-header">Estimates</p>
         	<span class="predrange"><span class="predrange predmin">{{pred[2]}}</span>&nbsp; &nbsp; - &nbsp; &nbsp;</span>
@@ -47,6 +46,11 @@
     	
     	<!-- Chart -->    	
         <canvas id="myChart" width="500" height="100"></canvas>
+        {% else %}
+        <div class="container pred">
+            <br><br>
+            <h4> Answer a few more for your prediction ... </h4>
+        </div>
         {% endif %}
         
         <!-- History -->    	

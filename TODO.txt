@@ -1,4 +1,18 @@
-#TODO - CLEANUP
+- show how many more before predictions
+- resize chart as needed? 0~ (x,y=0)
+
+#TODO - RANKS
+    - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
+        - keep moves small even at the high end to avoid abuse by individuals
+        - only adjust when on round 10 or higher and t > 0.003 to avoid randoms
+        
+#TODO - BUGS
+    - Error catching to ensure the DB is ALWAYS flushed
+        - sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
+        - may need to drop sqlite?
+    - Still not great at 0~100
+        
+#TODO - POLISH
     - commenting
     - data structuring
     - algorithms/code flow/refactoring
@@ -6,26 +20,18 @@
     - move defaults/constants to DB / config.py
     - error catching
     - looks good on mobile? (test sizes, touch controls, )
-        
-#TODO4 - RANKS
-    - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
-        - keep moves small even at the high end to avoid abuse by individuals
-        
-#TODO4 - BUGS
-    - Error catching to ensure the DB is ALWAYS flushed
-        - sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
-        - may need to drop sqlite?
-    - the algo is not very responsive to change ... stubborn?
-        - got trapped in a flat estimation ... how? lol
-        
+    - front page rewrite?
+            
 #TODO5 - Deployment!
     - alpha testing
     - going public
+    - find host
+    - buy domain, buy hosting
     
 --------------------------
 
 Expansion ideas:
-- resize chart as needed? 0~ (x,y=0)
+- blog post about it ... or just stuff into the github.
 - add 'share' buttons (esp for mobile) ... FB. (use a SS of test state?)
 - add example words to stop ambiguity
 - Historical rankings "You are #5/34830 tests!"
@@ -38,4 +44,3 @@ Expansion ideas:
 - other direction testing (definitions to kanji)
 - snazzy animations for flips
 - clientside the math
-- 
