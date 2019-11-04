@@ -1,5 +1,9 @@
+- "non standard for"
+- show question # somewhere (chart mouseover?)
 - show how many more before predictions
 - resize chart as needed? 0~ (x,y=0)
+- change bounds to use percentiles
+    - make bounds shrink more with more data
 
 #TODO - RANKS
     - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
