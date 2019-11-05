@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="container text-center">
+    	<a href="/"><img src="/static/img/jiken-sm.png"></a>
+    	
+    	<!-- Flashcard -->    	
+    	<div class="flashcard" onclick="flip()">
+            <div class="frontside container">
+                {% if question.my_rank != 7000 %}
+                    <p class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji number determined by commonness and complexity">{{question.my_rank}}</p>
+                {% endif %}
+                
+                <div class="top-right">
+                    {% if question.jlpt != '6' %}
+                        <p class="jlpt" data-toggle="tooltip" data-placement="right" title="JLPT grade level">N{{question.jlpt}}</p>
+                    {% endif %}
+                    {% if question.grade != '14' %}
+                        <p class="grade" data-toggle="tooltip" data-placement="right" title="Jōyō grade level">Gr{{question.grade|int}}</p>
+                    {% endif %}
+                </div>
+                <h1 class="kanji">{{question.kanji}}</h1>
+            </div>
+            <div class="backside container">
+                <h1 class="meaning">{{question.meaning}}</h1>
+                <h4 class="onyomi">{{question.onyomi}}</h4>
+                <h4 class="kunyomi">{{question.kunyomi}}</h4>
+                <a href="https://jisho.org/search/{{question.kanji}} %23kanji" class="more">...more</p>
+            </div>
+        </div>
+
+        <!-- Buttons -->    	
+		<a class="btn btn-success btn-lg" id="know" role="btn" href="/test?a=1&q={{question.id}}">Know it</a>
+		<a class="btn btn-danger btn-lg" id="dunno" role="btn" href="/test?a=0&q={{question.id}}">Don't Know</a>
+		
+		
+		<!-- Predictions -->    	
+    	{% if pred[0] !=0 %}
+    	
+    	<div class="container pred">
+        	<p class="pred-header">Estimates</p>
+        	<span class="predrange"><span class="predrange predmin">{{pred[2]}}</span>&nbsp; &nbsp; - &nbsp; &nbsp;</span>
+        	<span class="predmain" data-toggle="tooltip" data-placement="top" data-html="true" title="{{pred[0]}}">{{pred[0]}}</span>
+        	<span class="predrange">&nbsp; &nbsp; - &nbsp; &nbsp;{{pred[1]}}</span>
+    	</div>
+    	
+    	
+    	<!-- Chart -->    	
+        <canvas id="myChart" width="500" height="100"></canvas>
+        {% else %}
+        <div class="container pred">
+            <br><br>
+            <h4> Answer a few more for your prediction ... </h4>
+        </div>
+        {% endif %}
+        
+        <!-- History -->    	
+		<!--
+		<p>
+		{% for q in oldquestions %}
+            <span class="ans{{q.QuestionLog.score}}">{{q.TestMaterial.kanji}}</span>{{ "," if not loop.last }} 		
+		{% endfor %}
+		</p>		
+		-->
+	</div>
+{% endblock content %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/flip.css')}}">
+{% endblock %}
+
+{% block scripts %}
+    {{super()}}
+    <script type="text/javascript" src="{{url_for('static', filename='js/hotkeys.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/tooltip.js')}}"></script>
+    {%- include 'chart.js' -%}
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

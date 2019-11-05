@@ -1,0 +1,1 @@
+web: gunicorn jiken:app

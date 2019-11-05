@@ -65,3 +65,5 @@ switching apps\.txt
 numpy-1.17.1\+mkl-cp37-cp37m-win_amd64.whl
 
 testimagepython.png
+dev - ignore
+*.env

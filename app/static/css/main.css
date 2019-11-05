@@ -1,0 +1,146 @@
+/* TODO
+    
+*/
+
+/* Colour scheme
+
+Background (White)
+Highlight (green)  #267f00
+Highlight (grey) #f5f5f5
+
+Good - 28a745 (default) -> #267f00
+Bad - dc3545 (default) -> #B40020
+
+*/
+
+/* Test formatting
+-------------------------------------------------- */
+.flashcard {
+    margin: 30px 0px;
+    height: 150px;
+}
+
+/* Front */
+.frontside {
+    right: 0px;
+    width: 250px;
+    margin: 0px auto;
+}
+
+.kanji {
+    font-size: 128px;
+}
+
+.my_rank {
+    font-size: 12px;
+    float: left;
+}
+
+.top-right {
+    font-size: 12px;
+    text-align: right;
+    float: right;
+}
+
+/* Back */
+.backside {
+    right: 0px;
+    width: 600px;
+    margin: 0px auto;
+    overflow: auto;
+}
+
+.meaning {
+    font-size: 24px;
+}
+
+.onyomi {
+    font-size: 16px;
+}
+
+.kunyomi {
+    font-size: 16px;
+}
+
+.more {
+    font-size: 12px;
+    float: right;
+    right: 5px;
+    bottom: 5px;
+}
+
+/* Results */
+
+.pred {
+    height: 64px;
+    line-height:48px;
+    margin: 10px 0px;
+}
+
+.pred-header {
+    line-height:12px;
+    font-variant: small-caps;
+    letter-spacing: 3px;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0;
+}
+.predmain {
+    vertical-align:middle;
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.predrange {
+    vertical-align:middle;
+    font-size: 12px;
+}
+canvas {
+    margin: 100px, 0px;
+    height: 100px;
+    width: 500px;
+}
+
+/*.ansTrue {
+    color: #267f00;
+}
+
+.ansFalse {
+    color: #B40020;
+}*/
+
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  margin-bottom: 60px; /* Margin bottom by footer height */
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px; /* Set the fixed height of the footer here */
+  line-height: 60px; /* Vertically center the text there */
+  background-color: #f5f5f5;
+}
+
+
+/* General Styling
+-------------------------------------------------- */
+
+.btn-success {
+    background-color: #267f00;
+}
+
+.btn-danger {
+    background-color: #B40020;
+}
+
+.slogan {
+    color: #52B129;
+     font-variant: small-caps;
+}

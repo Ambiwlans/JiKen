@@ -18,20 +18,31 @@ from flask_bootstrap import Bootstrap
 
 import numpy as np
 
-# Setup Flask App
-app = Flask(__name__)
-app.config.from_object('KTest.config.Config')
-    
-db = SQLAlchemy(app)
- 
+from config import Config
 
-# Setup Bootstrap 4.1.0 with jquery 3.3.1
-Bootstrap(app)
+db = SQLAlchemy()
+
+# Setup Flask App
+def create_app(config_class=Config):
+	app = Flask(__name__)
+	app.config.from_object(config_class)
+    
+	db.init_app(app)
+	
+	#db.create_all()
+	
+	from app.views import bp as main_bp
+	app.register_blueprint(main_bp)    
+	 
+	# Setup Bootstrap 4.1.0 with jquery 3.3.1
+	Bootstrap(app)
+	
+	return app
 
 # Late import so modules can import their dependencies properly (proto-blueprint)
-from . import views, models
+from app import models
 
-db.create_all()
+
 
 # Reformat base DB taken from KANJIDIC
 def initial_DB_reformat():
@@ -128,11 +139,11 @@ def update_meta():
             
     print("Successfully Updated Meta vals")
         
-update_meta() 
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=update_meta, trigger="interval", days=1)
-scheduler.start()
-atexit.register(lambda: scheduler.shutdown())
+#update_meta() 
+#scheduler = BackgroundScheduler()
+#scheduler.add_job(func=update_meta, trigger="interval", days=1)
+#scheduler.start()
+#atexit.register(lambda: scheduler.shutdown())
 
 
 
