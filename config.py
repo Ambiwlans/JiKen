@@ -41,6 +41,10 @@ class DeploymentConfig:
     
     # SQLAlchemy
     SQLALCHEMY_DATABASE_URI = os.environ.get('CLEARDB_DATABASE_URL').replace('?reconnect=true','')
+    SQLALCHEMY_ENGINE_OPTIONS = {
+            'pool_recycle':60
+            }
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     
@@ -50,5 +54,3 @@ class DeploymentConfig:
     
 #Easy switch for different configs
 Config = DeploymentConfig
-
-print(Config.SQLALCHEMY_DATABASE_URI)
