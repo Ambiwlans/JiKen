@@ -18,6 +18,7 @@ document.onkeydown=function(e){
             break;
         case 40:    // Pressing down or space, flip card
         case 32:
+            e.preventDefault();
             flip();
             break;
     }
