@@ -1,7 +1,7 @@
 {% block chart %}
 <script>
 
-var ctx = document.getElementById('myChart').getContext('2d');
+var ctx = document.getElementById('predChart').getContext('2d');
 var myLineChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -23,6 +23,8 @@ var myLineChart = new Chart(ctx, {
         }]
     },
     options: {
+        responsive: true,
+        maintainAspectRatio: false,
         tooltips: {
             enabled: false
         },

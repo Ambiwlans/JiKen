@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 	<div class="container text-center">
-    	<a href="/"><img src="/static/img/jiken-sm.png"></a>
+    	<a href="/"><img class="sm" src="/static/img/jiken.png"></a>
     	
     	<!-- Flashcard -->    	
     	<div class="flashcard" onclick="flip()">
             <div class="frontside container">
                 {% if question.my_rank != 7000 %}
-                    <p class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji number determined by commonness and complexity">{{question.my_rank}}</p>
+                    <p class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji number determined by commonness, complexity and user data">{{question.my_rank}}</p>
                 {% endif %}
                 
                 <div class="top-right">
@@ -45,7 +45,9 @@
     	
     	
     	<!-- Chart -->    	
-        <canvas id="myChart" width="500" height="100"></canvas>
+    	<div class="chart-container">
+            <canvas id="predChart"></canvas>
+        </div>
         {% else %}
         <div class="container pred">
             <br><br>
@@ -53,14 +55,14 @@
         </div>
         {% endif %}
         
-        <!-- History -->    	
+        {#<!-- History -->    	
 		<!--
 		<p>
 		{% for q in oldquestions %}
             <span class="ans{{q.QuestionLog.score}}">{{q.TestMaterial.kanji}}</span>{{ "," if not loop.last }} 		
 		{% endfor %}
 		</p>		
-		-->
+		-->#}
 	</div>
 {% endblock content %}
 

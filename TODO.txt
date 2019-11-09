@@ -1,41 +1,67 @@
-- "non standard for"
 - show question # somewhere (chart mouseover?)
 - show how many more before predictions
 - resize chart as needed? 0~ (x,y=0)
-- change bounds to use percentiles
-    - make bounds shrink more with more data
+
+- css tweaks for mobile
+    - flipped card width/location
+    - graph height (or length)
+    
+- less annoying logging
+    - improve new question log (give full report incl testid)
+
+- Reduce # of queries by ~90%
+    - 2019-11-08T15:46:25.236991+00:00 app[web.1]: sqlalchemy.exc.OperationalError: (MySQLdb._exceptions.OperationalError) (1226, "User 'b66aba601fcf75' has exceeded the 'max_questions' resource (current value: 3600)")
+    - 2019-11-08T15:46:25.236992+00:00 app[web.1]: (Background on this error at: http://sqlalche.me/e/e3q8)
+    - cached queries?
+    - JawsDB cap is also 3600
+    - both db's have tips sctns
+    
 - error screens
 
-#TODO - RANKS
+- online learning
+
+- add kanji mouseovers for each dot
+
+#TODO - GENERAL
+    - new page for "end test" ...link to a testid value
+    - error screens
+    
+#TODO - ALGORITHMIC
+    - change bounds to use percentiles
+        - make bounds shrink more with more data
     - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
         - keep moves small even at the high end to avoid abuse by individuals
         - only adjust when on round 10 or higher and t > 0.003 to avoid randoms
         
 #TODO - BUGS
-    - Error catching to ensure the DB is ALWAYS flushed
-        - sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
-        - may need to drop sqlite?
     - Still not great at 0~100
-        
+    - "non standard for", other blank kanji
+            
 #TODO - POLISH
     - commenting
     - data structuring
     - algorithms/code flow/refactoring
     - variable names, constants
     - move defaults/constants to DB / config.py
-    - error catching
+    - error catching of literally any sort ... (use default flask stuff i have in tab site, incl contact info)
     - looks good on mobile? (test sizes, touch controls, )
     - front page rewrite?
             
-#TODO5 - Deployment!
+#TODO - STRUCTURAL
+    - trim the req list significantly
+    - clean out the init (cron and stuff should be own py)
+    - handle DB size increases (5mb cap ... still far away)
+    
+#TODO - RELEASE!
     - alpha testing
     - going public
-    - find host
-    - buy domain, buy hosting
+    - setup heroku notifications?
     
 --------------------------
 
 Expansion ideas:
+- first test page overview showing shit
+- use dotenv
 - blog post about it ... or just stuff into the github.
 - add 'share' buttons (esp for mobile) ... FB. (use a SS of test state?)
 - add example words to stop ambiguity

@@ -1,7 +1,3 @@
-/* TODO
-    
-*/
-
 /* Colour scheme
 
 Background (White)
@@ -10,7 +6,11 @@ Highlight (grey) #f5f5f5
 
 Good - 28a745 (default) -> #267f00
 Bad - dc3545 (default) -> #B40020
+*/
 
+/* Mobile Support 
+
+(assumed min width of ~480px)
 */
 
 /* Test formatting
@@ -45,28 +45,43 @@ Bad - dc3545 (default) -> #B40020
 /* Back */
 .backside {
     right: 0px;
-    width: 600px;
+    max-width: 600px;
     margin: 0px auto;
     overflow: auto;
 }
 
 .meaning {
-    font-size: 24px;
+    font-size: 4vw; /*24px*/
 }
 
 .onyomi {
-    font-size: 16px;
+    font-size: 3vw; /*16px*/
 }
 
 .kunyomi {
-    font-size: 16px;
+    font-size: 3vw; /*16px*/
 }
 
 .more {
-    font-size: 12px;
+    font-size: 3vw; /*12px*/
     float: right;
     right: 5px;
     bottom: 5px;
+}
+
+@media screen and (min-width: 600px) {
+    .meaning {
+        font-size: 24px;
+    }
+    .onyomi {
+        font-size: 16px;
+    }
+    .kunyomi {
+        font-size: 16px;
+    }
+    .more {
+        font-size: 12px;
+    }
 }
 
 /* Results */
@@ -95,10 +110,12 @@ Bad - dc3545 (default) -> #B40020
     vertical-align:middle;
     font-size: 12px;
 }
-canvas {
-    margin: 100px, 0px;
-    height: 100px;
-    width: 500px;
+
+.chart-container {
+    margin: 0px auto;
+    height: 200px;
+    width: 90%;
+    max-width: 1200px;
 }
 
 /*.ansTrue {
@@ -116,18 +133,27 @@ html {
   position: relative;
   min-height: 100%;
 }
+
 body {
   margin-bottom: 60px; /* Margin bottom by footer height */
 }
+
 .footer {
   position: absolute;
   bottom: 0;
+  left: 0;
   width: 100%;
-  height: 60px; /* Set the fixed height of the footer here */
-  line-height: 60px; /* Vertically center the text there */
+  height: 60px;
+  line-height: 60px;
   background-color: #f5f5f5;
+  font-size: 4vw;
 }
 
+@media screen and (min-width: 600px) {
+    .footer {
+        font-size: 20px;
+    }
+}
 
 /* General Styling
 -------------------------------------------------- */
@@ -143,4 +169,13 @@ body {
 .slogan {
     color: #52B129;
      font-variant: small-caps;
+}
+
+img {
+    width: 90%;
+    max-width: 600px;
+}
+
+img.sm {
+    max-width: 200px;
 }
