@@ -17,7 +17,7 @@ class DevelopmentConfig:
     # Flask
     DEBUG = True
     
-    SECRET_KEY = 'Ionceateawholeham'
+    SECRET_KEY = os.environ.get('DB_SECRET_KEY') or "Ionceateawholeham"
     
     # SQLAlchemy
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{user}:{password}@{host}/jiken?charset=utf8'.format(**{
@@ -37,7 +37,7 @@ class DeploymentConfig:
     # Flask
     DEBUG = True
     
-    SECRET_KEY = 'Ionceateawholeham'
+    SECRET_KEY = os.environ.get('DB_SECRET_KEY') or "Ionceateawholeham"
     
     # SQLAlchemy
     SQLALCHEMY_DATABASE_URI = os.environ.get('CLEARDB_DATABASE_URL').replace('?reconnect=true','')
