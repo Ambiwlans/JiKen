@@ -2,13 +2,6 @@
 - show how many more before predictions
 - resize chart as needed? 0~ (x,y=0)
 
-- css tweaks for mobile
-    - flipped card width/location
-    - graph height (or length)
-    
-- less annoying logging
-    - improve new question log (give full report incl testid)
-
 - Reduce # of queries by ~90%
     - 2019-11-08T15:46:25.236991+00:00 app[web.1]: sqlalchemy.exc.OperationalError: (MySQLdb._exceptions.OperationalError) (1226, "User 'b66aba601fcf75' has exceeded the 'max_questions' resource (current value: 3600)")
     - 2019-11-08T15:46:25.236992+00:00 app[web.1]: (Background on this error at: http://sqlalche.me/e/e3q8)
@@ -38,13 +31,12 @@
     - "non standard for", other blank kanji
             
 #TODO - POLISH
-    - commenting
+    - commenting + ensure all unused code is actualy not running (jinja2)
     - data structuring
     - algorithms/code flow/refactoring
     - variable names, constants
     - move defaults/constants to DB / config.py
     - error catching of literally any sort ... (use default flask stuff i have in tab site, incl contact info)
-    - looks good on mobile? (test sizes, touch controls, )
     - front page rewrite?
             
 #TODO - STRUCTURAL
@@ -53,9 +45,10 @@
     - handle DB size increases (5mb cap ... still far away)
     
 #TODO - RELEASE!
-    - alpha testing
-    - going public
-    - setup heroku notifications?
+    - alpha testing (more)
+    - beta testing
+    - drum up traffic
+    - setup heroku, DB e-mail notifications?
     
 --------------------------
 
