@@ -41,7 +41,6 @@
             
 #TODO - STRUCTURAL
     - trim the req list significantly
-    - clean out the init (cron and stuff should be own py)
     - handle DB size increases (5mb cap ... still far away)
     
 #TODO - RELEASE!

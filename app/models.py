@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 @author: Ambiwlans
-@general: KTest - Kanji test site JiKen
+@general: JiKen - Kanji testing site
 @description: Models
 """
 
