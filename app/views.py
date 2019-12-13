@@ -53,10 +53,11 @@ def test():
     
     if score is None or session['testlogid'] is None:
         # New Test, new log
+        
         newTest = TestLog(
                 a = db.session.query(MetaStatistics).first().default_kanji,
                 t = db.session.query(MetaStatistics).first().default_tightness,
-                ip = request.remote_addr,
+                ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr),
                 start_time = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
         
         db.session.add(newTest)
