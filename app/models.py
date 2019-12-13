@@ -20,7 +20,6 @@ from sqlalchemy.orm import relationship, backref
 ### Tests
 ###############################################################################
     
-#TODO ? include metauser data for ML
 class TestLog(db.Model):
     __tablename__ = 'testlog'
     
@@ -28,14 +27,19 @@ class TestLog(db.Model):
     id = Column(Integer, primary_key=True)
     
     #Core
-    a = Column(Integer)                   # predicted number of kanji known
-    t = Column(Numeric(asdecimal=False))  # predicted spread
+    a = Column(Integer)                     # predicted number of kanji known
+    t = Column(Numeric(asdecimal=False))    # predicted spread
     
+    upper_prediction = Column(Integer, default=0)                 # upper limit of prediction
+    lower_prediction = Column(Integer, default=0)                 # lower limit of prediction
+    number_of_questions = Column(Integer, default=0)   # how many questions asked through test
+    
+    #Tracking
+    ip = Column(String(100))
+    start_time = Column(DateTime())
 #    timezone = 
 #    browserdata =
-#    ip = 
-#    start_time
-    
+
     #Related
     questions = relationship("QuestionLog", back_populates="testlog")
 

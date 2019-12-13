@@ -13,13 +13,14 @@ bp = Blueprint('main', __name__)
 
 #SQLAlch
 from sqlalchemy import func #desc
-
 import json
 
 #Math
 import random
 from scipy.optimize import minimize
 from scipy.integrate import quad
+
+import datetime
 
 #Models
 from .models import TestMaterial, \
@@ -28,7 +29,6 @@ from .models import TestMaterial, \
 
 #Session
 from app import db
-
 from app.utils import sigmoid, logit, sigmoid_cost_regularized
 
 ##########################################
@@ -55,7 +55,9 @@ def test():
         # New Test, new log
         newTest = TestLog(
                 a = db.session.query(MetaStatistics).first().default_kanji,
-                t = db.session.query(MetaStatistics).first().default_tightness)
+                t = db.session.query(MetaStatistics).first().default_tightness,
+                ip = request.remote_addr,
+                start_time = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
         
         db.session.add(newTest)
         db.session.commit()
@@ -156,9 +158,6 @@ def test():
                 break
                 
         newquestion = db.session.query(TestMaterial).filter(TestMaterial.my_rank == x).first()
-
-        
-    print ("Asking test #" + str(session['testlogid']) + ", Question #: " + str(newquestion.id) + ", Rank: " + str(newquestion.my_rank) + " -- " + str(newquestion.kanji))
     
     #Get some history to show
     oldquestions = history.order_by(QuestionLog.id.desc()).limit(100)
@@ -168,6 +167,8 @@ def test():
     wronganswers = oldquestions.from_self().filter(QuestionLog.score == 0).all()
     wronganswers = [i.TestMaterial.my_rank for i in wronganswers]
     oldquestions = oldquestions.limit(10)
+    
+    print ("Asking test #" + str(session['testlogid']) + ", Question #: " + str(newquestion.id) + ", Rank: " + str(newquestion.my_rank) + " -- " + str(newquestion.kanji.encode("utf-8")))
     return render_template('test.html', question = newquestion, oldquestions = oldquestions, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), pred = pred)
 
 
