@@ -5,21 +5,27 @@
 @description: The main init, run via jiken.py
 """
 
-#General Python
+#Base
+from flask import Flask
+from config import Config
+
+#Data Handling
+from flask_sqlalchemy import SQLAlchemy
+from flask_session.__init__ import Session
+
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from flask import Flask
+#import pickle
+from sqlalchemy.ext.serializer import loads, dumps
 
-from flask_sqlalchemy import SQLAlchemy
-
+#UI
 from flask_bootstrap import Bootstrap
 
-import numpy as np
 
-from config import Config
 
 db = SQLAlchemy()
+sess = Session()
 
 # Setup Flask App
 def create_app(config_class=Config):
@@ -27,7 +33,7 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     
     db.init_app(app)
-	
+    sess.init_app(app)
     #db.create_all()
 	
     from app.views import bp as main_bp
@@ -45,6 +51,9 @@ def create_app(config_class=Config):
         scheduler.start()
         atexit.register(lambda: scheduler.shutdown())
         
+        app.config['SESSION_REDIS'].flushall()
+
+        app.config['SESSION_REDIS'].set('TestMaterial', dumps(db.session.query(models.TestMaterial)))
         #initial_DB_reformat()
     return app
 

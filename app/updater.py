@@ -6,6 +6,7 @@
 """
 
 from sqlalchemy import func
+import numpy as np
 
 #Models
 from app import models

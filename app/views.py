@@ -15,12 +15,14 @@ bp = Blueprint('main', __name__)
 from sqlalchemy import func #desc
 import json
 
-#Math
+#Tools
 import random
 from scipy.optimize import minimize
 from scipy.integrate import quad
 
 import datetime
+#import pickle
+from sqlalchemy.ext.serializer import loads, dumps
 
 #Models
 from .models import TestMaterial, \
@@ -37,6 +39,8 @@ from app.utils import sigmoid, logit, sigmoid_cost_regularized
 
 @bp.route("/")
 def home():
+    print(loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session).\
+          filter(TestMaterial.my_rank == 11).first())
     return render_template('home.html')
 
 #TODO2 - bias first question towards more commonly known ones
@@ -51,7 +55,7 @@ def test():
     score = request.args.get('a')
     testmaterialid = request.args.get('q')
     
-    if score is None or session['testlogid'] is None:
+    if score is None or session.get('testlogid') is None:
         # New Test, new log
         
         newTest = TestLog(
@@ -63,6 +67,8 @@ def test():
         db.session.add(newTest)
         db.session.commit()
         session['testlogid'] = newTest.id
+        session['a'] = newTest.a
+        session['t'] = newTest.t
         print("New Sess:" + str(session['testlogid']))
     else:
         # Log score
@@ -78,8 +84,16 @@ def test():
     ### Handle Data, Prep output
     ###
     
-    history = db.session.query(QuestionLog, TestMaterial).join(TestMaterial).filter(QuestionLog.testlogid==session['testlogid'])
-
+#    history = db.session.query(QuestionLog, TestMaterial).join(TestMaterial).filter(QuestionLog.testlogid==session['testlogid'])
+    history = loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session).join(QuestionLog).filter(QuestionLog.testlogid==session['testlogid']).with_entities(TestMaterial, QuestionLog)
+    
+    print("-")
+    print("-")
+    print("-")
+    print(history.first())
+    print("-")
+#    print(h2.first())
+    
     #Get updated statistics and next question
     
     xdata = []
@@ -88,7 +102,7 @@ def test():
     
     if score is None:
         #For the first question, ask a random kanji (for data gathering purposes)
-        newquestion = db.session.query(TestMaterial).order_by(func.random()).first()
+        newquestion = loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session).order_by(func.random()).first()
         db.session.query(TestLog).get(session['testlogid']).a = session['a'] = db.session.query(MetaStatistics).first().default_kanji
         db.session.query(TestLog).get(session['testlogid']).t = session['t'] = db.session.query(MetaStatistics).first().default_tightness
     else:
@@ -158,7 +172,7 @@ def test():
                 #TODO - go to seperate page
                 break
                 
-        newquestion = db.session.query(TestMaterial).filter(TestMaterial.my_rank == x).first()
+        newquestion = loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session).filter(TestMaterial.my_rank == x).first()
     
     #Get some history to show
     oldquestions = history.order_by(QuestionLog.id.desc()).limit(100)

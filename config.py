@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 @author: Ambiwlans
-@general: KTest - Kanji test site JiKen
+@general: JiKen - Kanji testing site
 @description: The config file
 """
 
 
 import os
+import redis
 #from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -27,6 +28,11 @@ class DevelopmentConfig:
     })
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    SQLALCHEMY_ECHO=True
+    
+    # Flask-Session
+    SESSION_TYPE = "redis"
+    SESSION_REDIS = redis.from_url(os.environ.get('SESSION_REDIS'))
     
     # App
     GRAPH_MAX_X = 4000
@@ -44,9 +50,12 @@ class DeploymentConfig:
     SQLALCHEMY_ENGINE_OPTIONS = {
             'pool_recycle':60
             }
-    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    
+    # Flask-Session
+    SESSION_TYPE = "redis"
+    SESSION_REDIS = redis.from_url(os.environ.get('SESSION_REDIS'))
     
     # App
     GRAPH_MAX_X = 6000
