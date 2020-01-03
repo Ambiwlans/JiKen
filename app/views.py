@@ -39,8 +39,6 @@ from app.utils import sigmoid, logit, sigmoid_cost_regularized
 
 @bp.route("/")
 def home():
-    print(loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session).\
-          filter(TestMaterial.my_rank == 11).first())
     return render_template('home.html')
 
 #TODO2 - bias first question towards more commonly known ones
@@ -84,15 +82,8 @@ def test():
     ### Handle Data, Prep output
     ###
     
-#    history = db.session.query(QuestionLog, TestMaterial).join(TestMaterial).filter(QuestionLog.testlogid==session['testlogid'])
     history = loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session).join(QuestionLog).filter(QuestionLog.testlogid==session['testlogid']).with_entities(TestMaterial, QuestionLog)
     
-    print("-")
-    print("-")
-    print("-")
-    print(history.first())
-    print("-")
-#    print(h2.first())
     
     #Get updated statistics and next question
     

@@ -12,40 +12,25 @@
     - include share buttons
     - add a 'try test button?
     
-- Reduce # of queries by ~90%
-    - 2019-11-08T15:46:25.236991+00:00 app[web.1]: sqlalchemy.exc.OperationalError: (MySQLdb._exceptions.OperationalError) (1226, "User 'b66aba601fcf75' has exceeded the 'max_questions' resource (current value: 3600)")
-    - 2019-11-08T15:46:25.236992+00:00 app[web.1]: (Background on this error at: http://sqlalche.me/e/e3q8)
-    - cached queries?
-    - load the testmaterial, metadata into memory on start (for all instances)
-        - as JSON? numpy table? Save as a raw query result duhhh! (prefetch needed?)
-        - not as session, but as a global variable
-    - change from default sessions to redis based sessions
-        - have a 'on request' view that 
-            - creates a new session if none exists or if new test starting
-                - save ip, start_timestamp, browserdata, timezone
-            - creates a 'end test' redis queue with a 6hr delay to spread out SQL use OR if new test requested
-                - write test immediately upon closing? (only 1 query), handle questions, rerank on a delay?
-                - only save if > 10 questions, else just delete the redis session
-                - writes the q, t to the DB
-                - handles reranking calculations
-                - better than delay? One SQL query per minute until complete?
-                - minimal # of queries?
-        - daily redis queue
-            - recalc meta values
-            - delete old questions (older than 50k), tests (older than 50k)
-        - how to handle transition period?
-            - where 'saved' test is not yet in the database, still in a redis queue?
-                - can you search existing redis queues for a matching testid?
-        - Redis only works on 'nix so testing sounds fucky ... need to run via cygwin? Also sounds horrible.
-        - how many workers?
+- Leverage redis sessions for less SQL queries
+    - have a 'on request' view that 
+        - creates a new session if none exists or if new test starting
+            - save ip, start_timestamp, browserdata, timezone
+        - creates a 'end test' redis queue with a 6hr delay to spread out SQL use OR if new test requested
+            - write test immediately upon closing? (only 1 query), handle questions, rerank on a delay?
+            - only save if > 10 questions, else just delete the redis session
+            - writes the q, t to the DB
+            - handles reranking calculations
+            - better than delay? One SQL query per minute until complete?
+            - minimal # of queries?
+    - daily redis queue
+        - recalc meta values
+        - delete old questions (older than 50k), tests (older than 50k)
+    - how to handle transition period?
+        - where 'saved' test is not yet in the database, still in a redis queue?
+            - can you search existing redis queues for a matching testid?
+    - how many workers?
         
-	Prefetching (aka eager-loading
-
-	Caching Query Results as Variables
-
-
-	-- do it manually in memory then dump to sql on session end?
-
 
 - error screens (DB down, other)
     - contact info, apologies
@@ -59,7 +44,8 @@
 
 #TODO - GENERAL
     - switch away from using params?
-        - refreshing pg w/o clicking a link should just refresh the page....
+        - refreshing pg w/o clicking a link should just refresh the page and do nothing...
+    - spacebar in main window should start test
     
 #TODO - ALGORITHMIC
     - change bounds to use percentiles
@@ -75,28 +61,24 @@
 #TODO - POLISH
     - commenting + ensure all unused code is actualy not running (jinja2)
     - data structuring
-    - algorithms/code flow/refactoring
-    - variable names, constants
-    - move defaults/constants to DB / config.py
+    - algorithms/code flow
+    - shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')?
     - error catching of literally any sort ... (use default flask stuff i have in tab site, incl contact info)
     - front page rewrite?
     - update github doc
             
 #TODO - STRUCTURAL
     - trim the req list significantly
-    - handle DB size increases (5mb cap ... still far away)
     
 #TODO - RELEASE!
-    - alpha testing (more)
     - beta testing
-    - drum up traffic
+    - drum up traffic (blog)
     - setup heroku, DB e-mail notifications?
     
 --------------------------
 
 Expansion ideas:
-? use dotenv
-- blog post about it ... or just stuff into the github.
+- medium blog post about it ... or just stuff into the github.
 - add 'share' buttons (esp for mobile) ... FB. (use a SS of test state?)
 - add example words to stop ambiguity
 - Historical rankings "You are #5/34830 tests!"
@@ -109,3 +91,5 @@ Expansion ideas:
 - other direction testing (definitions to kanji)
 - snazzy animations for flips
 - clientside the math
+- dotenv
+- flask debugtoolbar
