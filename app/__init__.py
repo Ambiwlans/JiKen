@@ -9,15 +9,17 @@
 from flask import Flask
 from config import Config
 
+from flask import current_app
+
 #Data Handling
 from flask_sqlalchemy import SQLAlchemy
 from flask_session.__init__ import Session
+import pandas as pd
 
+#Scheduling
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
-
-#import pickle
-from sqlalchemy.ext.serializer import loads, dumps
+import datetime
 
 #UI
 from flask_bootstrap import Bootstrap
@@ -34,27 +36,29 @@ def create_app(config_class=Config):
     
     db.init_app(app)
     sess.init_app(app)
-    #db.create_all()
 	
     from app.views import bp as main_bp
     app.register_blueprint(main_bp)    
-	 
+    
     # Setup Bootstrap 4.1.0 with jquery 3.3.1
     Bootstrap(app)
 
     # Scheduler set up/run
-    from app.updater import update_meta, initial_DB_reformat
+    from app.updater import update_meta, update_TestQuestionLogs, initial_DB_reformat
     with app.app_context():
-        update_meta()
+#        db.create_all() 
+#        initial_DB_reformat()
+        app.config['SESSION_REDIS'].flushall()
+        
         scheduler = BackgroundScheduler()
-        scheduler.add_job(func=update_meta, trigger="interval", days=1)
+        scheduler.add_job(func=update_meta, args=(current_app._get_current_object(),), trigger="interval", days=1, next_run_time=datetime.datetime.now())
+        scheduler.add_job(func=update_TestQuestionLogs, args=(current_app._get_current_object(),), trigger="interval", hours=1, next_run_time=datetime.datetime.now())
         scheduler.start()
         atexit.register(lambda: scheduler.shutdown())
         
-        app.config['SESSION_REDIS'].flushall()
-
-        app.config['SESSION_REDIS'].set('TestMaterial', dumps(db.session.query(models.TestMaterial)))
-        #initial_DB_reformat()
+        if app.config['SESSION_REDIS'].get('TestMaterial') is None:
+            app.config['SESSION_REDIS'].set('TestMaterial', pd.read_sql(db.session.query(models.TestMaterial).statement,db.engine).to_msgpack(compress='zlib'))
+            print("Refreshed TestMaterial")
     return app
 
 # Late import so modules can import their dependencies properly (proto-blueprint)

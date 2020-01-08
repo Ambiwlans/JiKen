@@ -35,7 +35,8 @@ class DevelopmentConfig:
     SESSION_REDIS = redis.from_url(os.environ.get('SESSION_REDIS'))
     
     # App
-    GRAPH_MAX_X = 4000
+    GRAPH_AFTER = 0
+    GRAPH_MAX_X = 6000
     MAX_X = 6183
     
 class DeploymentConfig:
@@ -58,6 +59,7 @@ class DeploymentConfig:
     SESSION_REDIS = redis.from_url(os.environ.get('SESSION_REDIS'))
     
     # App
+    GRAPH_AFTER = 10
     GRAPH_MAX_X = 6000
     MAX_X = 6183
     

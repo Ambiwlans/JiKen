@@ -10,7 +10,7 @@ from app import db
 
 # Data Types
 from sqlalchemy import Boolean, DateTime, Column, Integer, \
-                       String, ForeignKey, Text, Numeric    
+                       String, ForeignKey, Text, Numeric
 
 # Database
 from sqlalchemy.orm import relationship, backref
@@ -100,13 +100,6 @@ class MetaStatistics(db.Model):
     #Core
     default_kanji = Column(Integer, default= 400)       # Number of kanji people know on avg
     default_tightness = Column(Numeric(asdecimal=False), default= 0.05)  # typical knowledge spread
-
-
-
-
-
-
-
 
 #db.create_all() 
 #db.session.commit() 

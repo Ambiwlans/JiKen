@@ -5,6 +5,8 @@
 @description: Updater
 """
 
+from flask import current_app
+
 from sqlalchemy import func
 import numpy as np
 
@@ -14,22 +16,38 @@ from app import models
 #Session
 from app import db
 
-# Setup cron/scheduler to update kanji ranks and defaults
-def update_meta():    
-    # update our meta values
-    db.session.query(models.MetaStatistics).first().default_kanji = db.session.query(func.avg(models.TestLog.a)) \
-        .outerjoin(models.TestLog.questions) \
-        .group_by(models.TestLog) \
-        .having(func.count_(models.TestLog.questions)>25)[0][0]
-    db.session.query(models.MetaStatistics).first().default_tightness = db.session.query(func.avg(models.TestLog.t)) \
-        .outerjoin(models.TestLog.questions) \
-        .group_by(models.TestLog) \
-        .having(func.count_(models.TestLog.questions)>25)[0][0]
-    db.session.commit()
+def update_TestQuestionLogs(app):
+    #move stuff from redis to SQL (Ql,Tl)
+    with app.app_context():
+#        x = current_app.config['SESSION_REDIS'].scan()
+#        print(x)
+        print("Updated Logs")
         
-    #TODO - throw out overly short tests here
-
-    print("Successfully Updated Meta vals")
+    
+# Setup cron/scheduler to update kanji ranks and defaults
+def update_meta(app):
+    # update our meta values
+    with app.app_context():
+        current_app.config['SESSION_REDIS'].set('default_tightness', db.session.query(func.avg(models.TestLog.t)) \
+            .outerjoin(models.TestLog.questions) \
+            .group_by(models.TestLog) \
+            .having(func.count_(models.TestLog.questions)>25)[0][0])
+        db.session.query(models.MetaStatistics).first().default_tightness = float(current_app.config['SESSION_REDIS'].get('default_tightness'))
+        
+        current_app.config['SESSION_REDIS'].set('default_kanji', int(db.session.query(func.avg(models.TestLog.a)) \
+            .outerjoin(models.TestLog.questions) \
+            .group_by(models.TestLog) \
+            .having(func.count_(models.TestLog.questions)>25)[0][0]))
+        db.session.query(models.MetaStatistics).first().default_kanji = int(current_app.config['SESSION_REDIS'].get('default_kanji'))
+        
+        db.session.commit()
+        
+        #TODO - throw out overly short tests here
+        
+        #DEV
+        print("Successfully Updated Meta vals")
+        print("A = " + str(int(current_app.config['SESSION_REDIS'].get('default_kanji'))))
+        print("T = " + str(float(current_app.config['SESSION_REDIS'].get('default_tightness'))))
     
 # Reformat base DB taken from KANJIDIC
 def initial_DB_reformat():

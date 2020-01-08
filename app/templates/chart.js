@@ -61,7 +61,7 @@ function makePrediction() {
     
     for (var x = 0; x <= {{config['GRAPH_MAX_X']}}; x = x + 50) {
         //y = 1 / (1 + np.exp(t*(x-a)))
-        y = 1 / (1 + 2**({{session['t']}} * (x - {{session['a']}})))
+        y = 1 / (1 + 2**({{session['TestLog'].t}} * (x - {{session['TestLog'].a}})))
         pred.push({x: x, y: y});
     }
     return pred;

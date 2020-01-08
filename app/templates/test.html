@@ -7,7 +7,7 @@
     	<div class="flashcard" onclick="flip()">
             <div class="frontside container">
                 {% if question.my_rank != 7000 %}
-                    <p class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji number determined by commonness, complexity and user data">{{question.my_rank}}</p>
+                    <p class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji rank determined by commonness, complexity and user data">{{question.my_rank}}</p>
                 {% endif %}
                 
                 <div class="top-right">
