@@ -2,6 +2,8 @@
 - show how many more before predictions
 - resize chart as needed? 0~ (x,y=0)
 
+- currently overwriting session whne user does multiple tests instead of saving it and creating a new session
+
 - new page for "End/See Results" ...link to a testid value
     - add link to it on the test page
     - include links to other tests with same IP
@@ -11,26 +13,15 @@
     - Mention that it is a permalink that can be shared
     - include share buttons
     - add a 'try test button?
+    - triggers sql dump from redis to enable accurate ranking
     
-- Leverage redis sessions for less SQL queries
-    - have a 'on request' view that 
-        - creates a new session if none exists or if new test starting
-            - save ip, start_timestamp, browserdata, timezone
-        - creates a 'end test' redis queue with a 6hr delay to spread out SQL use OR if new test requested
-            - write test immediately upon closing? (only 1 query), handle questions, rerank on a delay?
-            - only save if > 10 questions, else just delete the redis session
-            - writes the q, t to the DB
-            - handles reranking calculations
-            - better than delay? One SQL query per minute until complete?
-            - minimal # of queries?
-    - daily redis queue
-        - recalc meta values
-        - delete old questions (older than 50k), tests (older than 50k)
-    - how to handle transition period?
-        - where 'saved' test is not yet in the database, still in a redis queue?
-            - can you search existing redis queues for a matching testid?
-    - how many workers?
-        
+-redis    
+    - lower calls to redis where viable
+
+    - daily DB trimming (delete tests, questions. Keep newest 10k tests, 100k questions)(questions first to avoid ophans)
+    
+    - learn to rank code done w/ online learning with the SQL dumps? or daily?
+
 
 - error screens (DB down, other)
     - contact info, apologies
@@ -64,6 +55,7 @@
     - algorithms/code flow
     - shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')?
     - error catching of literally any sort ... (use default flask stuff i have in tab site, incl contact info)
+        - updater log should throw out more garbage tests and tests potentially broken data from redis ... verify we have fitting test/question data
     - front page rewrite?
     - update github doc
             

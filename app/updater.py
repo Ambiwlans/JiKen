@@ -7,20 +7,75 @@
 
 from flask import current_app
 
+import pickle
 from sqlalchemy import func
 import numpy as np
 
-#Models
-from app import models
+import datetime
 
+import traceback
+
+#Models
+from .models import TestMaterial, \
+    TestLog, QuestionLog, \
+    MetaStatistics
+    
 #Session
 from app import db
 
 def update_TestQuestionLogs(app):
     #move stuff from redis to SQL (Ql,Tl)
     with app.app_context():
-#        x = current_app.config['SESSION_REDIS'].scan()
-#        print(x)
+        print("--------LOG UPDATE------------")
+        x = current_app.config['SESSION_REDIS'].scan()
+        print(x)
+        for sess in current_app.config['SESSION_REDIS'].scan_iter("session:*"):
+            print("Moving to SQL DB -- " + str(sess))
+            
+            data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
+            
+            try:
+                #Don't bother recording incomplete tests
+                if len(data['QuestionLog']) < 10:
+                    current_app.config['SESSION_REDIS'].delete(sess)
+                    print("Trashing pointless test")
+                    continue
+                
+                #Check timestamp to see if we should move it to SQL (>1hr since last touched)
+                if datetime.datetime.utcnow() - datetime.datetime.strptime(data['last_touched'], '%Y-%m-%d %H:%M:%S') < datetime.timedelta(hours=1):
+                    print("Skipping active test from: " + str(datetime.datetime.utcnow() - datetime.datetime.strptime(data['last_touched'], '%Y-%m-%d %H:%M:%S')))
+                    continue
+                
+                #Create new test
+                addTest = TestLog(
+                    a = int(data['TestLog']['a']),
+                    t =  data['TestLog']['t'],
+                    ip =  data['TestLog']['ip'],
+                    start_time =  data['TestLog']['start_time'],
+                    number_of_questions = len(data['QuestionLog']))
+                db.session.add(addTest)
+                db.session.commit()
+                
+                #Bulk dump the question log
+                db.engine.execute(
+                        QuestionLog.__table__.insert(),
+                        [{"testlogid" : addTest.id,
+                          "testmaterialid" : q.testmaterialid,
+                          "score" : q.score} for i, q in data['QuestionLog'].iterrows()])
+    
+                print("Upped Test #: " + str(addTest.id))
+                print(data['QuestionLog'])
+                
+            except Exception: 
+                import pprint
+                print("Failed to save test to SQL. Session content:")
+                pprint.pprint(data)
+                traceback.print_exc()
+                pass
+                
+            #Delete session (fail or succeed)
+            current_app.config['SESSION_REDIS'].delete(sess)
+            
         print("Updated Logs")
         
     
@@ -28,31 +83,28 @@ def update_TestQuestionLogs(app):
 def update_meta(app):
     # update our meta values
     with app.app_context():
-        current_app.config['SESSION_REDIS'].set('default_tightness', db.session.query(func.avg(models.TestLog.t)) \
-            .outerjoin(models.TestLog.questions) \
-            .group_by(models.TestLog) \
-            .having(func.count_(models.TestLog.questions)>25)[0][0])
-        db.session.query(models.MetaStatistics).first().default_tightness = float(current_app.config['SESSION_REDIS'].get('default_tightness'))
+        current_app.config['SESSION_REDIS'].set('default_tightness', db.session.query(func.avg(TestLog.t)) \
+            .outerjoin(TestLog.questions) \
+            .group_by(TestLog) \
+            .having(func.count_(TestLog.questions)>25)[0][0])
+        db.session.query(MetaStatistics).first().default_tightness = float(current_app.config['SESSION_REDIS'].get('default_tightness'))
         
-        current_app.config['SESSION_REDIS'].set('default_kanji', int(db.session.query(func.avg(models.TestLog.a)) \
-            .outerjoin(models.TestLog.questions) \
-            .group_by(models.TestLog) \
-            .having(func.count_(models.TestLog.questions)>25)[0][0]))
-        db.session.query(models.MetaStatistics).first().default_kanji = int(current_app.config['SESSION_REDIS'].get('default_kanji'))
+        current_app.config['SESSION_REDIS'].set('default_kanji', int(db.session.query(func.avg(TestLog.a)) \
+            .outerjoin(TestLog.questions) \
+            .group_by(TestLog) \
+            .having(func.count_(TestLog.questions)>25)[0][0]))
+        db.session.query(MetaStatistics).first().default_kanji = int(current_app.config['SESSION_REDIS'].get('default_kanji'))
         
         db.session.commit()
         
-        #TODO - throw out overly short tests here
-        
-        #DEV
         print("Successfully Updated Meta vals")
         print("A = " + str(int(current_app.config['SESSION_REDIS'].get('default_kanji'))))
         print("T = " + str(float(current_app.config['SESSION_REDIS'].get('default_tightness'))))
     
 # Reformat base DB taken from KANJIDIC
 def initial_DB_reformat():
-    data = db.session.query(models.TestMaterial).all()    
-    ranks = [r for r, in db.session.query(models.TestMaterial.my_rank)]
+    data = db.session.query(TestMaterial).all()    
+    ranks = [r for r, in db.session.query(TestMaterial.my_rank)]
     
     for item in data:
         if "Kyōiku-Jōyō (1st" in item.grade:

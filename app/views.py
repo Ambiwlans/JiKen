@@ -82,8 +82,6 @@ def test():
         
         for i, r in history.iterrows():
             xdata.append(r.my_rank)
-            print("AAAAAAAA")
-            print(r.my_rank)
             ydata.append(r.score)
         
         # Get new LOBF (a, t values)
@@ -93,7 +91,6 @@ def test():
         
         p0 = [session['TestLog'].t, session['TestLog'].a]       # use last LOBF as starting point for new one
         
-        print("p0: " + str(p0))
         res = minimize(sigmoid_cost_regularized, p0, args=(xdata, ydata, p0[0], p0[1]),method="Nelder-Mead")
             #,options={'eps': [0.0001,1]})#, bounds=[(0,10),(1,7000)])
         
@@ -113,7 +110,6 @@ def test():
                 pred[2] += (r.score - sigmoid(r.my_rank, *res.x, 2))
             
             pred = list(map(int,pred))
-            print(pred)
             
         # Select next question
         
@@ -158,9 +154,12 @@ def test():
     wronganswers = [r.my_rank for i, r in wronganswers.iterrows()]
     oldquestions = oldquestions[:10]
     
+    #Refresh the timeout flag
+    session['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+    
     print ("Asking Kanji #: " + str(newquestion['my_rank']) + " -- " + str(newquestion['kanji']))
-    print("Sess: A = " + str(session['TestLog'].a) + "T = " + str(session['TestLog'].t))
-    print(session['QuestionLog'].to_string())
+    print("Sess: A = " + str(session['TestLog'].a) + "  T = " + str(session['TestLog'].t) + "  # = " + str(len(session['QuestionLog'])))
+#    print(session['QuestionLog'].to_string())
     return render_template('test.html', question = newquestion, oldquestions = oldquestions, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), pred = pred)
 
 
