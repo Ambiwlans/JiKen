@@ -36,7 +36,7 @@ def update_TestQuestionLogs(app):
             
             try:
                 #Don't bother recording incomplete tests
-                if len(data['QuestionLog']) < 10:
+                if len(data['QuestionLog']) < current_app.config['MIN_TEST_LENGTH']:
                     current_app.config['SESSION_REDIS'].delete(sess)
                     print("Trashing pointless test")
                     continue
@@ -101,6 +101,17 @@ def update_meta(app):
         print("A = " + str(int(current_app.config['SESSION_REDIS'].get('default_kanji'))))
         print("T = " + str(float(current_app.config['SESSION_REDIS'].get('default_tightness'))))
     
+# Clear ancient logs
+def clear_old_logs(app):
+    with app.app_context():
+        print("--------LOG CLEANUP------------")
+        #Delete old questions first to avoid orphaned questions
+        cur_num = db.session.query(func.max(QuestionLog.id)).scalar()
+        db.session.query(QuestionLog).filter(QuestionLog.id < cur_num - current_app.config['MAX_QUESTIONS_LOGGED']).delete()
+        
+        cur_num = db.session.query(func.max(TestLog.id)).scalar()
+        db.session.query(TestLog).filter(TestLog.id < cur_num - current_app.config['MAX_TESTS_LOGGED']).delete()
+        
 # Reformat base DB taken from KANJIDIC
 def initial_DB_reformat():
     data = db.session.query(TestMaterial).all()    

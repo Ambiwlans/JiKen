@@ -44,7 +44,7 @@ def create_app(config_class=Config):
     Bootstrap(app)
 
     # Scheduler set up/run
-    from app.updater import update_meta, update_TestQuestionLogs, initial_DB_reformat
+    from app.updater import update_meta, update_TestQuestionLogs, clear_old_logs, initial_DB_reformat
     with app.app_context():
 #        db.create_all() 
 #        initial_DB_reformat()
@@ -53,6 +53,7 @@ def create_app(config_class=Config):
         scheduler = BackgroundScheduler()
         scheduler.add_job(func=update_meta, args=(current_app._get_current_object(),), trigger="interval", days=1, next_run_time=datetime.datetime.now())
         scheduler.add_job(func=update_TestQuestionLogs, args=(current_app._get_current_object(),), trigger="interval", hours=1, next_run_time=datetime.datetime.now())
+        scheduler.add_job(func=clear_old_logs, args=(current_app._get_current_object(),), trigger="interval", days=7, next_run_time=datetime.datetime.now())
         scheduler.start()
         atexit.register(lambda: scheduler.shutdown())
         

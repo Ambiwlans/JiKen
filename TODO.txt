@@ -2,7 +2,7 @@
 - show how many more before predictions
 - resize chart as needed? 0~ (x,y=0)
 
-- currently overwriting session whne user does multiple tests instead of saving it and creating a new session
+- currently overwriting session when user does multiple tests instead of saving it and creating a new session
 
 - new page for "End/See Results" ...link to a testid value
     - add link to it on the test page
@@ -13,13 +13,10 @@
     - Mention that it is a permalink that can be shared
     - include share buttons
     - add a 'try test button?
-    - triggers sql dump from redis to enable accurate ranking
+    - trigger sql dump from redis to enable accurate ranking
     
 -redis    
-    - lower calls to redis where viable
-
-    - daily DB trimming (delete tests, questions. Keep newest 10k tests, 100k questions)(questions first to avoid ophans)
-    
+    - lower # of calls to redis where viable    
     - learn to rank code done w/ online learning with the SQL dumps? or daily?
 
 

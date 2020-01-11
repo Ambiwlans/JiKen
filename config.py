@@ -30,9 +30,14 @@ class DevelopmentConfig:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_ECHO=True
     
+    # Data
+    MAX_QUESTIONS_LOGGED = 50000                                #Max # of questions before clearing them from SQL 
+    MAX_TESTS_LOGGED = 50000                                    #Max # of tests before clearing them from SQL (must be larger than questions/test_length)
+    MIN_TEST_LENGTH = 10                                        #Shorter tests won't be logged
+    
     # Flask-Session
     SESSION_TYPE = "redis"
-    SESSION_REDIS = redis.from_url(os.environ.get('SESSION_REDIS'))
+    SESSION_REDIS = redis.from_url(os.environ.get('SESSION_REDIS'))#, decode_responses=True)
     
     # App
     GRAPH_AFTER = 0
@@ -53,6 +58,11 @@ class DeploymentConfig:
             }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+
+    # Data
+    MAX_QUESTIONS_LOGGED = 50000                                #Max # of questions before clearing them from SQL 
+    MAX_TESTS_LOGGED = 50000                                    #Max # of tests before clearing them from SQL (must be larger than questions/test_length)
+    MIN_TEST_LENGTH = 10                                        #Shorter tests won't be logged
     
     # Flask-Session
     SESSION_TYPE = "redis"
