@@ -2,15 +2,11 @@
 <script>
 
 var ctx = document.getElementById('predChart').getContext('2d');
+var prediction =  makePrediction();
 var myLineChart = new Chart(ctx, {
     type: 'line',
     data: {
         datasets: [{
-            type: 'line',
-            label: 'Prediction',
-            data: makePrediction(),
-            pointRadius: 0
-        }, {
             type: 'scatter',
             showLine: false,
             data: {{ rightanswers|safe }}.map(rightPoints),
@@ -20,13 +16,41 @@ var myLineChart = new Chart(ctx, {
             showLine: false,
             data: {{ wronganswers|safe }}.map(wrongPoints),
             pointBackgroundColor: '#B40020'
+        }, {
+            type: 'line',
+            label: 'Prediction',
+            backgroundColor: '#267f0020',
+            fill: 'origin',
+            data: prediction,
+            pointRadius: 0
+        }, {
+            type: 'line',
+            label: 'Prediction',
+            backgroundColor: '#B4002020',
+            fill: 'end',
+            data: prediction,
+            pointRadius: 0
         }]
     },
     options: {
         responsive: true,
         maintainAspectRatio: false,
         tooltips: {
-            enabled: false
+            enabled: true,
+            mode: 'single',
+            callbacks: {
+                custom: function(tooltip) {
+    		        if (!tooltip) return;
+    		        // disable displaying the color box;
+    		        tooltip.displayColors = false;
+		        },
+                label: function(tooltipItems, data) { 
+                    return (data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].kanji);
+                },
+                title: function(tooltipItem, data) {
+		          return;
+		        }
+            }
         },
         scales: {
             xAxes: [{
@@ -68,11 +92,11 @@ function makePrediction() {
 };
 
 function rightPoints(val) {
-    return {x: val, y: 1};
+    return {x: val[0], y: 1, kanji: val[1]};
 };
 
 function wrongPoints(val) {
-    return {x: val, y: 0};
+    return {x: val[0], y: 0, kanji: val[1]};
 };
 
 </script>

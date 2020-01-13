@@ -1,35 +1,47 @@
-- show question # somewhere (chart mouseover?)
-- show how many more before predictions
-- resize chart as needed? 0~ (x,y=0)
+- show how many more before predictions appear
+
+- colorcoding green-red to match the buttons
 
 - currently overwriting session when user does multiple tests instead of saving it and creating a new session
+    - going to /test should just create a new session (right before creating the test df)
+    
+- basic L2R
 
-- new page for "End/See Results" ...link to a testid value
+#TODO - HISTORY PAGE
+    - 'end test' button? or just 'see advanced stats'?
+    - 'back to test' button if there is an active test?
+    - 
+    - new page for "End/See Results" ...link to a testid value
     - add link to it on the test page
     - include links to other tests with same IP
     - show graph, score like during testing
     - show some metrics: #1 test!, Top 2%, Kanji missed from JLPT 5, Kanken 10
-    - Yuki = 621, Seena = 441
+    - Test on: Yuki = 621, Seena = 441
     - Mention that it is a permalink that can be shared
     - include share buttons
-    - add a 'try test button?
-    - trigger sql dump from redis to enable accurate ranking
-    
--redis    
-    - lower # of calls to redis where viable    
-    - learn to rank code done w/ online learning with the SQL dumps? or daily?
-
+    - add a 'try test' button that just goes to the home page
+    - trigger sql dump from redis? needed to enable accurate ranking
 
 - error screens (DB down, other)
     - contact info, apologies
 
-- add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
+#TODO - L2R
+    - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
     - more whitepaper research on best methods
     - keep moves small even at the high end to avoid abuse by individuals
     - only adjust when on round 10 or higher and t > 0.003 to avoid randoms
+    - learn to rank code done w/ online learning with the SQL dumps? or daily?
     
-- add kanji mouseovers for each dot
+#TODO - UI
+    - add kanji mouseovers for each dot on graph
+    - show question # somewhere (chart mouseover? above the kanji?)
 
+#TODO - From BETA
+    - what do numbers mean? (mobile)
+        - better into explanation?
+        - splash screen?
+        - mouseover alternatives?
+        
 #TODO - GENERAL
     - switch away from using params?
         - refreshing pg w/o clicking a link should just refresh the page and do nothing...
@@ -55,12 +67,9 @@
         - updater log should throw out more garbage tests and tests potentially broken data from redis ... verify we have fitting test/question data
     - front page rewrite?
     - update github doc
-            
-#TODO - STRUCTURAL
-    - trim the req list significantly
     
 #TODO - RELEASE!
-    - beta testing
+    - load testing (5 simultaneous?)
     - drum up traffic (blog)
     - setup heroku, DB e-mail notifications?
     
@@ -82,3 +91,6 @@ Expansion ideas:
 - clientside the math
 - dotenv
 - flask debugtoolbar
+- resize chart as needed? 0~ (x,y=0)
+- lower # of calls to redis where viable (looks like redis stores it on the same box so little point)
+- trim the req list further?

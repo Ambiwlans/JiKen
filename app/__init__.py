@@ -48,8 +48,12 @@ def create_app(config_class=Config):
     with app.app_context():
 #        db.create_all() 
 #        initial_DB_reformat()
-        app.config['SESSION_REDIS'].flushall()
+#        app.config['SESSION_REDIS'].flushall()
         
+        if app.config['SESSION_REDIS'].get('TestMaterial') is None:
+            app.config['SESSION_REDIS'].set('TestMaterial', pd.read_sql(db.session.query(models.TestMaterial).statement,db.engine).to_msgpack(compress='zlib'))
+            print("Refreshed TestMaterial")
+            
         scheduler = BackgroundScheduler()
         scheduler.add_job(func=update_meta, args=(current_app._get_current_object(),), trigger="interval", days=1, next_run_time=datetime.datetime.now())
         scheduler.add_job(func=update_TestQuestionLogs, args=(current_app._get_current_object(),), trigger="interval", hours=1, next_run_time=datetime.datetime.now())
@@ -57,9 +61,7 @@ def create_app(config_class=Config):
         scheduler.start()
         atexit.register(lambda: scheduler.shutdown())
         
-        if app.config['SESSION_REDIS'].get('TestMaterial') is None:
-            app.config['SESSION_REDIS'].set('TestMaterial', pd.read_sql(db.session.query(models.TestMaterial).statement,db.engine).to_msgpack(compress='zlib'))
-            print("Refreshed TestMaterial")
+
     return app
 
 # Late import so modules can import their dependencies properly (proto-blueprint)

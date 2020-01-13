@@ -149,18 +149,17 @@ def test():
     oldquestions = history.sort_values(by=['id'], ascending=False)[:100]
     
     rightanswers = oldquestions[oldquestions['score']==1]
-    rightanswers = [r.my_rank for i, r in rightanswers.iterrows()]
+    rightanswers = [(r.my_rank, r.kanji) for i, r in rightanswers.iterrows()]
     wronganswers = oldquestions[oldquestions['score']==0]
-    wronganswers = [r.my_rank for i, r in wronganswers.iterrows()]
-    oldquestions = oldquestions[:10]
+    wronganswers = [(r.my_rank, r.kanji) for i, r in wronganswers.iterrows()]
     
     #Refresh the timeout flag
     session['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
     
     print ("Asking Kanji #: " + str(newquestion['my_rank']) + " -- " + str(newquestion['kanji']))
     print("Sess: A = " + str(session['TestLog'].a) + "  T = " + str(session['TestLog'].t) + "  # = " + str(len(session['QuestionLog'])))
-#    print(session['QuestionLog'].to_string())
-    return render_template('test.html', question = newquestion, oldquestions = oldquestions, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), pred = pred)
+
+    return render_template('test.html', question = newquestion, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), pred = pred)
 
 
 
