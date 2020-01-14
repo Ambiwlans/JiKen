@@ -42,7 +42,7 @@ def update_TestQuestionLogs(app):
                     continue
                 
                 #Check timestamp to see if we should move it to SQL (>1hr since last touched)
-                if datetime.datetime.utcnow() - datetime.datetime.strptime(data['last_touched'], '%Y-%m-%d %H:%M:%S') < datetime.timedelta(hours=1):
+                if datetime.datetime.utcnow() - datetime.datetime.strptime(data['last_touched'], '%Y-%m-%d %H:%M:%S') < datetime.timedelta(minutes=current_app.config['TEST_TIMEOUT']):
                     print("Skipping active test from: " + str(datetime.datetime.utcnow() - datetime.datetime.strptime(data['last_touched'], '%Y-%m-%d %H:%M:%S')))
                     continue
                 

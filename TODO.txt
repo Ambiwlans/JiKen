@@ -1,11 +1,19 @@
 - show how many more before predictions appear
 
-- colorcoding green-red to match the buttons
-
 - currently overwriting session when user does multiple tests instead of saving it and creating a new session
     - going to /test should just create a new session (right before creating the test df)
     
 - basic L2R
+
+- Fix scheduler for heroku -- https://devcenter.heroku.com/articles/clock-processes-python
+    - how to 
+
+- mobile splash screen first /test .... maybe change the start button on mobile? change the homepage?
+
+- more intro explanation
+    - first time visitor -> page between home and test
+    
+- keep alive should work! I get 1000 free hours a month. Only 720hrs in a month...
 
 #TODO - HISTORY PAGE
     - 'end test' button? or just 'see advanced stats'?
@@ -33,13 +41,10 @@
     - learn to rank code done w/ online learning with the SQL dumps? or daily?
     
 #TODO - UI
-    - add kanji mouseovers for each dot on graph
     - show question # somewhere (chart mouseover? above the kanji?)
 
 #TODO - From BETA
     - what do numbers mean? (mobile)
-        - better into explanation?
-        - splash screen?
         - mouseover alternatives?
         
 #TODO - GENERAL
@@ -56,7 +61,11 @@
         
 #TODO - BUGS
     - "non standard for", other blank kanji
-    - fix printout format kanji encoding
+    - fix printout format kanji encoding (low prio)
+    - Slow start up/wake up crashes many times before starting up
+        - error msg 1: H12 "request timeout" 503 
+        - CRITICAL WORKER TIMEOUT
+    - 
             
 #TODO - POLISH
     - commenting + ensure all unused code is actualy not running (jinja2)
