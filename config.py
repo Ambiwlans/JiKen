@@ -28,7 +28,7 @@ class DevelopmentConfig:
     })
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    SQLALCHEMY_ECHO=True
+#    SQLALCHEMY_ECHO=True
     
     # Data
     MAX_QUESTIONS_LOGGED = 50000                                #Max # of questions before clearing them from SQL 
@@ -41,7 +41,7 @@ class DevelopmentConfig:
     SESSION_REDIS = redis.from_url(os.environ.get('SESSION_REDIS'))#, decode_responses=True)
     
     # App
-    GRAPH_AFTER = 0
+    GRAPH_AFTER = 10
     GRAPH_MAX_X = 6000
     MAX_X = 6183
     

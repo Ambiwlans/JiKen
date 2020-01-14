@@ -159,7 +159,7 @@ def test():
     print ("Asking Kanji #: " + str(newquestion['my_rank']) + " -- " + str(newquestion['kanji']))
     print("Sess: A = " + str(session['TestLog'].a) + "  T = " + str(session['TestLog'].t) + "  # = " + str(len(session['QuestionLog'])))
 
-    return render_template('test.html', question = newquestion, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), pred = pred)
+    return render_template('test.html', question = newquestion, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), pred = pred, cnt = len(history))
 
 
 

@@ -51,18 +51,34 @@
         {% else %}
         <div class="container pred">
             <br><br>
-            <h4> Answer a few more for your prediction ... </h4>
+            <h4>
+            {% if cnt == 0 %}
+                Answer at least 10 to get an estimate...
+            {% elif cnt == 1 %}
+                The more you answer, the more accurate the estimate...
+            {% elif cnt == 2 %}
+                Tap the card to flip it and check your answers.
+            {% elif cnt == 3 %}
+                Treat it seriously, no "<em>Well, I should have known that one!</em>" answers.
+            {% elif cnt == 4 %}
+                The top left shows what rank difficulty the kanji is.
+            {% elif cnt == 5 %}
+                The top right shows the JLPT grade level and Jouyou grade level.
+            {% elif cnt == 6 %}
+                On PC, try mousing over things for an explanation. 
+            {% elif cnt == 7 %}
+                Hotkeys: ← Know, → Don't Know, ↓ Flip card
+            {% elif cnt == 8 %}
+                Remember you can keep going after the initial result...
+            {% elif cnt == 9 %}
+                Good Luck!
+            {% elif cnt == 10 %}
+                頑張って!
+            {% endif %}
+            </h4>
         </div>
         {% endif %}
         
-        {#<!-- History -->    	
-		<!--
-		<p>
-		{% for q in oldquestions %}
-            <span class="ans{{q.QuestionLog.score}}">{{q.TestMaterial.kanji}}</span>{{ "," if not loop.last }} 		
-		{% endfor %}
-		</p>		
-		-->#}
 	</div>
 {% endblock content %}
 
