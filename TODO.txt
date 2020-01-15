@@ -4,14 +4,11 @@
 - basic L2R
 
 - Fix scheduler for heroku -- https://devcenter.heroku.com/articles/clock-processes-python
-    - how to 
-    
-- keep alive should work! I get 1000 free hours a month. Only 720hrs in a month... just need to set up a nice janky hack
+    - how to connect to db/flaskapp?
 
 #TODO - HISTORY PAGE
     - 'end test' button? or just 'see advanced stats'?
     - 'back to test' button if there is an active test?
-    - 
     - new page for "End/See Results" ...link to a testid value
     - add link to it on the test page
     - include links to other tests with same IP

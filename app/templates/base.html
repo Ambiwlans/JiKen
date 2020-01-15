@@ -6,16 +6,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    {% block styles %}
+	{% block styles -%}
 		{{ bootstrap.load_css() }}
-		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
-    {% endblock %}
-
-    <title>{% block title %}JiKen{% endblock %}</title>
-	
-
+    {%- endblock styles %}
+    
     <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
@@ -26,20 +21,22 @@
     <meta name="msapplication-config" content="/static/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-
+    <title>{% block title %}JiKen{% endblock %}</title>
     {% endblock %}
   </head>
   <body>
-      <br>
+    <br>
     {% block content %}
 	{% endblock %}
 
     {%- block foot -%}
-		{%- include 'footer.html' -%}
-	{%- endblock foot -%}
+		{% include 'footer.html' %}
+	{%- endblock foot %}
 	
-    {% block scripts %}
+    
+    {%- block scripts -%}
 		{{ bootstrap.load_js() }}
-    {% endblock %}
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    {%- endblock scripts -%}
   </body>
 </html>
