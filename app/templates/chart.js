@@ -38,6 +38,7 @@ var myLineChart = new Chart(ctx, {
         tooltips: {
             enabled: true,
             mode: 'single',
+            bodyFontSize: 18,
             callbacks: {
                 custom: function(tooltip) {
     		        if (!tooltip) return;
@@ -57,7 +58,7 @@ var myLineChart = new Chart(ctx, {
                 type: 'linear',
                 beginAtZero: true,
                 ticks: {
-                    max: {{config['GRAPH_MAX_X']}}                
+                    max: {{xmax}}
                 }
             }],
             yAxes: [{
@@ -74,6 +75,11 @@ var myLineChart = new Chart(ctx, {
         },
         legend: {
             display: false
+        },
+        layout: {
+            padding: {
+                top: 30
+            }
         }
     }
 });

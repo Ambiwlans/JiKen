@@ -14,6 +14,7 @@ bp = Blueprint('main', __name__)
 #Data Handling
 import json
 import pandas as pd
+import math
 
 #Tools
 from app.utils import sigmoid, logit, sigmoid_cost_regularized
@@ -153,13 +154,16 @@ def test():
     wronganswers = oldquestions[oldquestions['score']==0]
     wronganswers = [(r.my_rank, r.kanji) for i, r in wronganswers.iterrows()]
     
+    #Find a sensible max x value
+    xmax = min(math.ceil((max(oldquestions['my_rank'], default=0) + 250) / 400.0) * 500.0, current_app.config['MAX_X'])
+    
     #Refresh the timeout flag
     session['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
     
     print ("Asking Kanji #: " + str(newquestion['my_rank']) + " -- " + str(newquestion['kanji']))
     print("Sess: A = " + str(session['TestLog'].a) + "  T = " + str(session['TestLog'].t) + "  # = " + str(len(session['QuestionLog'])))
 
-    return render_template('test.html', question = newquestion, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), pred = pred, cnt = len(history))
+    return render_template('test.html', question = newquestion, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred, cnt = len(history))
 
 
 
