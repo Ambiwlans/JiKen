@@ -1,3 +1,7 @@
+- repeated answers shouldn't be allowed (f5 spam)
+    - get rid of args (use ID for history)
+        
+        
 - currently overwriting session when user does multiple tests instead of saving it and creating a new session
     - going to /test should just create a new session (right before creating the test df)
     
@@ -5,6 +9,7 @@
 
 - Fix scheduler for heroku -- https://devcenter.heroku.com/articles/clock-processes-python
     - how to connect to db/flaskapp?
+    - Solved w/ keep alive?
 
 #TODO - HISTORY PAGE
     - 'end test' button? or just 'see advanced stats'?
@@ -94,6 +99,5 @@ Expansion ideas:
 - clientside the math
 - dotenv
 - flask debugtoolbar
-- resize chart as needed? 0~ (x,y=0)
 - lower # of calls to redis where viable (looks like redis stores it on the same box so little point)
 - trim the req list further?

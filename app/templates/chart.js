@@ -1,8 +1,8 @@
 {% block chart %}
 <script>
 
-var ctx = document.getElementById('predChart').getContext('2d');
 var prediction =  makePrediction();
+var ctx = document.getElementById('predChart').getContext('2d');
 var myLineChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -87,10 +87,8 @@ var myLineChart = new Chart(ctx, {
 //console.log({{ rightanswers|safe }}.forEach(rightPoints))
 
 function makePrediction() {
-    var pred = [];
-    
-    for (var x = 0; x <= {{config['GRAPH_MAX_X']}}; x = x + 50) {
-        //y = 1 / (1 + np.exp(t*(x-a)))
+    var pred = []; 
+    for (var x = 0; x <= {{config['MAX_X']}} + 50; x = x + 50) {
         y = 1 / (1 + 2**({{session['TestLog'].t}} * (x - {{session['TestLog'].a}})))
         pred.push({x: x, y: y});
     }

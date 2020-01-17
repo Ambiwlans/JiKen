@@ -155,7 +155,7 @@ def test():
     wronganswers = [(r.my_rank, r.kanji) for i, r in wronganswers.iterrows()]
     
     #Find a sensible max x value
-    xmax = min(math.ceil((max(oldquestions['my_rank'], default=0) + 250) / 400.0) * 500.0, current_app.config['MAX_X'])
+    xmax = min(int(math.ceil((max(oldquestions['my_rank'], default=0) + 250) / 400) * 500), int(current_app.config['MAX_X']))
     
     #Refresh the timeout flag
     session['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
