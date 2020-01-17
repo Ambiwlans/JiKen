@@ -11,11 +11,15 @@
                 {% endif %}
                 
                 <div class="top-right">
-                    {% if question.jlpt != '6' %}
+                    {% if question.jlpt != 6 %}
                         <p class="jlpt" data-toggle="tooltip" data-placement="right" title="JLPT grade level">N{{question.jlpt}}</p>
+                    {% else %}
+                        <p class="jlpt" data-toggle="tooltip" data-placement="right" title="JLPT grade level">N1+</p>
                     {% endif %}
-                    {% if question.grade != '14' %}
+                    {% if question.grade != 14 %}
                         <p class="grade" data-toggle="tooltip" data-placement="right" title="Jōyō grade level">Gr{{question.grade|int}}</p>
+                    {% else %}
+                        <p class="grade" data-toggle="tooltip" data-placement="right" title="Jōyō grade level">Gr13+</p>
                     {% endif %}
                 </div>
                 <h1 class="kanji">{{question.kanji}}</h1>
