@@ -83,16 +83,21 @@ def update_TestQuestionLogs(app):
 def update_meta(app):
     # update our meta values
     with app.app_context():
-        current_app.config['SESSION_REDIS'].set('default_tightness', db.session.query(func.avg(TestLog.t)) \
-            .outerjoin(TestLog.questions) \
-            .group_by(TestLog) \
-            .having(func.count_(TestLog.questions)>25)[0][0])
+        # get the averages after filtering out outliers, tend towards the middle
+        current_app.config['SESSION_REDIS'].set('default_tightness', 
+            (db.session.query(func.avg(TestLog.t)) \
+            .filter(TestLog.number_of_questions > 25) \
+            .filter(TestLog.t > 0.001) \
+            .filter(TestLog.t < 0.08)[0][0] + .005)/2
+            )
         db.session.query(MetaStatistics).first().default_tightness = float(current_app.config['SESSION_REDIS'].get('default_tightness'))
         
-        current_app.config['SESSION_REDIS'].set('default_kanji', int(db.session.query(func.avg(TestLog.a)) \
-            .outerjoin(TestLog.questions) \
-            .group_by(TestLog) \
-            .having(func.count_(TestLog.questions)>25)[0][0]))
+        current_app.config['SESSION_REDIS'].set('default_kanji', 
+            int((db.session.query(func.avg(TestLog.a)) \
+            .filter(TestLog.number_of_questions > 25) \
+            .filter(TestLog.a > 100) \
+            .filter(TestLog.a < 5000)[0][0] + 2000)/2)
+            )
         db.session.query(MetaStatistics).first().default_kanji = int(current_app.config['SESSION_REDIS'].get('default_kanji'))
         
         db.session.commit()
