@@ -35,7 +35,7 @@ class TestLog(db.Model):
     number_of_questions = Column(Integer, default=0)   # how many questions asked through test
     
     #Tracking
-    ip = Column(String(100))
+    ip = Column(String(20))
     start_time = Column(DateTime())
 #    timezone = 
 #    browserdata =
