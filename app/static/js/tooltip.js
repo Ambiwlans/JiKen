@@ -1,5 +1,5 @@
 $(function () {
-    var pred = parseInt($('.predmin').text() || 0);
+    var pred = parseInt($('.predlower').text() || 0);
     
     console.log(pred);
     
@@ -81,6 +81,12 @@ $(function () {
     if (pred > 1500)
     {
         $('.footer-content').html("<a href='https://github.com/Ambiwlans'>Ambiwlans</a>自作。気に入ったら、ガチに広めてください！");
+        $('.pred-header').html("- 見積 -");
+        $('.my_rank').attr("title","難しさのランキング、前のユーザーの試験で決めた");
+        $('.jlpt').attr("title","日本語能力試験");
+        $('.grade').attr("title","常用漢字");
+        $('.predlower').attr("title","信頼下限");
+        $('.predupper').attr("title","信頼上限");
     }
     $('[data-toggle="tooltip"]').tooltip();
 });

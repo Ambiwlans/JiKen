@@ -3,10 +3,6 @@
         
 - currently overwriting session when user does multiple tests instead of saving it and creating a new session
     - going to /test should just create a new session (right before creating the test df)
-    
-- basic L2R
-
-- tooltips aren't in jpns
 
 #TODO - HISTORY PAGE
     - 'end test' button? or just 'see advanced stats'?
@@ -52,8 +48,8 @@
         - only adjust when on round 10 or higher and t > 0.003 to avoid randoms
         
 #TODO - BUGS
-    - "non standard for", other blank kanji
-    - fix printout format kanji encoding (low prio)
+    - "non standard for", other blank kanji <-- just delete them from the DB
+    - fix printout/log format kanji encoding (low prio)
     - Slow start up/wake up crashes many times before starting up
         - error msg 1: H12 "request timeout" 503 
         - CRITICAL WORKER TIMEOUT
@@ -71,16 +67,11 @@
     - error catching of literally any sort ... (use default flask stuff i have in tab site, incl contact info)
         - updater log should throw out more garbage tests and tests potentially broken data from redis ... verify we have fitting test/question data
     - front page rewrite?
-    - update github doc
-    
-#TODO - RELEASE!
-    - load testing (5 simultaneous?)
-    - drum up traffic (blog)
-    - setup heroku, DB e-mail notifications?
     
 --------------------------
 
 Expansion ideas:
+- send dono http://www.edrdg.org/edrdg/licence.html
 - medium blog post about it ... or just stuff into the github.
 - add 'share' buttons (esp for mobile) ... FB. (use a SS of test state?)
 - add example words to stop ambiguity
@@ -92,9 +83,7 @@ Expansion ideas:
     - allow asymmetries
 - support flashcards other than kanji (vocab?)
 - other direction testing (definitions to kanji)
-- snazzy animations for flips
 - clientside the math
-- dotenv
 - flask debugtoolbar
 - lower # of calls to redis where viable (looks like redis stores it on the same box so little point)
 - trim the req list further?

@@ -13,13 +13,9 @@
                 <div class="top-right">
                     {% if question.jlpt != 6 %}
                         <p class="jlpt" data-toggle="tooltip" data-placement="right" title="JLPT grade level">N{{question.jlpt}}</p>
-                    {% else %}
-                        <p class="jlpt" data-toggle="tooltip" data-placement="right" title="JLPT grade level">N1+</p>
                     {% endif %}
                     {% if question.grade != 14 %}
                         <p class="grade" data-toggle="tooltip" data-placement="right" title="Jōyō grade level">Gr{{question.grade|int}}</p>
-                    {% else %}
-                        <p class="grade" data-toggle="tooltip" data-placement="right" title="Jōyō grade level">Gr13+</p>
                     {% endif %}
                 </div>
                 <h1 class="kanji">{{question.kanji}}</h1>
@@ -42,9 +38,9 @@
     	
     	<div class="container pred">
         	<p class="pred-header">Estimates</p>
-        	<span class="predrange"><span class="predrange predmin">{{pred[2]}}</span>&nbsp; &nbsp; - &nbsp; &nbsp;</span>
-        	<span class="predmain" data-toggle="tooltip" data-placement="top" data-html="true" title="{{pred[0]}}">{{pred[0]}}</span>
-        	<span class="predrange">&nbsp; &nbsp; - &nbsp; &nbsp;{{pred[1]}}</span>
+        	<span class="predrange"><span class="predrange predlower" data-toggle="tooltip" data-placement="left" title="lower bound">{{pred[2]}}</span>&nbsp; &nbsp; - &nbsp; &nbsp;</span>
+            	<span class="predmain" data-toggle="tooltip" data-placement="top" data-html="true" title="{{pred[0]}}">{{pred[0]}}</span>
+        	<span class="predrange predupper" data-toggle="tooltip" data-placement="right" title="upper bound">&nbsp; &nbsp; - &nbsp; &nbsp;{{pred[1]}}</span>
     	</div>
     	
     	
