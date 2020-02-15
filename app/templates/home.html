@@ -4,16 +4,26 @@
 		<a href="/"><img src="{{ url_for('static', filename='img/jiken.png') }}"></a>
 		<p class="slogan">Test Your Kanji</p>
 		<br>
+		<p>JiKen estimates your kanji knowledge in as few questions as possible.</p>
 		<br>
-		<p>JiKen uses statistics from users like you to estimate your Kanji knowledge in as few questions as possible.</p>
+		<div class="explanation">
+		<p>Answer <b>10</b> to start. Keep going for a more accurate estimate!</p>
+    	<p>Controls: [←] Know, [→] Don't Know, [↓]/[TAP]&nbsp;Flip&nbsp;card</p>
+    	
 		<br>
-		<p>Keep in mind that this is still in a <i>very</i> alpha state. <a href="https://github.com/Ambiwlans/KTest">Report any bugs</a> you find!</p>
-        <br>
-		<a class="btn btn-success btn-lg" role="btn" href="/test">START</a>
-		<br><br>
-		<p>Credit to the <a href="http://www.edrdg.org/wiki/index.php/KANJIDIC_Project">KANJIDIC</a> team for the kanji list/definitions.</p>
+		<a id="start" class="btn btn-success btn-lg" role="btn" href="/test">START</a>
+		<br><br>		
+		<p>Keep in mind that this is still in a <b>beta</b> state. <a href="https://github.com/Ambiwlans/KTest">Report any bugs</a> you find!</p>
+		<p>Credit to the <a href="http://www.edrdg.org/wiki/index.php/KANJIDIC_Project">KANJIDIC</a> team for the kanji list/definitions.</p></div>
 	</div>
 	
-
+    <script>
+    document.onkeydown=function(e){
+        if (e.which == 32){
+            e.preventDefault();
+            window.location.href = $("#start").attr("href");
+        }
+    }
+    </script>
 {% endblock content %}
 

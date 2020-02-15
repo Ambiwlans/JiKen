@@ -1,8 +1,25 @@
-- repeated answers shouldn't be allowed (f5 spam)
-    - get rid of args (use ID for history)
+- repeated answers shouldn't be allowed (f5 spam, double post)
+    - switch away from using params? (use ID for history)
+    - refreshing pg w/o clicking a link should just refresh the page and do nothing...
+    - allow answered question overwrites for ppl that hit go back
         
 - currently overwriting session when user does multiple tests instead of saving it and creating a new session
     - going to /test should just create a new session (right before creating the test df)
+
+- show question # somewhere (chart mouseover? above the kanji?)
+
+- error screens (DB down, other) (use default flask stuff i have in tab site, incl contact info)
+    - contact info, apologies
+
+- chg jpns font/force
+
+- fade/grey the bounds font slightly
+        
+- add 'share' buttons to bottom bar
+
+- incl some alpha stats on the readme
+
+- mention the phenomenon that allows us to use a sigmoid
 
 #TODO - HISTORY PAGE
     - 'end test' button? or just 'see advanced stats'?
@@ -17,73 +34,64 @@
     - include share buttons
     - add a 'try test' button that just goes to the home page
     - trigger sql dump from redis? needed to enable accurate ranking
+    - Historical rankings "You are #5/34830 tests!"
+	- some interesting stats on your test (you're in the 3rd percentile!)
+	- provide study tips like, the 10 lowest rank kanji you got wrong. Or the 10 lowest JLPT kanji you got wrong (From JLPT N5, you missed 東, 父...) and maybe have a button to make an anki deck with them, depending on how annoying that is.
+	- more graphs? I don't know what of... I just like graphs.
 
-- error screens (DB down, other)
-    - contact info, apologies
-
+#TODO - [?] button
+    - opens lightbox with detailed instructions
+    - Explain what "know it" means .... button mouseover? "Test yourself which kanji you know, however you want to define 'know'"
+	- graph explanation :/ tricky...
+	- click to flip!
+	- get https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/feztk2c/ to test
+	
 #TODO - L2R
     - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
     - more whitepaper research on best methods
     - keep moves small even at the high end to avoid abuse by individuals
     - only adjust when on round 10 or higher and t > 0.003 to avoid randoms
     - learn to rank code done w/ online learning with the SQL dumps? or daily?
-    
-#TODO - UI
-    - show question # somewhere (chart mouseover? above the kanji?)
-
-#TODO - From BETA
-    - what do numbers mean? (mobile)
-        - mouseover alternatives?
-        
-#TODO - GENERAL
-    - switch away from using params?
-        - refreshing pg w/o clicking a link should just refresh the page and do nothing...
-    - spacebar in main window should start test
-    
-#TODO - ALGORITHMIC
-    - change bounds to use percentiles
-        - make bounds shrink more with more data
-    - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
-        - keep moves small even at the high end to avoid abuse by individuals
-        - only adjust when on round 10 or higher and t > 0.003 to avoid randoms
+         
+#TODO - ADS
+    - side ads on pc, tiny bottom banner on phones
         
 #TODO - BUGS
     - "non standard for", other blank kanji <-- just delete them from the DB
-    - fix printout/log format kanji encoding (low prio)
+    - Occassional errors transferring to SQL? Double posting can be annoying.
+    - updater log should throw out more garbage tests and tests potentially broken data from redis ... verify we have fitting test/question data
+    
+
+--------------------------
+Low Prio:
+- send dono http://www.edrdg.org/edrdg/licence.html
+- track user devices in testlog
+- shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')?
+- change bounds to use percentiles
+    - make bounds shrink more with more data
+- lower # of calls to redis where viable (looks like redis stores it on the same box so little point)
+- trim the req list further?
+- switch to a slightly better ML algorithm (model family) allowing assymetries (non-sigmoid?)
+- clientside the math
+
+Bugs:
+    - fix printout/log format kanji encoding
     - Slow start up/wake up crashes many times before starting up
         - error msg 1: H12 "request timeout" 503 
         - CRITICAL WORKER TIMEOUT
         - SOLN: ... nothing run 'now' on startup.
-    - SIGINT crash?
-    - Occassional errors transferring to SQL?
-    - sleep fucks over everything
-        - SOLN: never sleep
-            
-#TODO - POLISH
-    - commenting + ensure all unused code is actualy not running (jinja2)
-    - data structuring
-    - algorithms/code flow
-    - shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')?
-    - error catching of literally any sort ... (use default flask stuff i have in tab site, incl contact info)
-        - updater log should throw out more garbage tests and tests potentially broken data from redis ... verify we have fitting test/question data
-    - front page rewrite?
-    
+    - SIGINT crash? Not sure if this still occurs
+    - https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/fes4muo/
+    	- add a gradient to negative t vals
+    - skipping by 10 when logging to sql
+
+PR
+    - medium blog post about it ... or just stuff into the github.
+    - patreon? probably not worth
+    - reddit beta post (after adding history, [?])
 --------------------------
 
-Expansion ideas:
-- send dono http://www.edrdg.org/edrdg/licence.html
-- medium blog post about it ... or just stuff into the github.
-- add 'share' buttons (esp for mobile) ... FB. (use a SS of test state?)
-- add example words to stop ambiguity
-- Historical rankings "You are #5/34830 tests!"
-- ads
-- patreon? probably not worth
-- multiple language support! <-important. should work for at least japanese
-- eventual switch to a slightly better ML algorithm
-    - allow asymmetries
-- support flashcards other than kanji (vocab?)
-- other direction testing (definitions to kanji)
-- clientside the math
-- flask debugtoolbar
-- lower # of calls to redis where viable (looks like redis stores it on the same box so little point)
-- trim the req list further?
+Extensions:
+- E->J
+    - add example words to stop ambiguity
+- Other cards sets (vocab for English, Jpns...)

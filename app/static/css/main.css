@@ -160,17 +160,22 @@ body {
 /* General Styling
 -------------------------------------------------- */
 
+.explanation {
+     font-size: 14px;
+     line-height: 1;
+}
+
+.slogan {
+    color: #52B129;
+    font-variant: small-caps;
+}
+
 .btn-success {
     background-color: #267f00;
 }
 
 .btn-danger {
     background-color: #B40020;
-}
-
-.slogan {
-    color: #52B129;
-     font-variant: small-caps;
 }
 
 img {
