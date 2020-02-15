@@ -17,9 +17,7 @@
         
 - add 'share' buttons to bottom bar
 
-- incl some alpha stats on the readme
-
-- mention the phenomenon that allows us to use a sigmoid
+- incl some alpha stats on the readme, mention the phenomenon that allows us to use a sigmoid
 
 #TODO - HISTORY PAGE
     - 'end test' button? or just 'see advanced stats'?
