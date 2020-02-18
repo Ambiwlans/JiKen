@@ -48,6 +48,7 @@ def test():
     if session.get('TestLog') is None or score is None:
         # New Test, new log
         session['TestLog'] = pd.Series({
+                "id" : int(current_app.config['SESSION_REDIS'].get('cur_testlog_id').decode('utf-8')),
                 "a" : int(current_app.config['SESSION_REDIS'].get('default_kanji')),
                 "t" : float(current_app.config['SESSION_REDIS'].get('default_tightness')),
                 "ip" : request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr),
@@ -55,6 +56,7 @@ def test():
         
         session['QuestionLog'] = pd.DataFrame(columns=['testmaterialid','score'], dtype='int64')
 
+        current_app.config['SESSION_REDIS'].incr('cur_testlog_id')
     else:
         # Got an answer, log it (to redis session)
         score = bool(int(score))

@@ -48,11 +48,16 @@ def create_app(config_class=Config):
     with app.app_context():
 #        db.create_all() 
 #        initial_DB_reformat()
-#        app.config['SESSION_REDIS'].flushall()
-        
+
+        if app.config['SESSION_REDIS'].get('cur_testlog_id') is None:
+            app.config['SESSION_REDIS'].flushall()
+            app.config['SESSION_REDIS'].set('cur_testlog_id', db.session.query(models.TestLog).order_by('id').all()[-1].id + 1)
+            print("Refreshed cur_testlog_id to " + app.config['SESSION_REDIS'].get('cur_testlog_id').decode('utf-8'))
         if app.config['SESSION_REDIS'].get('TestMaterial') is None:
             app.config['SESSION_REDIS'].set('TestMaterial', pd.read_sql(db.session.query(models.TestMaterial).statement,db.engine).to_msgpack(compress='zlib'))
             print("Refreshed TestMaterial")
+        
+        
             
         scheduler = BackgroundScheduler()
         scheduler.add_job(func=update_TestQuestionLogs, args=(current_app._get_current_object(),), trigger="interval", minutes=20)#, next_run_time=datetime.datetime.now()) #DEV run_now

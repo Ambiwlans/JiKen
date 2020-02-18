@@ -9,6 +9,7 @@ from flask import current_app
 
 import pickle
 from sqlalchemy import func
+from sqlalchemy.sql import exists
 import numpy as np
 
 import datetime
@@ -38,7 +39,13 @@ def update_TestQuestionLogs(app):
                 #Don't bother recording incomplete tests
                 if len(data['QuestionLog']) < current_app.config['MIN_TEST_LENGTH']:
                     current_app.config['SESSION_REDIS'].delete(sess)
-                    print("Trashing pointless test")
+                    print("Trashing pointless short test")
+                    continue
+                
+                #Don't save tests with duplicted ids
+                if db.session.query(exists().where(TestLog.id == data['TestLog']['id'])).scalar():
+                    current_app.config['SESSION_REDIS'].delete(sess)
+                    print("Trashing already saved test #"+ str(data['TestLog']['id']))
                     continue
                 
                 #Check timestamp to see if we should move it to SQL (>1hr since last touched)
@@ -48,6 +55,7 @@ def update_TestQuestionLogs(app):
                 
                 #Create new test
                 addTest = TestLog(
+                    id = data['TestLog']['id'],
                     a = int(data['TestLog']['a']),
                     t =  data['TestLog']['t'],
                     ip =  data['TestLog']['ip'],

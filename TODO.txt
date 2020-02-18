@@ -53,7 +53,6 @@
         
 #TODO - BUGS
     - "non standard for", other blank kanji <-- just delete them from the DB
-    - Occassional errors transferring to SQL? Double posting can be annoying.
     - updater log should throw out more garbage tests and tests potentially broken data from redis ... verify we have fitting test/question data
     
 
@@ -82,7 +81,7 @@ Bugs:
 
 PR
     - medium blog post about it ... or just stuff into the github.
-    - patreon? probably not worth
+    - patreon, buymeacoffee? probably not worth
     - reddit beta post (after adding history, [?])
 --------------------------
 
