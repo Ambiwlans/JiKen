@@ -80,7 +80,7 @@ $(function () {
     //Easter egg
     if (pred > 1500)
     {
-        $('.footer-content').html("<a href='https://github.com/Ambiwlans'>Ambiwlans</a>自作。気に入ったら、ガチに広めてください！");
+        $('.footer-note').html("<a href='https://github.com/Ambiwlans' target='_blank'>Ambiwlans</a>作。気に入ったら広めて下さい！");
         $('.pred-header').html("- 見積 -");
         $('.my_rank').attr("title","難しさのランキング、前のユーザーの試験で決めた");
         $('.jlpt').attr("title","日本語能力試験");

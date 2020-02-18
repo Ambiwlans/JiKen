@@ -11,11 +11,7 @@
 - error screens (DB down, other) (use default flask stuff i have in tab site, incl contact info)
     - contact info, apologies
 
-- chg jpns font/force
-
 - fade/grey the bounds font slightly
-        
-- add 'share' buttons to bottom bar
 
 - incl some alpha stats on the readme, mention the phenomenon that allows us to use a sigmoid
 
@@ -53,6 +49,7 @@
          
 #TODO - ADS
     - side ads on pc, tiny bottom banner on phones
+    - pick another ad service, adsense is ng for webapps.
         
 #TODO - BUGS
     - "non standard for", other blank kanji <-- just delete them from the DB
