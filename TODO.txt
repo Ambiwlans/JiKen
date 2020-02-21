@@ -15,24 +15,26 @@
 
 - incl some alpha stats on the readme, mention the phenomenon that allows us to use a sigmoid
 
-#TODO - HISTORY PAGE
-    - 'end test' button? or just 'see advanced stats'?
-    - 'back to test' button if there is an active test?
-    - new page for "End/See Results" ...link to a testid value
-    - add link to it on the test page
-    - include links to other tests with same IP
-    - show graph, score like during testing
-    - show some metrics: #1 test!, Top 2%, Kanji missed from JLPT 5, Kanken 10
-    - Test on: Yuki = 621, Seena = 441
-    - Mention that it is a permalink that can be shared
-    - include share buttons
-    - add a 'try test' button that just goes to the home page
-    - trigger sql dump from redis? needed to enable accurate ranking
-    - Historical rankings "You are #5/34830 tests!"
-	- some interesting stats on your test (you're in the 3rd percentile!)
-	- provide study tips like, the 10 lowest rank kanji you got wrong. Or the 10 lowest JLPT kanji you got wrong (From JLPT N5, you missed 東, 父...) and maybe have a button to make an anki deck with them, depending on how annoying that is.
-	- more graphs? I don't know what of... I just like graphs.
+- clear bounds from model/DB
 
+#TODO - HISTORY PAGE
+    - add test page button for 'more stats'
+        - under the graph
+        
+    - 'back to test' button if the test is active?
+        - up the expiry time to like 12hrs
+    - links to other tests with same IP
+    - show metrics: #1 test!, Top 2%
+    - Show testing/study suggestions: Easiest 10 Kanji missed from JLPT 5, Kanken 10, my_rank
+        - continued testing for active tests within a grade/level?
+        - button to make an anki deck with them?
+    - include share buttons, mention permalink/bookmarks
+    - add a 'new test' button that just goes to /test
+	- more graphs?
+    
+    - Beta tests: Yuki = 621, Seena = 441
+        
+        
 #TODO - [?] button
     - opens lightbox with detailed instructions
     - Explain what "know it" means .... button mouseover? "Test yourself which kanji you know, however you want to define 'know'"

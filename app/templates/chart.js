@@ -89,7 +89,7 @@ var myLineChart = new Chart(ctx, {
 function makePrediction() {
     var pred = []; 
     for (var x = 0; x <= {{config['MAX_X']}} + 50; x = x + 50) {
-        y = 1 / (1 + 2**({{session['TestLog'].t}} * (x - {{session['TestLog'].a}})))
+        y = 1 / (1 + 2**({{t}} * (x - {{a}})))
         pred.push({x: x, y: y});
     }
     return pred;

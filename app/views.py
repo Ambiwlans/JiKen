@@ -11,10 +11,15 @@ from flask import Blueprint, current_app
 
 bp = Blueprint('main', __name__)
 
+#DB
+from app import db
+from .models import TestLog, QuestionLog
+
 #Data Handling
 import json
 import pandas as pd
 import math
+import pickle
 
 #Tools
 from app.utils import sigmoid, logit, sigmoid_cost_regularized
@@ -106,7 +111,7 @@ def test():
             pred = [(quad(sigmoid,0,current_app.config['MAX_X'],args=(*res.x,1))[0]),
                         (quad(sigmoid,0,current_app.config['MAX_X'],args=(*res.x,.5))[0]),
                         (quad(sigmoid,0,current_app.config['MAX_X'],args=(*res.x,2))[0])]
-            #fixed to clear all the knowns
+            # account for all the answered values
             for i, r in history.iterrows():
                 pred[0] += (r.score - sigmoid(r.my_rank, *res.x, 1))
                 pred[1] += (r.score - sigmoid(r.my_rank, *res.x, .5))
@@ -165,8 +170,77 @@ def test():
     print ("Asking Kanji #: " + str(newquestion['my_rank']) + " -- " + str(newquestion['kanji']))
     print("Sess: A = " + str(session['TestLog'].a) + "  T = " + str(session['TestLog'].t) + "  # = " + str(len(session['QuestionLog'])))
 
-    return render_template('test.html', question = newquestion, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred, cnt = len(history))
+    return render_template('test.html', question = newquestion, a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred, cnt = len(history))
 
+@bp.route("/history/<id>")
+def history(id):
+    ###
+    ### Locate/Load test data
+    ###
+    
+    data = {}
+    datafound = False
+
+    #If test is in cache still, use that data.
+    for sess in current_app.config['SESSION_REDIS'].scan_iter("session:*"):
+        data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
+        try:
+            if data['TestLog']['id'] == int(id):
+                print("Test found in cache")            
+                datafound = True
+                break
+        except:
+            pass
+        
+    #Otherwise, load data from Sql
+    if not datafound:
+        print("Test not in cache")
+        data['TestLog'] = db.session.query(TestLog).filter(TestLog.id == id).first()
+        if not data['TestLog']:
+            #if it isn't in the DB either, 404 out, test not found.
+            print("Test not in DB")
+            return("Test not found")
+        data['QuestionLog'] = db.session.query(QuestionLog).filter(QuestionLog.testlogid == id).all()
+        data['QuestionLog'] = pd.DataFrame([s.__dict__ for s in data['QuestionLog']])
+        print("Test found in DB")
+
+    ###        
+    ### Prep output
+    ###
+    
+    history = pd.merge(data['QuestionLog'], \
+               pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')), \
+               left_on=data['QuestionLog'].testmaterialid.astype(int), \
+               right_on='id')
+            
+    #Redo Predictions
+    pred = [0,0,0]      #[mid, upper, lower]    
+    x = [data['TestLog'].t, data['TestLog'].a]
+    
+    pred = [(quad(sigmoid,0,current_app.config['MAX_X'],args=(*x,1))[0]),
+                (quad(sigmoid,0,current_app.config['MAX_X'],args=(*x,.5))[0]),
+                (quad(sigmoid,0,current_app.config['MAX_X'],args=(*x,2))[0])]
+    # account for all the answered values
+    for i, r in history.iterrows():
+        pred[0] += (r.score - sigmoid(r.my_rank, *x, 1))
+        pred[1] += (r.score - sigmoid(r.my_rank, *x, .5))
+        pred[2] += (r.score - sigmoid(r.my_rank, *x, 2))
+    
+    pred = list(map(int,pred))
+       
+        
+    #Prep historical graph display data
+    oldquestions = history.sort_values(by=['id'], ascending=False)[:100]
+    
+    rightanswers = oldquestions[oldquestions['score']==1]
+    rightanswers = [(r.my_rank, r.kanji) for i, r in rightanswers.iterrows()]
+    wronganswers = oldquestions[oldquestions['score']==0]
+    wronganswers = [(r.my_rank, r.kanji) for i, r in wronganswers.iterrows()]
+    
+    #Find a sensible max x value
+    xmax = min(int(math.ceil((max(oldquestions['my_rank'], default=0) + 250) / 400) * 500), int(current_app.config['MAX_X']))
+    
+    return  render_template('history.html', a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred, cnt = len(history))
 
 
 

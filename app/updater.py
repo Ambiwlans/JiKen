@@ -21,7 +21,7 @@ from .models import TestMaterial, \
     TestLog, QuestionLog, \
     MetaStatistics
     
-#Session
+#DB
 from app import db
 
 def update_TestQuestionLogs(app):

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="container text-center">
+    	<a href="/"><img class="sm" src="/static/img/jiken.png"></a>		
+		
+		<!-- Predictions -->    	    	
+    	<div class="container pred">
+        	<p class="pred-header">Estimates</p>
+        	<span class="predrange"><span class="predrange predlower" data-toggle="tooltip" data-placement="left" title="lower bound">{{pred[2]}}</span>&nbsp; &nbsp; - &nbsp; &nbsp;</span>
+            	<span class="predmain" data-toggle="tooltip" data-placement="top" data-html="true" title="{{pred[0]}}">{{pred[0]}}</span>
+        	<span class="predrange predupper" data-toggle="tooltip" data-placement="right" title="upper bound">&nbsp; &nbsp; - &nbsp; &nbsp;{{pred[1]}}</span>
+    	</div>
+    	
+    	
+    	<!-- Chart -->    	
+    	<div class="chart-container">
+            <canvas id="predChart"></canvas>
+        </div>
+        
+	</div>
+{% endblock content %}
+
+{% block styles %}
+    {{super()}}
+{% endblock %}
+
+{% block scripts %}
+    {{super()}}
+    <script type="text/javascript" src="{{url_for('static', filename='js/tooltip.js')}}"></script>
+    {%- include 'chart.js' -%}
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
