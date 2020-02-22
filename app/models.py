@@ -30,8 +30,6 @@ class TestLog(db.Model):
     a = Column(Integer)                     # predicted number of kanji known
     t = Column(Numeric(asdecimal=False))    # predicted spread
     
-    upper_prediction = Column(Integer, default=0)                 # upper limit of prediction
-    lower_prediction = Column(Integer, default=0)                 # lower limit of prediction
     number_of_questions = Column(Integer, default=0)   # how many questions asked through test
     
     #Tracking
@@ -101,6 +99,9 @@ class MetaStatistics(db.Model):
     default_kanji = Column(Integer, default= 400)       # Number of kanji people know on avg
     default_tightness = Column(Numeric(asdecimal=False), default= 0.05)  # typical knowledge spread
 
+    avg_known = Column(Integer)
+    avg_answered = Column(Integer)
+    
 #db.create_all() 
 #db.session.commit() 
 

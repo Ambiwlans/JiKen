@@ -248,10 +248,14 @@ def history(id):
     wronganswers = oldquestions[oldquestions['score']==0]
     wronganswers = [(r.my_rank, r.kanji) for i, r in wronganswers.iterrows()]
     
+            
     #Find a sensible max x value
     xmax = min(int(math.ceil((max(oldquestions['my_rank'], default=0) + 250) / 400) * 500), int(current_app.config['MAX_X']))
     
-    return  render_template('history.html', a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred, cnt = len(history), curtest = curtest)
+    return  render_template('history.html', \
+        a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred,\
+        curtest = curtest, cnt = len(history), \
+        avg_answered = int(current_app.config['SESSION_REDIS'].get('avg_answered')), avg_known = int(current_app.config['SESSION_REDIS'].get('avg_known')))
 
 
 

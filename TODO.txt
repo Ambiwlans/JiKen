@@ -18,19 +18,16 @@
 - clear bounds from model/DB
 
 #TODO - HISTORY PAGE
-    - add test page button for 'more stats'
-        - under the graph
+    - enable test page button for 'more stats/share/save' under the graph
 
     - links to other tests with same IP
-    - show metrics: #1 test!, Top 2%
     - Show testing/study suggestions: Easiest 10 Kanji missed from JLPT 5, Kanken 10, my_rank
         - continued testing for active tests within a grade/level?
         - button to make an anki deck with them?
     - include share buttons, mention permalink/bookmarks
     - add a 'new test' button that just goes to /test
 	- more graphs?
-    
-    - Beta tests: Yuki = 621, Seena = 441
+    - make layout less shit
         
     - proper error page for test not found
         

@@ -48,7 +48,7 @@ def create_app(config_class=Config):
     with app.app_context():
 #        db.create_all() 
 #        initial_DB_reformat()
-
+        
         if app.config['SESSION_REDIS'].get('cur_testlog_id') is None:
             app.config['SESSION_REDIS'].flushall()
             app.config['SESSION_REDIS'].set('cur_testlog_id', db.session.query(models.TestLog).order_by('id').all()[-1].id + 1)

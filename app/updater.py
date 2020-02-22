@@ -107,13 +107,23 @@ def update_meta(app):
             .filter(TestLog.a < 5000)[0][0] + 2000)/2)
             )
         db.session.query(MetaStatistics).first().default_kanji = int(current_app.config['SESSION_REDIS'].get('default_kanji'))
+
+        current_app.config['SESSION_REDIS'].set('avg_known', int(db.session.query(func.avg(TestLog.a))\
+            .filter(TestLog.number_of_questions > 10)[0][0]))
+        db.session.query(MetaStatistics).first().default_kanji = int(current_app.config['SESSION_REDIS'].get('avg_known'))
+
+        current_app.config['SESSION_REDIS'].set('avg_answered', int(db.session.query(func.avg(TestLog.number_of_questions))\
+            .filter(TestLog.number_of_questions > 10)[0][0]))
+        db.session.query(MetaStatistics).first().default_kanji = int(current_app.config['SESSION_REDIS'].get('avg_answered'))
         
         db.session.commit()
         
         print("Successfully Updated Meta vals")
         print("A = " + str(int(current_app.config['SESSION_REDIS'].get('default_kanji'))))
         print("T = " + str(float(current_app.config['SESSION_REDIS'].get('default_tightness'))))
-    
+        print("Known = " + str(int(current_app.config['SESSION_REDIS'].get('avg_known'))))
+        print("Answered = " + str(int(current_app.config['SESSION_REDIS'].get('avg_answered'))))
+        
 # Clear ancient logs
 def clear_old_logs(app):
     with app.app_context():

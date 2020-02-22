@@ -3,6 +3,17 @@
 	<div class="container text-center">
     	<a href="/"><img class="sm" src="/static/img/jiken.png"></a>		
 		
+		<br>
+		<p>{{cnt}} questions answered! 
+		{% if cnt > avg_answered %}
+    		More 
+    	{% else %}
+        	Less
+    	{% endif %}
+    	 than the average {{avg_answered}} of other testers. </p>
+		<p>{{pred[0]}} known kanji estimated compared to the average {{avg_known}}.</p>
+		<br>
+		
 		<!-- Predictions -->    	    	
     	<div class="container pred">
         	<p class="pred-header">Estimates</p>
@@ -17,8 +28,9 @@
             <canvas id="predChart"></canvas>
         </div>
         
+        <!-- Buttons -->    	
         {% if curtest %}
-            <a class="btn btn-success btn-lg" id="return" role="btn" href="/test?a=-1">Back to Test</a>
+            <a class="btn btn-success btn-lg float-right" id="return" role="btn" href="/test?a=-1">Back to Test</a>
         {% endif %}
 	</div>
 {% endblock content %}
