@@ -17,6 +17,9 @@
             <canvas id="predChart"></canvas>
         </div>
         
+        {% if curtest %}
+            <a class="btn btn-success btn-lg" id="return" role="btn" href="/test?a=-1">Back to Test</a>
+        {% endif %}
 	</div>
 {% endblock content %}
 

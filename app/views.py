@@ -62,6 +62,11 @@ def test():
         session['QuestionLog'] = pd.DataFrame(columns=['testmaterialid','score'], dtype='int64')
 
         current_app.config['SESSION_REDIS'].incr('cur_testlog_id')
+    elif int(score) == -1:
+        # Flag to just continue a test
+        score = int(score)
+        #print("Continuing test")
+        pass
     else:
         # Got an answer, log it (to redis session)
         score = bool(int(score))
@@ -126,6 +131,8 @@ def test():
             x = int(logit((random.random()**.5)/2, *res.x))
         elif score == 0:
             x = int(logit((random.random()**.5)/(-2) + 1, *res.x))
+        elif score == -1:
+            x = int(logit((random.random()**.5), *res.x))
         else:
             # Score not given, fail gracefully
             #TODO - error screens
@@ -137,7 +144,7 @@ def test():
         # don't ask repeats
         searchkey = 1
         while (history['my_rank']==x).sum() or x < 1 or x > current_app.config['MAX_X']:
-            print("Already answered" + str(x))
+            #print("Already answered" + str(x))
             x += searchkey
             
             if searchkey > 0:
@@ -180,29 +187,33 @@ def history(id):
     
     data = {}
     datafound = False
-
+    curtest = False
+    
     #If test is in cache still, use that data.
     for sess in current_app.config['SESSION_REDIS'].scan_iter("session:*"):
         data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
         try:
             if data['TestLog']['id'] == int(id):
-                print("Test found in cache")            
+                #print("Test found in cache")            
                 datafound = True
+                if session['TestLog']['id'] == int(id):
+                    #print("Test is current test")
+                    curtest = True
                 break
         except:
             pass
         
     #Otherwise, load data from Sql
     if not datafound:
-        print("Test not in cache")
+        #print("Test not in cache")
         data['TestLog'] = db.session.query(TestLog).filter(TestLog.id == id).first()
         if not data['TestLog']:
             #if it isn't in the DB either, 404 out, test not found.
-            print("Test not in DB")
+            #print("Test not in DB")
             return("Test not found")
         data['QuestionLog'] = db.session.query(QuestionLog).filter(QuestionLog.testlogid == id).all()
         data['QuestionLog'] = pd.DataFrame([s.__dict__ for s in data['QuestionLog']])
-        print("Test found in DB")
+        #print("Test found in DB")
 
     ###        
     ### Prep output
@@ -240,7 +251,7 @@ def history(id):
     #Find a sensible max x value
     xmax = min(int(math.ceil((max(oldquestions['my_rank'], default=0) + 250) / 400) * 500), int(current_app.config['MAX_X']))
     
-    return  render_template('history.html', a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred, cnt = len(history))
+    return  render_template('history.html', a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred, cnt = len(history), curtest = curtest)
 
 
 

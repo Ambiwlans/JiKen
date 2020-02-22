@@ -20,9 +20,7 @@
 #TODO - HISTORY PAGE
     - add test page button for 'more stats'
         - under the graph
-        
-    - 'back to test' button if the test is active?
-        - up the expiry time to like 12hrs
+
     - links to other tests with same IP
     - show metrics: #1 test!, Top 2%
     - Show testing/study suggestions: Easiest 10 Kanji missed from JLPT 5, Kanken 10, my_rank
@@ -34,6 +32,7 @@
     
     - Beta tests: Yuki = 621, Seena = 441
         
+    - proper error page for test not found
         
 #TODO - [?] button
     - opens lightbox with detailed instructions
