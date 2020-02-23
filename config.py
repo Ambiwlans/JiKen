@@ -48,7 +48,7 @@ class DevelopmentConfig:
 class DeploymentConfig:
 
     # Flask
-    DEBUG = True
+    DEBUG = False
     
     SECRET_KEY = os.environ.get('DB_SECRET_KEY') or "Ionceateawholeham"
     
