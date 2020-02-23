@@ -36,21 +36,22 @@ def update_TestQuestionLogs(app):
             data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
             
             try:
+                #Check timestamp to see if we should move it to SQL (>TEST_TIMEOUT mins since last touched)
+                if datetime.datetime.utcnow() - datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')\
+                        < datetime.timedelta(minutes=current_app.config['TEST_TIMEOUT']):
+                    print("Skipping active test from: " + str(datetime.datetime.utcnow() - datetime.datetime.strptime(data['last_touched'], '%Y-%m-%d %H:%M:%S')))
+                    continue
+                
                 #Don't bother recording incomplete tests
-                if len(data['QuestionLog']) < current_app.config['MIN_TEST_LENGTH']:
+                if len(data.get('QuestionLog', 0)) < current_app.config['MIN_TEST_LENGTH']:
                     current_app.config['SESSION_REDIS'].delete(sess)
-                    print("Trashing pointless short test")
+                    print("Trashing pointless short/non test")
                     continue
                 
                 #Don't save tests with duplicted ids
                 if db.session.query(exists().where(TestLog.id == data['TestLog']['id'])).scalar():
                     current_app.config['SESSION_REDIS'].delete(sess)
                     print("Trashing already saved test #"+ str(data['TestLog']['id']))
-                    continue
-                
-                #Check timestamp to see if we should move it to SQL (>1hr since last touched)
-                if datetime.datetime.utcnow() - datetime.datetime.strptime(data['last_touched'], '%Y-%m-%d %H:%M:%S') < datetime.timedelta(minutes=current_app.config['TEST_TIMEOUT']):
-                    print("Skipping active test from: " + str(datetime.datetime.utcnow() - datetime.datetime.strptime(data['last_touched'], '%Y-%m-%d %H:%M:%S')))
                     continue
                 
                 #Create new test

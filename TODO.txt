@@ -18,7 +18,7 @@
 - clear bounds from model/DB
 
 #TODO - HISTORY PAGE
-    - enable test page button for 'more stats/share/save' under the graph
+    - enable test page button for 'more stats/share/save' under the graph. Give it a mouseover.
 
     - links to other tests with same IP
     - Show testing/study suggestions: Easiest 10 Kanji missed from JLPT 5, Kanken 10, my_rank
@@ -26,10 +26,12 @@
         - button to make an anki deck with them?
     - include share buttons, mention permalink/bookmarks
     - add a 'new test' button that just goes to /test
-	- more graphs?
+    - more graphs?
     - make layout less shit
         
     - proper error page for test not found
+    
+    BUG - going to test without questions logged (cleared due to age) causes crash instead of showing graph with no nodes
         
 #TODO - [?] button
     - opens lightbox with detailed instructions
