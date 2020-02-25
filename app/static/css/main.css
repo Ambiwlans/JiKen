@@ -153,6 +153,7 @@ html {
 
 body {
   margin-bottom: 10vw; /* Margin bottom by footer height */
+  padding-bottom: 10vw; /* Margin bottom by footer height */
 }
 
 .footer {
@@ -174,6 +175,7 @@ body {
     }
     body {
         margin-bottom: 60px;
+        padding-bottom: 60px;
     }
 }
 
