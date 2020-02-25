@@ -80,6 +80,9 @@ var myLineChart = new Chart(ctx, {
             padding: {
                 top: 30
             }
+        },
+        animation: {
+            duration: 0
         }
     }
 });
