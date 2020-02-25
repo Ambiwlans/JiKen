@@ -41,7 +41,6 @@
 
 {% block scripts %}
     {{super()}}
-    <script type="text/javascript" src="{{url_for('static', filename='js/tooltip.js')}}"></script>
     {%- include 'chart.js' -%}
 {% endblock %}
 

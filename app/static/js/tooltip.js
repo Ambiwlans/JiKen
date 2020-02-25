@@ -1,6 +1,5 @@
 $(function () {
     var pred = parseInt($('.predlower').text() || 0);
-    
     console.log(pred);
     
     if (pred > 0 && pred < 100)
@@ -82,6 +81,12 @@ $(function () {
     {
         $('.footer-note').html("<a href='https://github.com/Ambiwlans' target='_blank'>Ambiwlans</a>作。気に入ったら広めて下さい！");
         $('.pred-header').html("- 見積 -");
+        
+        $('#know').html("知ってる");
+        $('#dunno').html("知らない");
+        $('#results').html("結果");
+        $('#results').attr("title","いつでも結果の細部見える");
+        
         $('.my_rank').attr("title","難しさのランキング、前のユーザーの試験で決めた");
         $('.jlpt').attr("title","日本語能力試験");
         $('.grade').attr("title","常用漢字");

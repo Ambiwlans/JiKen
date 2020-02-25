@@ -48,6 +48,10 @@
     	<div class="chart-container">
             <canvas id="predChart"></canvas>
         </div>
+        
+        <!-- Share/Results -->    	
+		<a class="btn btn-info btn-sm float-right" id="results" data-toggle="tooltip" data-placement="left" title="See your detailed test results at any time!" role="btn" href="/history/{{session['TestLog'].id}}">Results</a>
+		
         {% else %}
         <div class="container pred">
             <h4 class="preest">
