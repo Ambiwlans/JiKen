@@ -177,7 +177,8 @@ def test():
     print ("Asking Kanji #: " + str(newquestion['my_rank']) + " -- " + str(newquestion['kanji']))
     print("Sess: A = " + str(session['TestLog'].a) + "  T = " + str(session['TestLog'].t) + "  # = " + str(len(session['QuestionLog'])))
 
-    return render_template('test.html', question = newquestion, a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred, cnt = len(history))
+    return render_template('test.html', question = newquestion, cnt = len(history), \
+        a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred)
 
 @bp.route("/history/<id>")
 def history(id):
@@ -255,6 +256,7 @@ def history(id):
     return  render_template('history.html', \
         a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred,\
         curtest = curtest, cnt = len(history), \
+        date = data['TestLog'].start_time, \
         avg_answered = int(current_app.config['SESSION_REDIS'].get('avg_answered')), avg_known = int(current_app.config['SESSION_REDIS'].get('avg_known')))
 
 

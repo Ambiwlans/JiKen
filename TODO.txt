@@ -18,7 +18,7 @@
 - clear bounds from model/DB
 
 #TODO - HISTORY PAGE
-    - enable test page button for 'more stats/share/save' under the graph. Give it a mouseover.
+    - enable test page button for 'more stats/share/save' under the graph. Give it a mouseover. "Results" also add a share results button atttached to it.
 
     - links to other tests with same IP
     - Show testing/study suggestions: Easiest 10 Kanji missed from JLPT 5, Kanken 10, my_rank
@@ -28,6 +28,8 @@
     - add a 'new test' button that just goes to /test
     - more graphs?
     - make layout less shit
+    - test timestamp
+    - general information on the results page. Notes about bookmarking the page for future reference "Bookmark this test page to compare the next time you take a test"
         
     - proper error page for test not found
     
@@ -54,7 +56,7 @@
 #TODO - BUGS
     - "non standard for", other blank kanji <-- just delete them from the DB
     - updater log should throw out more garbage tests and tests potentially broken data from redis ... verify we have fitting test/question data
-    
+    - update/dump bleach security risk
 
 --------------------------
 Low Prio:
