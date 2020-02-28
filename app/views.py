@@ -154,9 +154,8 @@ def test():
             
             if x > current_app.config['MAX_X'] and x + searchkey < 1: 
                 print("Test # " + str(session['TestLog'].id) + " asked every question!")
-                x = 1
-                #TODO - go to seperate page
-                break
+                #Just go to history page when a user has completed every question...
+                return redirect(url_for('history/' + session['TestLog'].id))
                 
         newquestion = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))[pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))['my_rank']==x].iloc[0]
     
@@ -210,8 +209,7 @@ def history(id):
         data['TestLog'] = db.session.query(TestLog).filter(TestLog.id == id).first()
         if not data['TestLog']:
             #if it isn't in the DB either, 404 out, test not found.
-            #print("Test not in DB")
-            return("Test not found")
+            abort(404, "Test not found.")
         data['QuestionLog'] = db.session.query(QuestionLog).filter(QuestionLog.testlogid == id).all()
         data['QuestionLog'] = pd.DataFrame([s.__dict__ for s in data['QuestionLog']])
         #print("Test found in DB")
@@ -220,11 +218,14 @@ def history(id):
     ### Prep output
     ###
     
-    history = pd.merge(data['QuestionLog'], \
-               pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')), \
-               left_on=data['QuestionLog'].testmaterialid.astype(int), \
-               right_on='id')
-            
+    try:
+        history = pd.merge(data['QuestionLog'], \
+                   pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')), \
+                   left_on=data['QuestionLog'].testmaterialid.astype(int), \
+                   right_on='id')
+    except:
+        abort(404, "Test not found.")
+        
     #Redo Predictions
     pred = [0,0,0]      #[mid, upper, lower]    
     x = [data['TestLog'].t, data['TestLog'].a]

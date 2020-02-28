@@ -17,21 +17,15 @@
 
 - clear bounds from model/DB
 
-#TODO - HISTORY PAGE
-    - enable test page button for 'more stats/share/save' under the graph. Give it a mouseover. "Results" also add a share results button atttached to it.
+- is test timeout config broken?
 
-    - links to other tests with same IP
+#TODO - HISTORY PAGE
+    ? links to other tests with same IP. Use a cookie?
+    
     - Show testing/study suggestions: Easiest 10 Kanji missed from JLPT 5, Kanken 10, my_rank
         - continued testing for active tests within a grade/level?
         - button to make an anki deck with them?
-    - include share buttons, mention permalink/bookmarks
-    - add a 'new test' button that just goes to /test
-    - more graphs?
-    - make layout less shit
-    - test timestamp
-    - general information on the results page. Notes about bookmarking the page for future reference "Bookmark this test page to compare the next time you take a test"
-        
-    - proper error page for test not found
+    - include share buttons in a BS buttonbar, also add to test page
     
     BUG - going to test without questions logged (cleared due to age) causes crash instead of showing graph with no nodes
         
