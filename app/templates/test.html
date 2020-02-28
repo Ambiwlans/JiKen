@@ -7,17 +7,19 @@
     	<div class="flashcard" onclick="flip()">
             <div class="frontside container">
                 {% if question.my_rank != 7000 %}
-                    <p class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji rank determined by commonness, complexity and user data">{{question.my_rank}}</p>
+                    <span class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji rank determined by commonness, complexity and user data">{{question.my_rank}}</span>
                 {% endif %}
-                
-                <div class="top-right">
+                <span class="top-center">
+                    <p class="count" data-toggle="tooltip" data-placement="top" title="How many questions you've answered so far">{{cnt + 1}}</p>
+                </span>
+                <span class="top-right">
                     {% if question.jlpt != 6 %}
                         <p class="jlpt" data-toggle="tooltip" data-placement="right" title="JLPT grade level">N{{question.jlpt}}</p>
                     {% endif %}
                     {% if question.grade != 14 %}
                         <p class="grade" data-toggle="tooltip" data-placement="right" title="Jōyō grade level">Gr{{question.grade|int}}</p>
                     {% endif %}
-                </div>
+                </span>
                 <h1 class="kanji">{{question.kanji}}</h1>
             </div>
             <div class="backside container">
@@ -34,7 +36,7 @@
 		
 		
 		<!-- Predictions -->    	
-    	{% if cnt > 10 %}
+    	{% if cnt >= 10 %}
     	
     	<div class="container pred">
         	<p class="pred-header">Estimates</p>
@@ -74,9 +76,7 @@
             {% elif cnt == 8 %}
                 Remember you can keep going after the initial result...
             {% elif cnt == 9 %}
-                Good Luck!
-            {% elif cnt == 10 %}
-                頑張って!
+                Good Luck! 頑張って!
             {% endif %}
             </h4>
         </div>

@@ -33,8 +33,16 @@ Bad - dc3545 (default) -> #B40020
 
 .my_rank {
     font-size: 12px;
-    float: left;
+    text-align: left;
     position: absolute;
+    left: 0;
+}
+
+.top-center {
+    font-size: 12px;
+    text-align: center;
+    position: absolute;
+    top: -12px;
 }
 
 .top-right {

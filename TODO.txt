@@ -1,12 +1,5 @@
-- repeated answers shouldn't be allowed (f5 spam, double post)
-    - switch away from using params? (use ID for history)
-    - refreshing pg w/o clicking a link should just refresh the page and do nothing...
-    - allow answered question overwrites for ppl that hit go back
-        
 - currently overwriting session when user does multiple tests instead of saving it and creating a new session
     - going to /test should just create a new session (right before creating the test df)
-
-- show question # somewhere (chart mouseover? above the kanji?)
 
 - error screens (DB down, other) (use default flask stuff i have in tab site, incl contact info)
     - contact info, apologies
@@ -39,9 +32,11 @@
         
 #TODO - BUGS
     - "non standard for", other blank kanji <-- just delete them from the DB
-    - updater log should throw out more garbage tests and tests potentially broken data from redis ... verify we have fitting test/question data
-    - update/dump bleach security risk
-
+    - repeated answers shouldn't be allowed (f5 spam, double post)
+        - switch away from using params? (use ID for history)
+        - refreshing pg w/o clicking a link should just refresh the page and do nothing...
+        - allow answered question overwrites for ppl that hit go back
+    
 --------------------------
 Low Prio:
 - send dono http://www.edrdg.org/edrdg/licence.html
