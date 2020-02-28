@@ -17,14 +17,10 @@
 
 - clear bounds from model/DB
 
-- is test timeout config broken?
 
 #TODO - HISTORY PAGE
     ? links to other tests with same IP. Use a cookie?
     
-    - Show testing/study suggestions: Easiest 10 Kanji missed from JLPT 5, Kanken 10, my_rank
-        - continued testing for active tests within a grade/level?
-        - button to make an anki deck with them?
     - include share buttons in a BS buttonbar, also add to test page
     
     BUG - going to test without questions logged (cleared due to age) causes crash instead of showing graph with no nodes
@@ -63,6 +59,8 @@ Low Prio:
 - trim the req list further?
 - switch to a slightly better ML algorithm (model family) allowing assymetries (non-sigmoid?)
 - clientside the math
+- extend hist pg kanji suggestions - tooltips, categories
+- add a 'drills' feature for kanji missed on a test
 
 Bugs:
     - fix printout/log format kanji encoding

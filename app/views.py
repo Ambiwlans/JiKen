@@ -91,8 +91,8 @@ def test():
         #For the first question, ask a random kanji (for data gathering purposes)
         newquestion = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')).sample().iloc[0]
     else:
-        history = history.sort_values(by=['my_rank'], ascending=False)
-        
+        history = history.sort_values(by=['my_rank'], ascending=True)
+
         for i, r in history.iterrows():
             xdata.append(r.my_rank)
             ydata.append(r.score)
@@ -160,7 +160,7 @@ def test():
         newquestion = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))[pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))['my_rank']==x].iloc[0]
     
     #Get some history to show
-    oldquestions = history.sort_values(by=['id'], ascending=False)[:100]
+    oldquestions = history[:100]
     
     rightanswers = oldquestions[oldquestions['score']==1]
     rightanswers = [(r.my_rank, r.kanji) for i, r in rightanswers.iterrows()]
@@ -177,7 +177,7 @@ def test():
     print("Sess: A = " + str(session['TestLog'].a) + "  T = " + str(session['TestLog'].t) + "  # = " + str(len(session['QuestionLog'])))
 
     return render_template('test.html', question = newquestion, cnt = len(history), \
-        a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred)
+        a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred)
 
 @bp.route("/history/<id>")
 def history(id):
@@ -222,9 +222,10 @@ def history(id):
         history = pd.merge(data['QuestionLog'], \
                    pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')), \
                    left_on=data['QuestionLog'].testmaterialid.astype(int), \
-                   right_on='id')
+                   right_on='id') \
+                   .sort_values(by=['my_rank'], ascending=True)
     except:
-        abort(404, "Test not found.")
+        abort(404, "Test borked.")
         
     #Redo Predictions
     pred = [0,0,0]      #[mid, upper, lower]    
@@ -243,7 +244,7 @@ def history(id):
        
         
     #Prep historical graph display data
-    oldquestions = history.sort_values(by=['id'], ascending=False)[:100]
+    oldquestions = history[:100]
     
     rightanswers = oldquestions[oldquestions['score']==1]
     rightanswers = [(r.my_rank, r.kanji) for i, r in rightanswers.iterrows()]
@@ -255,7 +256,7 @@ def history(id):
     xmax = min(int(math.ceil((max(oldquestions['my_rank'], default=0) + 250) / 400) * 500), int(current_app.config['MAX_X']))
     
     return  render_template('history.html', \
-        a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = json.dumps(wronganswers), rightanswers = json.dumps(rightanswers), xmax = xmax, pred = pred,\
+        a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred,\
         curtest = curtest, cnt = len(history), \
         date = data['TestLog'].start_time, \
         avg_answered = int(current_app.config['SESSION_REDIS'].get('avg_answered')), avg_known = int(current_app.config['SESSION_REDIS'].get('avg_known')))

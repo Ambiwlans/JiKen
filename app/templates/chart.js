@@ -9,12 +9,12 @@ var myLineChart = new Chart(ctx, {
         datasets: [{
             type: 'scatter',
             showLine: false,
-            data: {{ rightanswers|safe }}.map(rightPoints),
+            data: {{ rightanswers|tojson|safe }}.map(rightPoints),
             pointBackgroundColor: '#267f00'
         }, {
             type: 'scatter',
             showLine: false,
-            data: {{ wronganswers|safe }}.map(wrongPoints),
+            data: {{ wronganswers|tojson|safe }}.map(wrongPoints),
             pointBackgroundColor: '#B40020'
         }, {
             type: 'line',

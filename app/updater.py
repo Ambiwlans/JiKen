@@ -37,7 +37,8 @@ def update_TestQuestionLogs(app):
             
             try:
                 #Check timestamp to see if we should move it to SQL (>TEST_TIMEOUT mins since last touched)
-                if datetime.datetime.utcnow() - datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')\
+                if datetime.datetime.utcnow() - \
+                        datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')\
                         < datetime.timedelta(minutes=current_app.config['TEST_TIMEOUT']):
                     print("Skipping active test from: " + str(datetime.datetime.utcnow() - datetime.datetime.strptime(data['last_touched'], '%Y-%m-%d %H:%M:%S')))
                     continue
