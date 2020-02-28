@@ -37,13 +37,14 @@
     		
         
             <!-- Relevant kanji lists -->
-            <p class="text-left">Some kanji to review:</p>
-        	<h1>
-    		{% for q in wronganswers[:10] %}
-                <a href="https://jisho.org/search/{{q[1]}} %23kanji" class="review">{{q[1]}}</a>{{ " - " if not loop.last }} 		
-    		{% endfor %}
-    		</h1>	
-        
+            {% if wronganswers|length > 0 %}
+                <p class="text-left">Some kanji to review:</p>
+            	<h1>
+        		{% for q in wronganswers[:10] %}
+                    <a href="https://jisho.org/search/{{q[1]}} %23kanji" class="review">{{q[1]}}</a>{{ " - " if not loop.last }} 		
+        		{% endfor %}
+        		</h1>	
+            {% endif %}
             <br>
             <p>Tip: Be sure to bookmark this page to compare to the next time you take a test</p>
         </div>

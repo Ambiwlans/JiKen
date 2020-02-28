@@ -38,8 +38,6 @@ import datetime
 def home():
     return render_template('home.html')
 
-#TODO2 - bias first question towards more commonly known ones
-#TODO5 - avoid recalculating everything each question - modify rather than redo
 @bp.route("/test")
 def test():
     
@@ -168,7 +166,7 @@ def test():
     wronganswers = [(r.my_rank, r.kanji) for i, r in wronganswers.iterrows()]
     
     #Find a sensible max x value
-    xmax = min(int(math.ceil((max(oldquestions['my_rank'], default=0) + 250) / 400) * 500), int(current_app.config['MAX_X']))
+    xmax = min(int(math.ceil((max(oldquestions['my_rank'], default=0) + 250) / 400) * 500), int(current_app.config['GRAPH_MAX_X']))
     
     #Refresh the timeout flag
     session['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
@@ -225,7 +223,7 @@ def history(id):
                    right_on='id') \
                    .sort_values(by=['my_rank'], ascending=True)
     except:
-        abort(404, "Test borked.")
+        history = pd.DataFrame(columns=['score','my_rank'])
         
     #Redo Predictions
     pred = [0,0,0]      #[mid, upper, lower]    
@@ -241,8 +239,7 @@ def history(id):
         pred[2] += (r.score - sigmoid(r.my_rank, *x, 2))
     
     pred = list(map(int,pred))
-       
-        
+          
     #Prep historical graph display data
     oldquestions = history[:100]
     
@@ -253,11 +250,11 @@ def history(id):
     
             
     #Find a sensible max x value
-    xmax = min(int(math.ceil((max(oldquestions['my_rank'], default=0) + 250) / 400) * 500), int(current_app.config['MAX_X']))
+    xmax = int(min(((pred[0] + 4*(pred[1]-pred[0])) + 250), current_app.config['GRAPH_MAX_X']))
     
     return  render_template('history.html', \
         a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred,\
-        curtest = curtest, cnt = len(history), \
+        curtest = curtest, cnt = data['TestLog'].number_of_questions, \
         date = data['TestLog'].start_time, \
         avg_answered = int(current_app.config['SESSION_REDIS'].get('avg_answered')), avg_known = int(current_app.config['SESSION_REDIS'].get('avg_known')))
 
