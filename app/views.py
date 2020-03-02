@@ -34,6 +34,10 @@ import datetime
 ### ROUTES
 ##########################################
 
+@bp.errorhandler(500)
+def server_error(e):
+    return "There was an internal server error. Contact <a href='https://github.com/Ambiwlans' target='_blank'>Ambiwlans</a> or return to the <a href='/'>home page</a>.", 500
+
 @bp.route("/")
 def home():
     return render_template('home.html')
