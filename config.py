@@ -34,14 +34,14 @@ class DevelopmentConfig:
     MAX_QUESTIONS_LOGGED = 40000                                #Max # of questions before clearing them from SQL 
     MAX_TESTS_LOGGED = 40000                                    #Max # of tests before clearing them from SQL (must be larger than questions/test_length)
     MIN_TEST_LENGTH = 1                                         #Shorter tests won't be logged
-    TEST_TIMEOUT = 1                                            #Minutes inactive before tests get dumped to SQL
+    TEST_TIMEOUT = 600                                            #Minutes inactive before tests get dumped to SQL
     
     # Flask-Session
     SESSION_TYPE = "redis"
     SESSION_REDIS = redis.from_url(os.environ.get('SESSION_REDIS'))#, decode_responses=True)
     
     # App
-    GRAPH_AFTER = 1
+    GRAPH_AFTER = 0
     GRAPH_MAX_X = 6000
     MAX_X = 6183
     
@@ -71,7 +71,7 @@ class DeploymentConfig:
     SESSION_REDIS = redis.from_url(os.environ.get('SESSION_REDIS'))
     
     # App
-    GRAPH_AFTER = 10
+    GRAPH_AFTER = 9
     GRAPH_MAX_X = 6000
     MAX_X = 6183
     

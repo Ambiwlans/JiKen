@@ -2,9 +2,7 @@
     - going to /test should just create a new session (right before creating the test df)
 
 - History - include share buttons in a BS buttonbar, also add to test page
-  
-- deal with the idiot q10 no prediction
-      
+        
 #TODO - [?] button
     - opens lightbox with detailed instructions
     - Explain what "know it" means .... button mouseover? "Test yourself which kanji you know, however you want to define 'know'"
