@@ -3,6 +3,8 @@
 
 - History - include share buttons in a BS buttonbar, also add to test page
         
+- change old log cleaner to use count not id
+
 #TODO - [?] button
     - opens lightbox with detailed instructions
     - Explain what "know it" means .... button mouseover? "Test yourself which kanji you know, however you want to define 'know'"
@@ -15,7 +17,6 @@
     - pick another ad service, adsense is ng for webapps.
         
 #TODO - BUGS
-    - "non standard for", other blank kanji <-- just delete them from the DB
     - repeated answers shouldn't be allowed (f5 spam, double post)
         - switch away from using params? (use ID for history)
         - refreshing pg w/o clicking a link should just refresh the page and do nothing...

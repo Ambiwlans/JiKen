@@ -43,7 +43,7 @@ class DevelopmentConfig:
     # App
     GRAPH_AFTER = 0
     GRAPH_MAX_X = 6000
-    MAX_X = 6183
+    MAX_X = 6750
     
 class DeploymentConfig:
 
@@ -73,7 +73,7 @@ class DeploymentConfig:
     # App
     GRAPH_AFTER = 9
     GRAPH_MAX_X = 6000
-    MAX_X = 6183
+    MAX_X = 6750
     
 #Easy switch for different configs
 Config = DeploymentConfig
