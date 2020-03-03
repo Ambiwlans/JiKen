@@ -3,8 +3,6 @@
 
 - History - include share buttons in a BS buttonbar, also add to test page
         
-- change old log cleaner to use count not id
-
 #TODO - [?] button
     - opens lightbox with detailed instructions
     - Explain what "know it" means .... button mouseover? "Test yourself which kanji you know, however you want to define 'know'"
@@ -22,8 +20,12 @@
         - refreshing pg w/o clicking a link should just refresh the page and do nothing...
         - allow answered question overwrites for ppl that hit go back
     
+#TODO - PR
+    - tweets, open beta w/ new features, msg some teaching sites to see if they're interested
+    
 --------------------------
 Low Prio:
+- rebuffer tests when opened in history to redis
 - incl some alpha stats on the readme, mention the phenomenon that allows us to use a sigmoid
 ? about section (other than the github)
 - send dono http://www.edrdg.org/edrdg/licence.html

@@ -31,9 +31,9 @@ class DevelopmentConfig:
 #    SQLALCHEMY_ECHO=True
     
     # Data
-    MAX_QUESTIONS_LOGGED = 40000                                #Max # of questions before clearing them from SQL 
-    MAX_TESTS_LOGGED = 40000                                    #Max # of tests before clearing them from SQL (must be larger than questions/test_length)
-    MIN_TEST_LENGTH = 1                                         #Shorter tests won't be logged
+    MAX_QUESTIONS_LOGGED = 4500                                   #Max # of questions before clearing them from SQL 
+    MAX_TESTS_LOGGED = 4500                                       #Max # of tests before clearing them from SQL (must be larger than questions/test_length)
+    MIN_TEST_LENGTH = 1                                           #Shorter tests won't be logged
     TEST_TIMEOUT = 600                                            #Minutes inactive before tests get dumped to SQL
     
     # Flask-Session
@@ -61,8 +61,8 @@ class DeploymentConfig:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 
     # Data
-    MAX_QUESTIONS_LOGGED = 40000                                #Max # of questions before clearing them from SQL 
-    MAX_TESTS_LOGGED = 40000                                    #Max # of tests before clearing them from SQL (must be larger than questions/test_length)
+    MAX_QUESTIONS_LOGGED = 4500                                 #Max # of questions before clearing them from SQL 
+    MAX_TESTS_LOGGED = 4500                                     #Max # of tests before clearing them from SQL (must be larger than questions/test_length)
     MIN_TEST_LENGTH = 10                                        #Shorter tests won't be logged
     TEST_TIMEOUT = 600                                          #Minutes inactive before tests get dumped to SQL
     

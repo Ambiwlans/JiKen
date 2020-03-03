@@ -131,11 +131,17 @@ def clear_old_logs(app):
     with app.app_context():
         print("--------LOG CLEANUP------------")
         #Delete old questions first to avoid orphaned questions
-        cur_num = db.session.query(func.max(QuestionLog.id)).scalar()
-        db.session.query(QuestionLog).filter(QuestionLog.id < cur_num - current_app.config['MAX_QUESTIONS_LOGGED']).delete()
+        cutoff = max(db.session.query(QuestionLog.id).count() - current_app.config['MAX_QUESTIONS_LOGGED'], 0)
+        cutoff_id = db.session.query(QuestionLog).order_by(QuestionLog.id)[cutoff].id
+        db.session.query(QuestionLog).filter(QuestionLog.id < cutoff_id).delete()
+        print(str(cutoff) + " old questions deleted")
         
-        cur_num = db.session.query(func.max(TestLog.id)).scalar()
-        db.session.query(TestLog).filter(TestLog.id < cur_num - current_app.config['MAX_TESTS_LOGGED']).delete()
+        cutoff = max(db.session.query(TestLog.id).count() - current_app.config['MAX_TESTS_LOGGED'], 0)
+        cutoff_id = db.session.query(TestLog).order_by(TestLog.id)[cutoff].id
+        db.session.query(TestLog).filter(TestLog.id < cutoff_id).delete()
+        print(str(cutoff) + " old tests deleted")
+        
+        db.session.commit()
         
 # Reformat base DB taken from KANJIDIC
 def initial_DB_reformat():

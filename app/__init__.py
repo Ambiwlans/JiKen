@@ -62,9 +62,10 @@ def create_app(config_class=Config):
         scheduler = BackgroundScheduler()
         if app.config['DEBUG']:
             scheduler.add_job(func=update_TestQuestionLogs, args=(current_app._get_current_object(),), trigger="interval", minutes=20, next_run_time=datetime.datetime.now())
+            scheduler.add_job(func=clear_old_logs, args=(current_app._get_current_object(),), trigger="interval", days=1, next_run_time=datetime.datetime.now())
         else:
             scheduler.add_job(func=update_TestQuestionLogs, args=(current_app._get_current_object(),), trigger="interval", minutes=20)
-        scheduler.add_job(func=clear_old_logs, args=(current_app._get_current_object(),), trigger="interval", days=1)
+            scheduler.add_job(func=clear_old_logs, args=(current_app._get_current_object(),), trigger="interval", days=1)
         scheduler.add_job(func=update_meta, args=(current_app._get_current_object(),), trigger="interval", days=1, next_run_time=datetime.datetime.now())
         scheduler.start()
         atexit.register(lambda: scheduler.shutdown())
