@@ -137,8 +137,7 @@ def test():
             x = int(logit((random.random()**.5), *res.x))
         else:
             # Score not given, fail gracefully
-            #TODO - error screens
-            return render_template('home.html')
+            abort(500)
         
         if x < 1 : x = 1
         if x > current_app.config['MAX_X']: x = current_app.config['MAX_X']
@@ -146,7 +145,6 @@ def test():
         # don't ask repeats
         searchkey = 1
         while (history['my_rank']==x).sum() or x < 1 or x > current_app.config['MAX_X']:
-            #print("Already answered" + str(x))
             x += searchkey
             
             if searchkey > 0:
@@ -156,8 +154,8 @@ def test():
             
             if x > current_app.config['MAX_X'] and x + searchkey < 1: 
                 print("Test # " + str(session['TestLog'].id) + " asked every question!")
-                #Just go to history page when a user has completed every question...
-                return redirect(url_for('history/' + session['TestLog'].id))
+                # Go to history page when a user has completed every question... wowza
+                return "Holy crap!! You actually answered every kanji. I don't really expect anyone to maneage this so I don't have anything ready.... uhh, check your <a href='history/"+session['TestLog'].id+"'>results</a> and tweet them to me (@Ambiwlans1, #jiken). Damn... good job!"
                 
         newquestion = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))[pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))['my_rank']==x].iloc[0]
     
