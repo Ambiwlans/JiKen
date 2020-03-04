@@ -3,6 +3,7 @@
 
 - History - include share buttons in a BS buttonbar, also add to test page
         
+
 #TODO - [?] button
     - opens lightbox with detailed instructions
     - Explain what "know it" means .... button mouseover? "Test yourself which kanji you know, however you want to define 'know'"
@@ -10,9 +11,6 @@
 	- click to flip!
 	- get https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/feztk2c/ to test
          
-#TODO - ADS
-    - side ads on pc, tiny bottom banner on phones
-    - pick another ad service, adsense is ng for webapps.
         
 #TODO - BUGS
     - repeated answers shouldn't be allowed (f5 spam, double post)
@@ -21,7 +19,9 @@
         - allow answered question overwrites for ppl that hit go back
     
 #TODO - PR
-    - tweets, open beta w/ new features, msg some teaching sites to see if they're interested
+    - basic seo
+    - open beta thread: new features - ads, shareable/saveable tests, [?] button
+    - tweets, msg some teaching sites to see if they're interested
     
 --------------------------
 Low Prio:
@@ -40,9 +40,7 @@ Low Prio:
 - extend hist pg kanji suggestions - tooltips, categories
 ? add a 'drills' feature for kanji missed on a test
 ? links to other tests with same IP. Use a cookie?
-- error screen (DB down, other)
-    - override DB/redis errors
-    - contact info, apologies
+- error screen (DB down, other) - contact info, apologies
 - reimplement L2R
     - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
     - more whitepaper research on best methods
@@ -71,3 +69,4 @@ Extensions:
 - E->J
     - add example words to stop ambiguity
 - Other cards sets (vocab for English, Jpns...)
+- make an app

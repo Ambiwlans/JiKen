@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
+
+<!-- Ad -->
+{% if cnt > 0 and cnt % 10 == 0 %}
+    <script>
+    if (window.matchMedia("(min-width: 480px)").matches) {
+      document.write("<script data-cfasync='false' type='text/javascript' src='//p386432.clksite.com/adServe/banners?tid=386432_758560_3&type=shadowbox&size=38'><\/script>");  
+    }
+    else{
+      document.write("<script data-cfasync='false' type='text/javascript' src='//p386432.clksite.com/adServe/banners?tid=386432_758560_1'><\/script>");
+    }
+    </script>
+{% endif %}
 	<div class="container text-center">
     	<a href="/"><img class="sm" src="/static/img/jiken.png"></a>
     	
@@ -64,15 +76,15 @@
             {% elif cnt == 2 %}
                 Tap the card to flip it and check your answers.
             {% elif cnt == 3 %}
-                Treat it seriously, no "<em>Well, I should have known that one!</em>" answers.
+                "<em>I should have known that one!</em>" is "<em>Don't know</em>".
             {% elif cnt == 4 %}
-                The top left shows what rank difficulty the kanji is.
+                The top left # shows what rank/difficulty the kanji is.
             {% elif cnt == 5 %}
-                The top right shows the JLPT grade level and Jouyou grade level.
+                The top right # shows the JLPT grade level and Jouyou grade level.
             {% elif cnt == 6 %}
                 On PC, try mousing over things for an explanation. 
             {% elif cnt == 7 %}
-                Controls: [←] Know, [→] Don't Know, [↓]/[TAP] Flip card
+                Controls: [←]&nbsp;Know, [→]&nbsp;Don't&nbsp;Know, [↓]/[TAP]&nbsp;Flip&nbsp;card
             {% elif cnt == 8 %}
                 Remember you can keep going after the initial result...
             {% elif cnt == 9 %}

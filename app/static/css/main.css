@@ -6,6 +6,8 @@ Highlight (grey) #f5f5f5
 
 Good - 28a745 (default) -> #267f00
 Bad - dc3545 (default) -> #B40020
+Muted grey #6c757d
+
 */
 
 /* Mobile Support 
@@ -119,6 +121,7 @@ Bad - dc3545 (default) -> #B40020
 .predrange {
     vertical-align:middle;
     font-size: 12px;
+    color: #6c757d;
 }
 
 .chart-container {

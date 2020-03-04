@@ -4,7 +4,7 @@
         <a href="/"><img class="sm" src="/static/img/jiken.png"></a>
 		<p class="slogan">Test Your Kanji</p>
 		<br>
-		Results for test taken on {{(date|string)[:-3]}}GMT:
+		Results for test on {{(date|string)[:-3]}}GMT
 		<br>
 		
 		<!-- Predictions -->    	    	
@@ -21,11 +21,15 @@
             <canvas id="predChart"></canvas>
         </div>
         
+        <hr>
+        <script data-cfasync='false' type='text/javascript' src='//p386432.clksite.com/adServe/banners?tid=386432_758560_2'></script>
+        <hr>
+        
         <div class="explanation container">
             <!-- Stats -->
             <br>
-            <p class="text-left">Stats:</p>
-            <p>{{cnt}} questions answered! 
+            <h3 class="text-left">Stats:</h3>
+            <p><b>{{cnt}}</b> questions answered! 
     		{% if cnt > avg_answered %}
         		More 
         	{% else %}
@@ -33,12 +37,12 @@
         	{% endif %}
         	 than the average {{avg_answered}} of other testers.
         	 <br>
-    		{{pred[0]}} known kanji estimated compared to the average {{avg_known}}.</p>
+    		You know <b>{{pred[0]}}</b> kanji vs the average {{avg_known}}.</p>
     		
         
             <!-- Relevant kanji lists -->
             {% if wronganswers|length > 0 %}
-                <p class="text-left">Some kanji to review:</p>
+                <h3 class="text-left">Kanji to review:</h3>
             	<h1>
         		{% for q in wronganswers[:10] %}
                     <a href="https://jisho.org/search/{{q[1]}} %23kanji" class="review">{{q[1]}}</a>{{ " - " if not loop.last }} 		
@@ -50,9 +54,9 @@
         </div>
         <!-- Buttons -->    	
         {% if curtest %}
-            <a class="btn btn-info float-right" id="return" role="btn" href="/test?a=-1">Continue Test</a>
+            <a class="btn btn-info btn-sm float-right" id="return" role="btn" href="/test?a=-1">Continue Test</a>
         {% endif %}
-        &nbsp; &nbsp;<a class="btn btn-success float-right" id="new" role="btn" href="/test">New Test</a>
+        &nbsp; &nbsp;<a class="btn btn-success btn-sm float-right" id="new" role="btn" href="/test">New Test</a>
         
 	</div>
 {% endblock content %}
