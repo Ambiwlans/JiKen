@@ -188,9 +188,11 @@ def history(id):
     data = {}
     datafound = False
     curtest = False
-    
+
     #If test is in cache still, use that data.
     for sess in current_app.config['SESSION_REDIS'].scan_iter("session:*"):
+        if datafound:
+            break
         data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
         try:
             if data['TestLog']['id'] == int(id):
