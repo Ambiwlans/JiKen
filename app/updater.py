@@ -31,7 +31,7 @@ def update_TestQuestionLogs(app):
         x = current_app.config['SESSION_REDIS'].scan()
         print(x)
         for sess in current_app.config['SESSION_REDIS'].scan_iter("session:*"):
-            print("Moving to SQL DB -- " + str(sess))
+#            print("Moving to SQL DB -- " + str(sess))
             
             data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
             
@@ -40,7 +40,7 @@ def update_TestQuestionLogs(app):
                 if datetime.datetime.utcnow() - \
                         datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')\
                         < datetime.timedelta(minutes=current_app.config['TEST_TIMEOUT']):
-                    print("Skipping active test from: " + str(datetime.datetime.utcnow() - datetime.datetime.strptime(data['last_touched'], '%Y-%m-%d %H:%M:%S')))
+                    print("Skipping active test from: " + str(datetime.datetime.utcnow() - datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')))
                     continue
                 
                 #Don't bother recording incomplete tests
@@ -73,8 +73,8 @@ def update_TestQuestionLogs(app):
                           "testmaterialid" : q.testmaterialid,
                           "score" : q.score} for i, q in data['QuestionLog'].iterrows()])
     
-                print("Upped Test #: " + str(addTest.id))
-                print(data['QuestionLog'])
+                print("Upped Test #: " + str(addTest.id) + " with " + str(len(data.get('QuestionLog', 0))) + " questions.")
+#                print(data['QuestionLog'])
                 
             except Exception: 
                 import pprint

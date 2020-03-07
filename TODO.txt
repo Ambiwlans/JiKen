@@ -15,7 +15,6 @@
         - switch away from using params? (use ID for history)
         - refreshing pg w/o clicking a link should just refresh the page and do nothing...
         - allow answered question overwrites for ppl that hit go back
-    - updater ln 43 keyerror 'last_touched' (empty test)
     
 #TODO - PR
     - basic seo
