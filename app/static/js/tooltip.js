@@ -87,7 +87,7 @@ $(function () {
         $('#results').html("結果");
         $('#results').attr("title","いつでも結果の細部見える");
         
-        $('.my_rank').attr("title","難しさのランキング、前のユーザーの試験で決めた");
+        $('.my_rank').attr("title","難しさのランキング");
         $('.count').attr("title","何番目の質問");
         $('.jlpt').attr("title","日本語能力試験");
         $('.grade').attr("title","常用漢字");

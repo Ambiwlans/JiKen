@@ -6,6 +6,7 @@ Highlight (grey) #f5f5f5
 
 Good - 28a745 (default) -> #267f00
 Bad - dc3545 (default) -> #B40020
+Share/Info - #117a8b
 Muted grey #6c757d
 
 */
@@ -17,6 +18,20 @@ Muted grey #6c757d
 
 /* Test formatting
 -------------------------------------------------- */
+.test_header{
+    padding-left: 41px;
+}
+
+.help_btn {
+    color: #117a8b !important;
+    padding-left: 20px;
+    vertical-align: top;
+}
+
+.modalimg {
+    max-width:90%;
+}
+
 .flashcard {
     margin: 30px 0px;
     height: 150px;
@@ -211,11 +226,12 @@ body {
     background-color: #B40020;
 }
 
-img {
+.title-lg {
     width: 90%;
     max-width: 600px;
 }
 
-img.sm {
+.title-sm {
+    width: 90%;
     max-width: 200px;
 }

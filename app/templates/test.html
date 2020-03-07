@@ -13,13 +13,26 @@
     </script>
 {% endif %}
 	<div class="container text-center">
-    	<a href="/"><img class="sm" src="/static/img/jiken.png"></a>
+    	<div class="test_header">
+        	<a href="/"><img class="title-sm" src="/static/img/jiken.png"></a>
+        	<a class="help_btn" data-toggle="modal" data-target="#helpModal"><i class="fas fa-question-circle fa-lg"></i></a>
+    	</div>
+    	<!-- Modal -->
+    	<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalTitle" aria-hidden="true">
+        	<div class="modal-dialog modal-dialog-centered" role="document">
+            	<div class="modal-content">
+                    <div class="modal-body next">
+                        <img class="btn modalimg" src="/static/img/guide.png">
+                    </div>
+                </div>
+        	</div>
+    	</div>
     	
     	<!-- Flashcard -->    	
     	<div class="flashcard" onclick="flip()">
             <div class="frontside container">
                 {% if question.my_rank != 7000 %}
-                    <span class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji rank determined by commonness, complexity and user data">{{question.my_rank}}</span>
+                    <span class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji difficulty ranking">{{question.my_rank}}</span>
                 {% endif %}
                 <span class="top-center">
                     <p class="count" data-toggle="tooltip" data-placement="top" title="How many questions you've answered so far">{{cnt + 1}}</p>
@@ -107,6 +120,17 @@
     <script type="text/javascript" src="{{url_for('static', filename='js/hotkeys.js')}}"></script>
     <script type="text/javascript" src="{{url_for('static', filename='js/tooltip.js')}}"></script>
     {%- include 'chart.js' -%}
+    <script>
+        $(".next").click(function() {
+            if ($(".modalimg").attr("src") == "/static/img/guide.png") {
+                $(".modalimg").attr("src", "/static/img/guide2.png");
+            }
+            else {
+                $("#helpModal").modal("hide");
+                $(".modalimg").attr("src", "/static/img/guide.png");
+            }
+        });
+    </script>
 {% endblock %}
 
 

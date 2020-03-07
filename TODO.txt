@@ -2,21 +2,20 @@
     - going to /test should just create a new session (right before creating the test df)
 
 - History - include share buttons in a BS buttonbar, also add to test page
-        
 
-#TODO - [?] button
-    - opens lightbox with detailed instructions
-    - Explain what "know it" means .... button mouseover? "Test yourself which kanji you know, however you want to define 'know'"
-	- graph explanation :/ tricky...
-	- click to flip!
-	- get https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/feztk2c/ to test
-         
+- more history pg stats
+    - condense into one call per history page load
+    - grade level, suggested tests (how close you are)
+    - % of japanese you can read
+    - switch to percentiles (need to add bins to metadata)
+    	- could even make into graphs (you are here)         
         
 #TODO - BUGS
     - repeated answers shouldn't be allowed (f5 spam, double post)
         - switch away from using params? (use ID for history)
         - refreshing pg w/o clicking a link should just refresh the page and do nothing...
         - allow answered question overwrites for ppl that hit go back
+    - updater ln 43 keyerror 'last_touched' (empty test)
     
 #TODO - PR
     - basic seo
