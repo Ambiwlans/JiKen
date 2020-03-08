@@ -42,8 +42,9 @@ class DevelopmentConfig:
     
     # App
     GRAPH_AFTER = 0
-    GRAPH_MAX_X = 6000
+    GRAPH_MAX_X = 6750
     MAX_X = 6750
+    QUESTION_VARIABLITY = 1.0                                       # .1 = low variance from the prediction, 2 = high variance
     
 class DeploymentConfig:
 
@@ -72,8 +73,9 @@ class DeploymentConfig:
     
     # App
     GRAPH_AFTER = 9
-    GRAPH_MAX_X = 6000
+    GRAPH_MAX_X = 6750
     MAX_X = 6750
-    
+    QUESTION_VARIABLITY = 1.0                                       # .1 = low variance from the prediction, 2 = high variance
+        
 #Easy switch for different configs
 Config = DeploymentConfig
