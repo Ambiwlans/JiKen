@@ -10,10 +10,6 @@
     - time spent per question, total
     
 #TODO - BUGS
-    - repeated answers shouldn't be allowed (f5 spam, double post)
-        - switch away from using params? (use ID for history)
-        - refreshing pg w/o clicking a link should just refresh the page and do nothing...
-        - allow answered question overwrites for ppl that hit go back
     - currently overwriting session when user does multiple tests instead of saving it and creating a new session
         - going to /test should just create a new session (right before creating the test df)    
             - or just move old session into some dump session w/ the same format
@@ -26,6 +22,7 @@
     
 --------------------------
 Low Prio:
+- switch away from using params?
 - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis
 - incl some alpha stats on the readme, mention the phenomenon that allows us to use a sigmoid
 ? about section (other than the github)

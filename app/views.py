@@ -71,7 +71,10 @@ def test():
     else:
         # Got an answer, log it (to redis session)
         score = bool(int(score))
-        session['QuestionLog'] = session['QuestionLog'].append({'testmaterialid' : testmaterialid, 'score' : score}, ignore_index=True)
+        if (session['QuestionLog']['testmaterialid'].astype('int') == testmaterialid).any():
+            session['QuestionLog'][session['QuestionLog']['testmaterialid'].astype('int') == testmaterialid].score = score
+        else:
+            session['QuestionLog'] = session['QuestionLog'].append({'testmaterialid' : testmaterialid, 'score' : score}, ignore_index=True)
         
     ###
     ### Handle Data, Prep output
