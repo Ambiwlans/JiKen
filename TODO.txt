@@ -1,7 +1,5 @@
 - lower ad rate on pc, or change pc ad to a banner?
 
-- force hist pg to round max to x*500 as well
-
 - more history pg stats
     - add a 'keep going' link for ppl below the average.
     - condense into one call per history page load
