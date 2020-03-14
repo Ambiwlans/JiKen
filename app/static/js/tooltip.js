@@ -82,6 +82,8 @@ $(function () {
         $('.footer-note').html("<a href='https://github.com/Ambiwlans' target='_blank'>Ambiwlans</a>作。気に入ったら広めて下さい！");
         $('.pred-header').html("- 見積 -");
         
+        $('.sharegroup').attr("title","友達を挑戦する");
+        
         $('#know').html("知ってる");
         $('#dunno').html("知らない");
         $('#results').html("結果");

@@ -16,7 +16,6 @@ from app import db
 from .models import TestLog, QuestionLog
 
 #Data Handling
-import json
 import pandas as pd
 import math
 import pickle
@@ -176,7 +175,7 @@ def test():
     print ("Asking Kanji #: " + str(newquestion['my_rank']) + " -- " + str(newquestion['kanji']))
     print("Sess: A = " + str(session['TestLog'].a) + "  T = " + str(session['TestLog'].t) + "  # = " + str(len(session['QuestionLog'])))
 
-    return render_template('test.html', question = newquestion, cnt = len(history), \
+    return render_template('test.html', question = newquestion, cnt = len(history), id = session['TestLog'].id, \
         a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred)
 
 @bp.route("/history/<id>")
@@ -260,7 +259,7 @@ def history(id):
     #Find a sensible max x value
     xmax = int(min(((pred[0] + 4*(pred[1]-pred[0])) + 250), current_app.config['GRAPH_MAX_X']))
     
-    return  render_template('history.html', \
+    return  render_template('history.html', id = id, \
         a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred,\
         curtest = curtest, cnt = cnt, \
         date = data['TestLog'].start_time, \

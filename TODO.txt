@@ -1,4 +1,6 @@
-- Share buttons on a BS buttonbar - test, hist pgs
+- lower ad rate on pc, or change pc ad to a banner?
+
+- force hist pg to round max to x*500 as well
 
 - more history pg stats
     - add a 'keep going' link for ppl below the average.
@@ -7,7 +9,8 @@
     - % of japanese you can read
     - switch to percentiles (need to add bins to metadata)
     	- could even make into graphs (you are here)         
-        
+    - time spent per question, total
+    
 #TODO - BUGS
     - repeated answers shouldn't be allowed (f5 spam, double post)
         - switch away from using params? (use ID for history)
@@ -15,10 +18,12 @@
         - allow answered question overwrites for ppl that hit go back
     - currently overwriting session when user does multiple tests instead of saving it and creating a new session
         - going to /test should just create a new session (right before creating the test df)    
-        
+            - or just move old session into some dump session w/ the same format
+    - crazy prediction bug from minimize fn leading to /0 error ... re. images
+            
 #TODO - PR
     - basic seo
-    - open beta thread: new features - ads, shareable/saveable tests, [?] button
+    - open beta thread: new features - ads too annoying?, shareable/saveable tests, [?] button
     - tweets, msg some teaching sites to see if they're interested
     
 --------------------------

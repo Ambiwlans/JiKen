@@ -39,6 +39,10 @@
         	 <br>
     		You know <b>{{pred[0]}}</b> kanji vs the average {{avg_known}}.</p>
     		
+    		<script>
+    		 d = {{rightanswers[1][1]}}
+    		 console.log(d);
+    		</script>
         
             <!-- Relevant kanji lists -->
             {% if wronganswers|length > 0 %}
@@ -53,11 +57,20 @@
             <p>Tip: Be sure to bookmark this page to compare to the next time you take a test</p>
         </div>
         <!-- Buttons -->    	
-        {% if curtest %}
-            <a class="btn btn-info btn-sm float-right" id="return" role="btn" href="/test?a=-1">Continue Test</a>
-        {% endif %}
-        &nbsp; &nbsp;<a class="btn btn-success btn-sm float-right" id="new" role="btn" href="/test">New Test</a>
-        
+        <div class="btn-toolbar float-right" role="toolbar">
+        <div class="btn-group btn-group-sm sharegroup" data-toggle="tooltip" data-placement="top" title="Share your score with friends" role="group" aria-label="Share your score with friends">
+            <a type="button" class="btn btn-primary" id="sharetw" role="btn" 
+                href=" https://twitter.com/intent/tweet?via=Ambiwlans1&url=https%3A%2F%2Fjiken.herokuapp.com%2Fhistory%2F{{id}}&text=I%20know%20{{pred[0]}}%20kanji%21%20Top%20me%3F&hashtags=jiken%20kanji%20challenge">
+                <i class="fab fa-twitter fa-lg"></i></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            <a type="button" class="btn btn-primary" id="sharefb" role="btn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjiken.herokuapp.com%2Fhistory%2F{{id}}"><i class="fab fa-facebook fa-lg"></i></a>
+        </div>
+        <div class="btn-group btn-group-sm" role="group" aria-label="Nav Button Block">
+            <a type="button" class="btn btn-success" id="new" role="btn" href="/test">New Test</a>
+            {% if curtest %}
+                <a type="button" class="btn btn-info" id="return" role="btn" href="/test?a=-1">Continue Test</a>
+            {% endif %}
+        </div>
+        </div>
 	</div>
 {% endblock content %}
 
