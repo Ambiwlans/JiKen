@@ -1,3 +1,8 @@
+- currently overwriting session when user does multiple tests instead of saving it and creating a new session
+    - going to /test should just create a new session (right before creating the test df)    
+        - or just move old session into some dump session w/ the same format
+            
+
 - lower ad rate on pc, or change pc ad to a banner?
 
 - more history pg stats
@@ -10,9 +15,6 @@
     - time spent per question, total
     
 #TODO - BUGS
-    - currently overwriting session when user does multiple tests instead of saving it and creating a new session
-        - going to /test should just create a new session (right before creating the test df)    
-            - or just move old session into some dump session w/ the same format
     - crazy prediction bug from minimize fn leading to /0 error ... re. images
         - probably needs a gradient when a <= 0 rather than a wall. Causes differentiability issues
             
