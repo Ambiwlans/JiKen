@@ -266,7 +266,7 @@ def history(id):
         a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred,\
         curtest = curtest, cnt = cnt, \
         date = data['TestLog'].start_time, \
-        avg_answered = int(current_app.config['SESSION_REDIS'].get('avg_answered')), avg_known = int(current_app.config['SESSION_REDIS'].get('avg_known')))
+        avg_answered = int(current_app.config['SESSION_REDIS'].get('avg_answered') or 0), avg_known = int(current_app.config['SESSION_REDIS'].get('avg_known') or 0))
 
 
 
