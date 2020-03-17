@@ -194,6 +194,7 @@ def test():
     return render_template('test.html', question = newquestion, cnt = len(history), id = session['TestLog'].id, \
         a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred)
 
+@bp.route("/t/<id>")
 @bp.route("/history/<id>")
 def history(id):
     ###

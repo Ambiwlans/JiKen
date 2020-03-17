@@ -8,7 +8,7 @@
     - switch to percentiles (need to add bins to metadata)
     	- could even make into graphs (you are here)         
     - time spent per question, total
-    
+
 #TODO - BUGS
     - crazy prediction bug from minimize fn leading to /0 error ... re. images
         - probably needs a gradient when a <= 0 rather than a wall. Causes differentiability issues
@@ -20,6 +20,7 @@
     
 --------------------------
 Low Prio:
+- ask whether to continue or to do a new test
 - switch away from using params?
 - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis
 - incl some alpha stats on the readme, mention the phenomenon that allows us to use a sigmoid
