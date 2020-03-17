@@ -57,6 +57,15 @@ def test():
     testmaterialid = request.args.get('q')
     
     if session.get('TestLog') is None or score is None:
+        # Stash 'old test' if there was already an active one
+        if session.get('TestLog') is not None:
+            print('Stashing earlier test...' + str(session['TestLog'].id))
+            oldtest = {}
+            oldtest['TestLog'] = session['TestLog']
+            oldtest['QuestionLog'] = session['QuestionLog']
+            oldtest['last_touched'] = session['last_touched']
+            current_app.config['SESSION_REDIS'].set('session:old' + str(session['TestLog'].id), pickle.dumps(oldtest))
+            
         # New Test, new log
         session['TestLog'] = pd.Series({
                 "id" : int(current_app.config['SESSION_REDIS'].get('cur_testlog_id').decode('utf-8')),
@@ -180,8 +189,7 @@ def test():
     #Refresh the timeout flag
     session['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
     
-    print ("Asking Kanji #: " + str(newquestion['my_rank']) + " -- " + str(newquestion['kanji']))
-    print("Sess: A = " + str(session['TestLog'].a) + "  T = " + str(session['TestLog'].t) + "  # = " + str(len(session['QuestionLog'])))
+    print("Test #" + str(session['TestLog'].id) + ": A = " + str(session['TestLog'].a) + ",  T = " + str(session['TestLog'].t) + ",  # = " + str(len(session['QuestionLog'])) + " Kanji#: " + str(newquestion['my_rank']))
 
     return render_template('test.html', question = newquestion, cnt = len(history), id = session['TestLog'].id, \
         a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred)

@@ -1,8 +1,3 @@
-- currently overwriting session when user does multiple tests instead of saving it and creating a new session
-    - going to /test should just create a new session (right before creating the test df)    
-        - or just move old session into some dump session w/ the same format
-            
-
 - lower ad rate on pc, or change pc ad to a banner?
 
 - more history pg stats
