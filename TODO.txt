@@ -1,9 +1,6 @@
 - lower ad rate on pc, or change pc ad to a banner?
 
 - more history pg stats
-    - add a 'keep going' link for ppl below the average.
-    - condense into one call per history page load
-    - grade level, suggested tests (how close you are)
     - % of japanese you can read
     - switch to percentiles (need to add bins to metadata)
     	- could even make into graphs (you are here)         
@@ -11,8 +8,9 @@
 
 #TODO - BUGS
     - crazy prediction bug from minimize fn leading to /0 error ... re. images
-        - probably needs a gradient when a <= 0 rather than a wall. Causes differentiability issues
-            
+        - probably needs a gradient when t <= 0 rather than a wall. Causes differentiability issues
+        - https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/fes4muo/
+
 #TODO - PR
     - basic seo
     - open beta thread: new features - ads too annoying?, shareable/saveable tests, [?] button
@@ -20,14 +18,14 @@
     
 --------------------------
 Low Prio:
+- rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
 - ask whether to continue or to do a new test
-- switch away from using params?
-- rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis
+? switch away from using params?
 - incl some alpha stats on the readme, mention the phenomenon that allows us to use a sigmoid
 ? about section (other than the github)
 - send dono http://www.edrdg.org/edrdg/licence.html
 - track user devices in testlog
-- shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')?
+- shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')? (more readable)
 - change bounds to use percentiles
     - make bounds shrink more with more data
 - lower # of calls to redis where viable (looks like redis stores it on the same box so little point)
@@ -37,7 +35,7 @@ Low Prio:
 - extend hist pg kanji suggestions - tooltips, categories
 ? add a 'drills' feature for kanji missed on a test
 ? links to other tests with same IP. Use a cookie?
-- error screen (DB down, other) - contact info, apologies
+- error screen (DB down, other) - contact info, apologies, redirect
 - reimplement L2R
     - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
     - more whitepaper research on best methods
@@ -46,24 +44,20 @@ Low Prio:
     - learn to rank code done w/ online learning with the SQL dumps? or daily?
         
 Bugs:
-    - fix printout/log format kanji encoding
     - Slow start up/wake up crashes many times before starting up
         - error msg 1: H12 "request timeout" 503 
         - CRITICAL WORKER TIMEOUT
         - SOLN: ... nothing run 'now' on startup.
     - SIGINT crash? Not sure if this still occurs
-    - https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/fes4muo/
-    	- add a gradient to negative t vals
-    - skipping by 10 when logging to sql
 
 PR
     - medium blog post about it ... or just stuff into the github.
     - patreon, buymeacoffee? probably not worth
-    - reddit beta post (after adding history, [?])
+
 --------------------------
 
 Extensions:
 - E->J
-    - add example words to stop ambiguity
+    - needs example words to stop ambiguity
 - Other cards sets (vocab for English, Jpns...)
 - make an app

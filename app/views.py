@@ -171,7 +171,7 @@ def test():
             if x > current_app.config['MAX_X'] and x + searchkey < 1: 
                 print("Test # " + str(session['TestLog'].id) + " asked every question!")
                 # Go to history page when a user has completed every question... wowza
-                return "Holy crap!! You actually answered every kanji. I don't really expect anyone to maneage this so I don't have anything ready.... uhh, check your <a href='history/"+session['TestLog'].id+"'>results</a> and tweet them to me (@Ambiwlans1, #jiken). Damn... good job!"
+                return "Holy crap!! You actually answered every kanji. I don't really expect anyone to maneage this so I don't have anything ready.... uhh, check your <a href='/t/"+session['TestLog'].id+"'>results</a> and tweet them to me! Damn... good job!"
                 
         newquestion = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))[pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))['my_rank']==x].iloc[0]
     
@@ -276,10 +276,34 @@ def history(id):
     #Find a sensible max x value
     xmax = min(int(math.ceil(min(((pred[0] + 4*(pred[1]-pred[0])) + 250), current_app.config['GRAPH_MAX_X'])/500)*500), int(current_app.config['GRAPH_MAX_X']))
     
+    #Calc some stats data
+    jlpt_recc = {
+        0    <= pred[2] < 100  : 0,
+        100  <= pred[2] < 300  : 5,
+        300  <= pred[2] < 650  : 4,
+        650  <= pred[2] < 1000 : 3,
+        1000 <= pred[2] < 2000 : 2,
+        2000 <= pred[2]        : 1}[True]
+    kk_recc = {
+        0    <= pred[2] < 80   : 0,
+        80   <= pred[2] < 240  : 10,
+        240  <= pred[2] < 440  : 9,
+        440  <= pred[2] < 640  : 8,
+        640  <= pred[2] < 825  : 7,
+        825  <= pred[2] < 1006 : 6,
+        1006 <= pred[2] < 1300 : 5,
+        1300 <= pred[2] < 1600 : 4,
+        1600 <= pred[2] < 1950 : 3,
+        1950 <= pred[2] < 2136 : -2,
+        2136 <= pred[2] < 2965 : 2,
+        2965 <= pred[2] < 6355 : 1,
+        6355 <= pred[2]        : -1}[True]
+    
     return  render_template('history.html', id = id, \
         a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred,\
         curtest = curtest, cnt = cnt, \
         date = data['TestLog'].start_time, \
+        jlpt_recc = jlpt_recc, kk_recc = kk_recc, \
         avg_answered = int(current_app.config['SESSION_REDIS'].get('avg_answered') or 0), avg_known = int(current_app.config['SESSION_REDIS'].get('avg_known') or 0))
 
 

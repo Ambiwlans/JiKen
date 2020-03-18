@@ -35,11 +35,35 @@
         	{% else %}
             	Less
         	{% endif %}
-        	 than the average {{avg_answered}} of other testers.
-        	 <br>
-    		You know <b>{{pred[0]}}</b> kanji vs the average {{avg_known}}.</p>
+        	than the average {{avg_answered}} of other testers. {% if curtest %}Click <a href="/test?a=-1">here</a> to keep going!{% endif %}
+        	
+        	<br>
+    		You know <b>{{pred[0]}}</b> kanji vs the average {{avg_known}}.
     		
-        
+    		<br><br>
+    		{% if jlpt_recc == 1 %}
+                Wow! Finally you are ready to challenge the <b>final</b> <a href="https://www.jlpt.jp/e/index.html">JLPT</a> test! (日本人じゃないの?)
+            {% elif jlpt_recc == 2 %}
+                It looks like you are ready to challenge the  <b><a href="https://www.jlpt.jp/e/index.html">JLPT</a> N2</b> level test! (もちろん、文法も完全にマスターしましたね)
+            {% elif jlpt_recc == 3 %}    
+                It looks like you are ready to challenge the  <b><a href="https://www.jlpt.jp/e/index.html">JLPT</a> N3</b> level test! (日本語上手ですね)
+            {% elif jlpt_recc == 4 %}    
+                It looks like you are ready to challenge the  <b><a href="https://www.jlpt.jp/e/index.html">JLPT</a> N4</b> level test! (日本語上手ですね)
+            {% elif jlpt_recc == 5 %}
+                It looks like you are ready for the  <b><a href="https://www.jlpt.jp/e/index.html">JLPT</a> N5</b>! (Your big first step into Japanese)
+            {% else %}
+                It doesn't look like you're ready for the  <b><a href="https://www.jlpt.jp/e/index.html">JLPT</a></b>/Kanken just yet. Remember, progress is a slow process but you can do it! I hear https://www.duolingo.com/ is good, but it will always be hard work!
+            {% endif %}
+            
+            <br>
+            {% if kk_recc == -1 %}
+                Either you're a dirty cheat or a true <b>Kanji God</b> amongst mortals and I bow before you! Kanken should take a test from you!
+            {% elif kk_recc == -2 %}
+                You're also 'ready' for <b><a href="https://www.kanken.or.jp/">Kanken</a> level pre-2</b>! (Kanken is notoriously brutal, make sure you are drawing these kanji in your sleep before trying!)
+            {% elif kk_recc > 0 %}
+                You're also 'ready' for <b><a href="https://www.kanken.or.jp/">Kanken</a> level {{kk_recc}}</b>! (Kanken is notoriously brutal, make sure you are drawing these kanji in your sleep before trying!)
+            {% endif %}
+            </p>
             <!-- Relevant kanji lists -->
             {% if wronganswers|length > 0 %}
                 <h3 class="text-left">Kanji to review:</h3>
