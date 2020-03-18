@@ -1,6 +1,6 @@
 - make it results/share or add a permalink
 
-- discord notes 03/17
+- 𩶗 doesn't display - it is in CJK Extensions
 
 - lower ad rate on pc, or change pc ad to a banner?
 
