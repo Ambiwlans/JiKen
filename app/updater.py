@@ -28,14 +28,21 @@ def update_TestQuestionLogs(app):
     #move stuff from redis to SQL (Ql,Tl)
     with app.app_context():
         print("--------LOG UPDATE------------")
-        x = current_app.config['SESSION_REDIS'].scan()
-        print(x)
+#        x = current_app.config['SESSION_REDIS'].scan()
+#        print(x)
         for sess in current_app.config['SESSION_REDIS'].scan_iter("session:*"):
 #            print("Moving to SQL DB -- " + str(sess))
             
             data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
             
             try:
+                # Skip sessions without attached tests after adding a timeout to clear out old sessions faster
+                if (data.get('last_touched', -1) == -1):
+                    data['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+                    current_app.config['SESSION_REDIS'].set(sess, pickle.dumps(data))
+                    print("Added time to empty session")
+                    continue
+                
                 #Check timestamp to see if we should move it to SQL (>TEST_TIMEOUT mins since last touched)
                 if datetime.datetime.utcnow() - \
                         datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')\

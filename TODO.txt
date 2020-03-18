@@ -1,3 +1,7 @@
+- make it results/share or add a permalink
+
+- discord notes 03/17
+
 - lower ad rate on pc, or change pc ad to a banner?
 
 - more history pg stats
@@ -5,12 +9,13 @@
     - switch to percentiles (need to add bins to metadata)
     	- could even make into graphs (you are here)         
     - time spent per question, total
+    - max questions answered
 
 #TODO - BUGS
     - crazy prediction bug from minimize fn leading to /0 error ... re. images
         - probably needs a gradient when t <= 0 rather than a wall. Causes differentiability issues
         - https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/fes4muo/
-
+    
 #TODO - PR
     - basic seo
     - open beta thread: new features - ads too annoying?, shareable/saveable tests, [?] button
