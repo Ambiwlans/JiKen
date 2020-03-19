@@ -21,7 +21,7 @@ class DevelopmentConfig:
     SECRET_KEY = os.environ.get('DB_SECRET_KEY') or "Ionceateawholeham"
     
     # SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{user}:{password}@{host}/jiken?charset=utf8'.format(**{
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{user}:{password}@{host}/jiken?charset=utf8mb4'.format(**{
         'user': "Ambiwlans",
         'password' : "test",
         'host' : 'localhost',
@@ -54,7 +54,7 @@ class DeploymentConfig:
     SECRET_KEY = os.environ.get('DB_SECRET_KEY') or "Ionceateawholeham"
     
     # SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = os.environ.get('CLEARDB_DATABASE_URL').replace('?reconnect=true','')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('CLEARDB_DATABASE_URL').replace('?reconnect=true','?charset=utf8mb4')
     SQLALCHEMY_ENGINE_OPTIONS = {
             'pool_recycle':60
             }

@@ -1,8 +1,10 @@
 - make it results/share or add a permalink
 
-- 𩶗 doesn't display - it is in CJK Extensions
+- 𩶗 doesn't display - it is in CJK Extensions - switched encodings, still need to update server properly
 
 - lower ad rate on pc, or change pc ad to a banner?
+
+- should show latest 100 dots, not the easiest 100 by my_rank
 
 - more history pg stats
     - % of japanese you can read
