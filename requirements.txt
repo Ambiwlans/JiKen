@@ -23,7 +23,7 @@ Flask-Migrate==2.5.2
 Flask-MySQLdb==0.2.0
 Flask-Session==0.3.1
 Flask-SQLAlchemy==2.4.0
-httplib2==0.13.0
+httplib2==0.18.0
 idna==2.8
 imagesize==1.1.0
 ipykernel==5.1.2
