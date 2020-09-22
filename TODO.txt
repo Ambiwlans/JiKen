@@ -2,11 +2,6 @@
 
 - Mention Zipf's Law
 
-- change pc ad to a banner
-    - ads shouldn't block on load
-
-- center banner ad
-
 - more history pg stats
     - % of japanese you can read
     - switch to percentiles (need to add bins to metadata)
@@ -28,6 +23,7 @@
     
 --------------------------
 Low Prio:
+- side banner ads on pc test
 - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
 - ask whether to continue or to do a new test
 ? switch away from using params?
@@ -54,11 +50,6 @@ Low Prio:
     - learn to rank code done w/ online learning with the SQL dumps? or daily?
         
 Bugs:
-    - Slow start up/wake up crashes many times before starting up
-        - error msg 1: H12 "request timeout" 503 
-        - CRITICAL WORKER TIMEOUT
-        - SOLN: ... nothing run 'now' on startup.
-    - SIGINT crash? Not sure if this still occurs
 
 PR
     - medium blog post about it ... or just stuff into the github.
