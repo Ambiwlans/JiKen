@@ -5,7 +5,7 @@
 - change pc ad to a banner
     - ads shouldn't block on load
 
-- should show latest 100 dots, not the easiest 100 by my_rank
+- center banner ad
 
 - more history pg stats
     - % of japanese you can read
