@@ -75,7 +75,8 @@ def test():
                 "start_time" : datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')})
         
         session['QuestionLog'] = pd.DataFrame(columns=['testmaterialid','score'], dtype='int64')
-
+        session['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+        
         current_app.config['SESSION_REDIS'].incr('cur_testlog_id')
     elif int(score) == -1:
         # Flag to just continue a test
