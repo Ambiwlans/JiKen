@@ -1,8 +1,9 @@
-- make it results/share or add a permalink
+- make it 'results/share' or add a permalink
 
-- 𩶗 doesn't display - it is in CJK Extensions - switched encodings, still need to update server properly
+- Mention Zipf's Law
 
-- lower ad rate on pc, or change pc ad to a banner?
+- change pc ad to a banner
+    - ads shouldn't block on load
 
 - should show latest 100 dots, not the easiest 100 by my_rank
 
@@ -12,8 +13,10 @@
     	- could even make into graphs (you are here)         
     - time spent per question, total
     - max questions answered
+    - 'level stats' 5/60 JLPT N3 etc.
 
 #TODO - BUGS
+    - can go to tests that don't exist (empty tests)
     - crazy prediction bug from minimize fn leading to /0 error ... re. images
         - probably needs a gradient when t <= 0 rather than a wall. Causes differentiability issues
         - https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/fes4muo/
@@ -34,7 +37,7 @@ Low Prio:
 - track user devices in testlog
 - shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')? (more readable)
 - change bounds to use percentiles
-    - make bounds shrink more with more data
+    - make bounds shrink more with more data (how to determine these bounds? can i use existing fit solution?)
 - lower # of calls to redis where viable (looks like redis stores it on the same box so little point)
 - trim the req list further?
 - switch to a slightly better ML algorithm (model family) allowing assymetries (non-sigmoid?)

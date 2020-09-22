@@ -31,11 +31,10 @@ def update_TestQuestionLogs(app):
 #        x = current_app.config['SESSION_REDIS'].scan()
 #        print(x)
         for sess in current_app.config['SESSION_REDIS'].scan_iter("session:*"):
-#            print("Moving to SQL DB -- " + str(sess))
-            
-            data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
-            
             try:
+                #print("Moving to SQL DB -- " + str(sess))
+                data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
+                
                 # Skip sessions without attached tests after adding a timeout to clear out old sessions faster
                 if (data.get('last_touched', -1) == -1):
                     data['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
