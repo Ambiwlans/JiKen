@@ -32,8 +32,6 @@ Low Prio:
 - send dono http://www.edrdg.org/edrdg/licence.html
 - track user devices in testlog
 - shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')? (more readable)
-- change bounds to use percentiles
-    - make bounds shrink more with more data (how to determine these bounds? can i use existing fit solution?)
 - lower # of calls to redis where viable (looks like redis stores it on the same box so little point)
 - trim the req list further?
 - switch to a slightly better ML algorithm (model family) allowing assymetries (non-sigmoid?)

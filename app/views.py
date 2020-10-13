@@ -140,11 +140,12 @@ def test():
         session['TestLog'].t = float(res.x[0])
         
         # Predict known kanji
-        if len(history) > current_app.config['GRAPH_AFTER']:
+        len_history = len(history)
+        if len_history > current_app.config['GRAPH_AFTER']:
             #[mid, upper, lower]
             pred = [(quad(sigmoid,0,current_app.config['MAX_X'],args=(*res.x,1))[0]),
-                        (quad(sigmoid,0,current_app.config['MAX_X'],args=(*res.x,.5))[0]),
-                        (quad(sigmoid,0,current_app.config['MAX_X'],args=(*res.x,2))[0])]
+                        (quad(sigmoid,0,current_app.config['MAX_X'],args=(*res.x, (1 / (1 + 2**(-len_history/150)))))[0]),
+                        (quad(sigmoid,0,current_app.config['MAX_X'],args=(*res.x, 1 + (2 / (1 + 2**(len_history/150)))))[0])]
             # account for all the answered values
             for i, r in history.iterrows():
                 pred[0] += (r.score - sigmoid(r.my_rank, *res.x, 1))
@@ -253,9 +254,11 @@ def history(id):
     pred = [0,0,0]      #[mid, upper, lower]    
     x = [data['TestLog'].t, data['TestLog'].a]
     
+    len_history = len(history)
     pred = [(quad(sigmoid,0,current_app.config['MAX_X'],args=(*x,1))[0]),
-                (quad(sigmoid,0,current_app.config['MAX_X'],args=(*x,.5))[0]),
-                (quad(sigmoid,0,current_app.config['MAX_X'],args=(*x,2))[0])]
+            (quad(sigmoid,0,current_app.config['MAX_X'],args=(*x, (1 / (1 + 2**(-len_history/150)))))[0]),
+            (quad(sigmoid,0,current_app.config['MAX_X'],args=(*x, 1 + (2 / (1 + 2**(len_history/150)))))[0])]
+    
     # account for all the answered values
     for i, r in history.iterrows():
         pred[0] += (r.score - sigmoid(r.my_rank, *x, 1))
