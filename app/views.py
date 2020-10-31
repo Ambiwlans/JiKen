@@ -245,11 +245,27 @@ def history(id):
         history = pd.merge(data['QuestionLog'], \
                    pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')), \
                    left_on=data['QuestionLog'].testmaterialid.astype(int), \
-                   right_on='id') \
-                   .sort_values(by=['my_rank'], ascending=True)
+                   right_on='id')
     except:
         history = pd.DataFrame(columns=['score','my_rank'])
+    
+    
+    #Get some history to show (do this before sort)
+    oldquestions = history[:250]
+    
+    rightanswers = oldquestions[oldquestions['score']==1]
+    rightanswers = [(r.my_rank, r.kanji) for i, r in rightanswers.iterrows()]
+    wronganswers = oldquestions[oldquestions['score']==0]
+    wronganswers = [(r.my_rank, r.kanji) for i, r in wronganswers.iterrows()]
+    
+    try:
+        cnt = data['TestLog'].number_of_questions
+    except:
+        cnt = len(history)
         
+    #Resort by my_rank for faster iter
+    history = history.sort_values(by=['my_rank'], ascending=True)
+    
     #Redo Predictions
     pred = [0,0,0]      #[mid, upper, lower]    
     x = [data['TestLog'].t, data['TestLog'].a]
@@ -266,19 +282,8 @@ def history(id):
         pred[2] += (r.score - sigmoid(r.my_rank, *x, 2))
     
     pred = list(map(int,pred))
-          
-    #Prep historical graph display data
-    oldquestions = history[:100]
     
-    rightanswers = oldquestions[oldquestions['score']==1]
-    rightanswers = [(r.my_rank, r.kanji) for i, r in rightanswers.iterrows()]
-    wronganswers = oldquestions[oldquestions['score']==0]
-    wronganswers = [(r.my_rank, r.kanji) for i, r in wronganswers.iterrows()]
-    
-    try:
-        cnt = data['TestLog'].number_of_questions
-    except:
-        cnt = len(history)
+
     
     #Find a sensible max x value
     xmax = min(int(math.ceil(min(((pred[0] + 4*(pred[1]-pred[0])) + 250), current_app.config['GRAPH_MAX_X'])/500)*500), int(current_app.config['GRAPH_MAX_X']))
