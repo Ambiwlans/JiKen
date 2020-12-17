@@ -1,6 +1,4 @@
-- make it 'results/share' or add a permalink
-
-- Mention Zipf's Law
+- Mention Zipf's Law (on gitpage)
 
 - more history pg stats
     - % of japanese you can read
