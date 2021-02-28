@@ -11,6 +11,8 @@ The name JiKen is a bit of a play on words/kanji. It could be read as 字検 (le
 
 ## Math
 
+First thing to know to understand why this works so well is that kanji usage (and recognition) is not flat/random but has a relatively normal distribution and follows [Ziph's Law](https://en.wikipedia.org/wiki/Zipf%27s_law). This allows us to make relatively sensible predictions of people's knowledge using a sigmoid function.
+
 There are two main algorithms worth noting. 
 
 One predicts how many kanji you know (the graph) based on your answers. This is a Nelder-Mead regression algo with custom regularization: giving a lot of weight to the initial weights (safe assumption until data is collected), L2 reg (to avoid traps), some penalty to change between questions to give users a smooth experience. I also do bias correction as per https://cs.nyu.edu/~mohri/pub/bias.pdf since the questions selected are not random. No formal tuning methods were use, everything was done by hand until it felt good (the tuning target was to meet user expectations rather than simply being mathematically accurate).
