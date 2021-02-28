@@ -71,11 +71,11 @@ def sigmoid_cost_regularized(params, true_X, true_Y, last_t, last_a):
     reg += np.log((t / last_t) + (last_t / t) - 1) / i       
     reg += (abs(a - last_a) / last_a) / (4 * i)
 
-    #Penalize shallowness while a is small
-    reg += (np.log((0.01/t)+3)) / (((last_a/150)**3 + 1) * (i**.75))
+    #Penalize shallowness while a is small and early in test
+    reg += (np.log((0.01/t)+3)) / (((last_a/150)**.3 + 1) * (i**.65))
     
-    #Penalize steepness while a is large
-    reg += (np.log((t / 0.01)+3)) / (10 * (i**.75))
+    #Penalize steepness while early in test
+    reg += (np.log((t / 0.01)+3)) / (10 * (i**.65))
 
 #    print("")
 #    print("Cost on question #" +  str(i) +":")

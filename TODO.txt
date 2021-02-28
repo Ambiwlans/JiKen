@@ -1,18 +1,21 @@
-- Mention Zipf's Law (on gitpage)
-
 - more history pg stats
     - % of japanese you can read
     - switch to percentiles (need to add bins to metadata)
     	- could even make into graphs (you are here)         
-    - time spent per question, total
+    ? time spent per question, total
     - max questions answered
     - 'level stats' 5/60 JLPT N3 etc.
 
+- reimplement L2R
+    - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
+    - more whitepaper research on best methods
+    - keep moves small even at the high end to avoid abuse by individuals
+    - only adjust when on round 10 or higher and t > 0.003 to avoid randoms
+    - learn to rank code done w/ online learning with the SQL dumps? or daily?
+    - use tests only w/ >50 answered, non outliers
+    
 #TODO - BUGS
     - can go to tests that don't exist (empty tests)
-    - crazy prediction bug from minimize fn leading to /0 error ... re. images
-        - probably needs a gradient when t <= 0 rather than a wall. Causes differentiability issues
-        - https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/fes4muo/
     
 #TODO - PR
     - basic seo
@@ -21,6 +24,9 @@
     
 --------------------------
 Low Prio:
+? redo regularization
+    ? change jump size penalty from regularization to just averaging
+    ? make steepness penalties exponential not logarithmic (loss should explode)
 - side banner ads on pc test
 - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
 - ask whether to continue or to do a new test
@@ -38,14 +44,24 @@ Low Prio:
 ? add a 'drills' feature for kanji missed on a test
 ? links to other tests with same IP. Use a cookie?
 - error screen (DB down, other) - contact info, apologies, redirect
-- reimplement L2R
-    - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
-    - more whitepaper research on best methods
-    - keep moves small even at the high end to avoid abuse by individuals
-    - only adjust when on round 10 or higher and t > 0.003 to avoid randoms
-    - learn to rank code done w/ online learning with the SQL dumps? or daily?
         
 Bugs:
+    Bad Predictions (start to Feb 2021)
+        CLIFF (t>2- ie. 63005
+        	- 7/4600
+        	- typically over 50 questions
+        TOO SHALLOW (0<t<.0002) - ie. 62627
+        	- 19/4600
+        	- avg questions ~30
+        	- half are intentional/users fucking around?
+        	- none recent
+        FLAT (t=0) - ie. 63030
+        	- 42/4600
+        	- avg questions ~30
+        	- possibly fixed
+    	    - crazy prediction bug from minimize fn leading to /0 error ... re. images
+            - probably needs a gradient when t <= 0 rather than a wall. Causes differentiability issues
+            - https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/fes4muo/
 
 PR
     - medium blog post about it ... or just stuff into the github.
