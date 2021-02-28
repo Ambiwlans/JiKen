@@ -64,7 +64,7 @@ def sigmoid_cost_regularized(params, true_X, true_Y, last_t, last_a):
     #Regularization penalties
     
     #Clip OOB values
-    if t <= 0: return 100
+    if t <= 0: return (1 - t)*100
     if a < 1: return 100
     
     #Penalize very large jumps
