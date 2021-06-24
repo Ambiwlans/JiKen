@@ -1,5 +1,4 @@
 - hide graph on old history page (no points on graph), or say data deleted due to age, gen graph w/ no points?
-- change 'via Ambbiwlans' phrasing
 - redis version change on heroku (Jun 30)
 
 - more history pg stats

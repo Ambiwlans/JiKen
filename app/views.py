@@ -46,6 +46,12 @@ def notfound_error(e):
 def home():
     return render_template('home.html')
 
+@bp.route("/forceupdate?p=999")
+def forceupdate():
+    from app.updater import update_TestQuestionLogs as upd
+    upd(session.app)
+    return render_template('home.html')
+
 @bp.route("/test")
 def test():
     

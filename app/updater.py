@@ -46,7 +46,9 @@ def update_TestQuestionLogs(app):
                 if datetime.datetime.utcnow() - \
                         datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')\
                         < datetime.timedelta(minutes=current_app.config['TEST_TIMEOUT']):
-                    print("Skipping active test from: " + str(datetime.datetime.utcnow() - datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')))
+                    print("Skipping active test #" + str(data['TestLog']['id']) + " from: " + str(data['TestLog']['start_time']))
+                    print("   last_touched: " + str(data.get('last_touched')))
+                    print("   " + str(datetime.datetime.utcnow() - datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')) + " ago.")
                     continue
                 
                 #Don't bother recording incomplete tests
