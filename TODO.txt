@@ -1,3 +1,7 @@
+- hide graph on old history page (no points on graph), or say data deleted due to age, gen graph w/ no points?
+- change 'via Ambbiwlans' phrasing
+- redis version change on heroku (Jun 30)
+
 - more history pg stats
     - % of japanese you can read
     - switch to percentiles (need to add bins to metadata)
@@ -16,10 +20,11 @@
     
 #TODO - BUGS
     - can go to tests that don't exist (empty tests)
+    - some tests vanish (why?)
     
 #TODO - PR
     - basic seo
-    - open beta thread: new features - ads too annoying?, shareable/saveable tests, [?] button
+    - New reddit thread: new features - ads too annoying?, shareable/saveable tests, [?] button
     - tweets, msg some teaching sites to see if they're interested
     
 --------------------------
