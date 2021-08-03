@@ -46,10 +46,12 @@ def notfound_error(e):
 def home():
     return render_template('home.html')
 
-@bp.route("/forceupdate?p=999")
+@bp.route("/forceupdate")
 def forceupdate():
-    from app.updater import update_TestQuestionLogs as upd
-    upd(session.app)
+    print("Force update attempt")
+    if request.args.get('p') == current_app.config['SECRET_KEY']:
+        from app.updater import update_TestQuestionLogs as upd
+        upd(session.app)
     return render_template('home.html')
 
 @bp.route("/test")
