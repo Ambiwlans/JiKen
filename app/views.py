@@ -51,7 +51,8 @@ def forceupdate():
     print("Force update attempt")
     if request.args.get('p') == current_app.config['SECRET_KEY']:
         from app.updater import update_TestQuestionLogs as upd
-        upd(session.app)
+        upd(current_app)
+        return("update success")
     return render_template('home.html')
 
 @bp.route("/test")
