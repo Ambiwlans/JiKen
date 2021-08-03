@@ -257,7 +257,7 @@ def history(id):
     
     
     #Get some history to show (do this before sort)
-    oldquestions = history[:250]
+    oldquestions = history[:500].sort_values(by=['my_rank'], ascending=True)
     
     rightanswers = oldquestions[oldquestions['score']==1]
     rightanswers = [(r.my_rank, r.kanji) for i, r in rightanswers.iterrows()]
