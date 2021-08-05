@@ -28,7 +28,7 @@ class TestLog(db.Model):
     
     #Core
     a = Column(Integer)                     # predicted number of kanji known
-    t = Column(Numeric(asdecimal=False))    # predicted spread
+    t = Column(Numeric(asdecimal=False))    # predicted spread/slope
     
     number_of_questions = Column(Integer, default=0)   # how many questions asked through test
     
@@ -53,7 +53,7 @@ class QuestionLog(db.Model):
     #Core
     testlogid = Column(Integer, ForeignKey('testlog.id'), nullable=False)
     testmaterialid = Column(Integer, ForeignKey('testmaterial.id'), nullable=False)
-    score = Column(Boolean)
+    score = Column(Boolean)             # 1 = right, 0 = wrong
     
 #    timegiven = 
 #    timeanswered = 

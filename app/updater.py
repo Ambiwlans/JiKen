@@ -7,19 +7,25 @@
 
 from flask import current_app
 
-import pickle
-from sqlalchemy import func
-from sqlalchemy.sql import exists
-import numpy as np
-
-import datetime
-
+#Debug
 import traceback
+import pprint
+
+#Data Handling
+import pandas as pd
+import numpy as np
+import pickle
 
 #Models
 from .models import TestMaterial, \
     TestLog, QuestionLog, \
     MetaStatistics
+
+#Tools
+from sqlalchemy import func
+from sqlalchemy.sql import exists
+import datetime
+from app.utils import sigmoid#, logit
     
 #DB
 from app import db
