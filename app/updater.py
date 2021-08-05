@@ -90,18 +90,63 @@ def update_TestQuestionLogs(app):
                         [{"testlogid" : addTest.id,
                           "testmaterialid" : q.testmaterialid,
                           "score" : q.score} for i, q in data['QuestionLog'].iterrows()])
-    
+                
+                
                 print("Upped Test #: " + str(addTest.id) + " with " + str(len(data.get('QuestionLog', 0))) + " questions.")
-#                print(data['QuestionLog'])
+                      
+                ###        
+                ### L2R Adjustments (To the redis)
+                ###
+                
+                print("L2R")
+                #update to a copy
+                if app.config['SESSION_REDIS'].get('L2RTestMaterial') is None:
+                    app.config['SESSION_REDIS'].set('L2RTestMaterial', app.config['SESSION_REDIS'].get('TestMaterial'))
+                    
+                testmat = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('L2RTestMaterial'))
+                
+                for i, q in data['QuestionLog'].iterrows():
+                    #find outliers
+                    
+                    # Gather variables
+                    qrank = int(testmat[testmat['id'] == int(q.testmaterialid)].iloc[0]['my_rank'])
+                    # 1 = order was totally wrong, 0 = totally right. ie: a=1000, q=人, prediction=1, score=1.... errorlevel = 0
+                    errorlevel = abs(sigmoid(qrank, addTest.t, addTest.a, 1) - q.score)                    
+                    if (errorlevel < .70): continue                    
+                    incdir = int(((qrank < addTest.a) -.5)* 2)
+                    shiftsize = int(round((errorlevel * qrank) / 500) + 1)
+
+                    print("outlier found: kanjiid#" + str(q.testmaterialid) + " rank#" + str(qrank))
+                    print("errorlevel: " + str(errorlevel))
+                    print("bumping to: " + str(incdir))
+                    print("shiftsize: " + str(shiftsize))
+                    
+                    
+                    # Update my_rank vals
+                    tgt = testmat[qrank + ((incdir * shiftsize) - shiftsize)/2 <= testmat['my_rank']][testmat['my_rank'] <= qrank + ((incdir * shiftsize) + shiftsize)/2]
+                    print("tgt:")
+                    pprint.pprint(tgt)
+                    
+                    # reverse increment each question down the line
+                    testmat.loc[testmat['my_rank'].between(qrank + ((incdir * shiftsize) - shiftsize)/2, \
+                        qrank + ((incdir * shiftsize) + shiftsize)/2), 'my_rank'] -= incdir
+                        
+                    # increment the target question
+                    testmat.loc[testmat['id'] == int(q.testmaterialid),'my_rank'] = int(qrank + (incdir * shiftsize))
+                    
+                    pprint.pprint(testmat[qrank + ((incdir * shiftsize) - shiftsize)/2 <= testmat['my_rank']][testmat['my_rank'] <= qrank + ((incdir * shiftsize) + shiftsize)/2])
+                    
+                    #Update the redis
+                    app.config['SESSION_REDIS'].set('L2RTestMaterial', testmat.to_msgpack(compress='zlib'))
+                    
                 
             except Exception: 
-                import pprint
                 print("Failed to save test to SQL. Session content:")
                 pprint.pprint(data)
                 traceback.print_exc()
                 pass
                 
-            #Delete session (fail or succeed)
+            #Delete session (fail or succeed to add) .... only keep sessions intentionally skipped (with 'continue')
             current_app.config['SESSION_REDIS'].delete(sess)
             
         print("Updated Logs")
