@@ -46,6 +46,15 @@ def notfound_error(e):
 def home():
     return render_template('home.html')
 
+@bp.route("/forcemetaupdate")
+def forcemetaupdate():
+    print("Force metaupdate attempt")
+    if request.args.get('p') == current_app.config['SECRET_KEY']:
+        from app.updater import update_meta as mupd
+        mupd(current_app)
+        return("metaupdate success")
+    return render_template('home.html')
+
 @bp.route("/forceupdate")
 def forceupdate():
     print("Force update attempt")
