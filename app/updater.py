@@ -48,17 +48,21 @@ def update_TestQuestionLogs(app):
                     print("Added time to empty session")
                     continue
                 
+                
                 #Check timestamp to see if we should move it to SQL (>TEST_TIMEOUT mins since last touched)
                 if datetime.datetime.utcnow() - \
                         datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')\
                         < datetime.timedelta(minutes=current_app.config['TEST_TIMEOUT']):
-                    print("Skipping active test #" + str(data['TestLog']['id']) + " from: " + str(data['TestLog']['start_time']))
-                    print("   last_touched: " + str(data.get('last_touched')))
-                    print("   " + str(datetime.datetime.utcnow() - datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')) + " ago.")
+                    if (len(data.get('QuestionLog', [])) == 0):
+                        print("Skipping empty session")
+                        continue
+                    print("Skipping active test #" + str(data['TestLog']['id']) + " from: " + str(data['TestLog']['start_time']) + \
+                        "   last_touched: " + str(data.get('last_touched')) + "." + \
+                        "   " + str(datetime.datetime.utcnow() - datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')) + " ago.")
                     continue
                 
                 #Don't bother recording incomplete tests
-                if len(data.get('QuestionLog', 0)) < current_app.config['MIN_TEST_LENGTH']:
+                if len(data.get('QuestionLog', [])) < current_app.config['MIN_TEST_LENGTH']:
                     current_app.config['SESSION_REDIS'].delete(sess)
                     print("Trashing pointless short/non test")
                     continue
