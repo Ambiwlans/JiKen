@@ -113,9 +113,9 @@ def update_TestQuestionLogs(app):
                     qrank = int(testmat[testmat['id'] == int(q.testmaterialid)].iloc[0]['my_rank'])
                     # 1 = order was totally wrong, 0 = totally right. ie: a=1000, q=人, prediction=1, score=1.... errorlevel = 0
                     errorlevel = abs(sigmoid(qrank, addTest.t, addTest.a, 1) - q.score)                    
-                    if (errorlevel < .70): continue                    
+                    if (errorlevel < current_app.config['ERRORLEVEL_CUTOFF_PCT']): continue                    
                     incdir = int(((qrank < addTest.a) -.5)* 2)
-                    shiftsize = int(round((errorlevel * qrank) / 500) + 1)
+                    shiftsize = int(round((errorlevel * qrank) / current_app.config['SHIFTSIZE_SLOPE']) + 1)
 
                     print("outlier found: kanjiid#" + str(q.testmaterialid) + " rank#" + str(qrank))
                     print("errorlevel: " + str(errorlevel))
