@@ -38,8 +38,13 @@ def update_TestQuestionLogs(app):
 #        print(x)
         for sess in current_app.config['SESSION_REDIS'].scan_iter("session:*"):
             try:
-                #print("Moving to SQL DB -- " + str(sess))
-                data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
+                rdata = current_app.config['SESSION_REDIS'].get(sess)
+                if rdata is None:
+                    print("Skipping bugged session")
+                    #TODO - This shouldn't occur.
+                    continue
+                
+                data = pickle.loads(rdata)
                 
                 # Skip sessions without attached tests after adding a timeout to clear out old sessions faster
                 if (data.get('last_touched', -1) == -1):
