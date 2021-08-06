@@ -45,7 +45,7 @@ def update_TestQuestionLogs(app):
                 if (data.get('last_touched', -1) == -1):
                     data['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
                     current_app.config['SESSION_REDIS'].set(sess, pickle.dumps(data))
-                    print("Added time to empty session")
+                    print("Added timestamp to new empty session")
                     continue
                 
                 
@@ -54,7 +54,7 @@ def update_TestQuestionLogs(app):
                         datetime.datetime.strptime(data.get('last_touched', datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')), '%Y-%m-%d %H:%M:%S')\
                         < datetime.timedelta(minutes=current_app.config['TEST_TIMEOUT']):
                     if (len(data.get('QuestionLog', [])) == 0):
-                        print("Skipping empty session")
+                        print("Skipping recent empty session")
                         continue
                     print("Skipping active test #" + str(data['TestLog']['id']) + " from: " + str(data['TestLog']['start_time']) + \
                         "   last_touched: " + str(data.get('last_touched')) + "." + \
@@ -92,7 +92,7 @@ def update_TestQuestionLogs(app):
                           "score" : q.score} for i, q in data['QuestionLog'].iterrows()])
                 
                 
-                print("Upped Test #: " + str(addTest.id) + " with " + str(len(data.get('QuestionLog', 0))) + " questions.")
+                print("Upped Test #: " + str(addTest.id) + "-" + str(data['TestLog']['id']) + " with " + str(len(data.get('QuestionLog', 0))) + " questions.")
                       
                 ###        
                 ### L2R Adjustments (To the redis)
@@ -130,9 +130,9 @@ def update_TestQuestionLogs(app):
                     if shiftsize < 1: continue
                     
                     # Update my_rank vals
-                    tgt = testmat[qrank + ((incdir * shiftsize) - shiftsize)/2 <= testmat['my_rank']][testmat['my_rank'] <= qrank + ((incdir * shiftsize) + shiftsize)/2]
-                    print("tgt:")
-                    pprint.pprint(tgt)
+                    print("ranks (before):")
+                    pprint.pprint(testmat.loc[testmat['my_rank'].between(qrank + ((incdir * shiftsize) - shiftsize)/2, \
+                        qrank + ((incdir * shiftsize) + shiftsize)/2), 'my_rank'])
                     
                     # reverse increment each question down the line
                     testmat.loc[testmat['my_rank'].between(qrank + ((incdir * shiftsize) - shiftsize)/2, \
@@ -141,7 +141,9 @@ def update_TestQuestionLogs(app):
                     # increment the target question
                     testmat.loc[testmat['id'] == int(q.testmaterialid),'my_rank'] = int(qrank + (incdir * shiftsize))
                     
-                    pprint.pprint(testmat[qrank + ((incdir * shiftsize) - shiftsize)/2 <= testmat['my_rank']][testmat['my_rank'] <= qrank + ((incdir * shiftsize) + shiftsize)/2])
+                    print("ranks (after):")
+                    pprint.pprint(testmat.loc[testmat['my_rank'].between(qrank + ((incdir * shiftsize) - shiftsize)/2, \
+                        qrank + ((incdir * shiftsize) + shiftsize)/2), 'my_rank'])
                     
                     #Update the redis
                     app.config['SESSION_REDIS'].set('L2RTestMaterial', testmat.to_msgpack(compress='zlib'))
