@@ -104,6 +104,7 @@ def update_TestQuestionLogs(app):
                     app.config['SESSION_REDIS'].set('L2RTestMaterial', app.config['SESSION_REDIS'].get('TestMaterial'))
                     
                 testmat = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('L2RTestMaterial'))
+                max_rank = len(testmat)
                 
                 for i, q in data['QuestionLog'].iterrows():
                     #find outliers
@@ -121,6 +122,12 @@ def update_TestQuestionLogs(app):
                     print("bumping to: " + str(incdir))
                     print("shiftsize: " + str(shiftsize))
                     
+                    #correct for edge cases
+                    if (qrank + shiftsize > max_rank):
+                        shiftsize = max_rank - qrank - 1
+                    if (qrank - shiftsize < 1):
+                        shiftsize = qrank - 1
+                    if shiftsize < 1: continue
                     
                     # Update my_rank vals
                     tgt = testmat[qrank + ((incdir * shiftsize) - shiftsize)/2 <= testmat['my_rank']][testmat['my_rank'] <= qrank + ((incdir * shiftsize) + shiftsize)/2]
