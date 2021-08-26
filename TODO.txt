@@ -1,5 +1,7 @@
+- side banner ads on pc test
 - hide graph on old history page (no points on graph), or say data deleted due to age, gen graph w/ no points?
-- redis version change on heroku (Jun 30)
+- get rid of magic numbers, switch to config variables
+- before doing meta DB update, check when it was done last (with a redis value) to avoid double updating
 
 - more history pg stats
     - % of japanese you can read
@@ -8,18 +10,14 @@
     ? time spent per question, total
     - max questions answered
     - 'level stats' 5/60 JLPT N3 etc.
-
-- reimplement L2R
-    - add online learning adjustments to view (|%-.5|*2)^2 * ln(d)
-    - more whitepaper research on best methods
-    - keep moves small even at the high end to avoid abuse by individuals
-    - only adjust when on round 10 or higher and t > 0.003 to avoid randoms
-    - learn to rank code done w/ online learning with the SQL dumps? or daily?
-    - use tests only w/ >50 answered, non outliers
     
 #TODO - BUGS
     - can go to tests that don't exist (empty tests)
     - some tests vanish (why?)
+    - session mismatch
+        - related to resetting the server while tests are active gives the wrong number? (check where/when the 'current ID' number is pulled from)
+        - on duplicate ID found, check contents if matched, or skip that number and attempt save again
+    ? deleting a sessions doesn't sem to actually delete it... sessions may be persistent in multiple locations
     
 #TODO - PR
     - basic seo
@@ -31,7 +29,6 @@ Low Prio:
 ? redo regularization
     ? change jump size penalty from regularization to just averaging
     ? make steepness penalties exponential not logarithmic (loss should explode)
-- side banner ads on pc test
 - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
 - ask whether to continue or to do a new test
 ? switch away from using params?
