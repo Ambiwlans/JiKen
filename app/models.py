@@ -87,6 +87,14 @@ class TestMaterial(db.Model):
     frequency = Column(Integer)
     my_rank = Column(Integer)
 
+class TempTestMaterial(db.Model):
+    __tablename__ = 'temptestmaterial'
+    
+    #Meta
+    id = Column(Integer, primary_key=True)  #uses ids from testmaterial
+    
+    L2R_my_rank = Column(Integer)
+
 # Meta information
     # Only 1 row, stored in DB for convenience
 class MetaStatistics(db.Model):

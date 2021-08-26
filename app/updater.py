@@ -103,19 +103,15 @@ def update_TestQuestionLogs(app):
                 ### L2R Adjustments (To the redis)
                 ###
                 
-                print("L2R")
-                #update to a copy
-                if app.config['SESSION_REDIS'].get('L2RTestMaterial') is None:
-                    app.config['SESSION_REDIS'].set('L2RTestMaterial', app.config['SESSION_REDIS'].get('TestMaterial'))
-                    
-                testmat = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('L2RTestMaterial'))
-                max_rank = len(testmat)
+                print("L2R")                    
+                temptestmat = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TempTestMaterial'))
+                max_rank = len(temptestmat)
                 
                 for i, q in data['QuestionLog'].iterrows():
                     #find outliers
                     
                     # Gather variables
-                    qrank = int(testmat[testmat['id'] == int(q.testmaterialid)].iloc[0]['my_rank'])
+                    qrank = int(temptestmat[temptestmat['id'] == int(q.testmaterialid)].iloc[0]['L2R_my_rank'])
                     # 1 = order was totally wrong, 0 = totally right. ie: a=1000, q=人, prediction=1, score=1.... errorlevel = 0
                     errorlevel = abs(sigmoid(qrank, addTest.t, addTest.a, 1) - q.score)                    
                     if (errorlevel < current_app.config['ERRORLEVEL_CUTOFF_PCT']): continue                    
@@ -136,22 +132,22 @@ def update_TestQuestionLogs(app):
                     
                     # Update my_rank vals
                     print("ranks (before):")
-                    pprint.pprint(testmat.loc[testmat['my_rank'].between(qrank + ((incdir * shiftsize) - shiftsize)/2, \
-                        qrank + ((incdir * shiftsize) + shiftsize)/2), 'my_rank'])
+                    pprint.pprint(temptestmat.loc[temptestmat['L2R_my_rank'].between(qrank + ((incdir * shiftsize) - shiftsize)/2, \
+                        qrank + ((incdir * shiftsize) + shiftsize)/2), 'L2R_my_rank'])
                     
                     # reverse increment each question down the line
-                    testmat.loc[testmat['my_rank'].between(qrank + ((incdir * shiftsize) - shiftsize)/2, \
-                        qrank + ((incdir * shiftsize) + shiftsize)/2), 'my_rank'] -= incdir
+                    temptestmat.loc[temptestmat['L2R_my_rank'].between(qrank + ((incdir * shiftsize) - shiftsize)/2, \
+                        qrank + ((incdir * shiftsize) + shiftsize)/2), 'L2R_my_rank'] -= incdir
                         
                     # increment the target question
-                    testmat.loc[testmat['id'] == int(q.testmaterialid),'my_rank'] = int(qrank + (incdir * shiftsize))
+                    temptestmat.loc[temptestmat['id'] == int(q.testmaterialid),'L2R_my_rank'] = int(qrank + (incdir * shiftsize))
                     
                     print("ranks (after):")
-                    pprint.pprint(testmat.loc[testmat['my_rank'].between(qrank + ((incdir * shiftsize) - shiftsize)/2, \
-                        qrank + ((incdir * shiftsize) + shiftsize)/2), 'my_rank'])
+                    pprint.pprint(temptestmat.loc[temptestmat['L2R_my_rank'].between(qrank + ((incdir * shiftsize) - shiftsize)/2, \
+                        qrank + ((incdir * shiftsize) + shiftsize)/2), 'L2R_my_rank'])
                     
                     #Update the redis
-                    app.config['SESSION_REDIS'].set('L2RTestMaterial', testmat.to_msgpack(compress='zlib'))
+                    app.config['SESSION_REDIS'].set('TempTestMaterial', temptestmat.to_msgpack(compress='zlib'))
                     
                 
             except Exception: 
