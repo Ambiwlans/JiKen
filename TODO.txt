@@ -1,4 +1,3 @@
-- side banner ads on pc test
 - hide graph on old history page (no points on graph), or say data deleted due to age, gen graph w/ no points?
 - get rid of magic numbers, switch to config variables
 - before doing meta DB update, check when it was done last (with a redis value) to avoid double updating

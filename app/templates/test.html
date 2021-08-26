@@ -4,121 +4,138 @@
 <!-- Ad -->
 {% if cnt > 0 and cnt % 10 == 0 %}
     <script>
-    if (window.matchMedia("(min-width: 480px)").matches) {
-      document.write("<script data-cfasync='false' type='text/javascript' src='//p386432.clksite.com/adServe/banners?tid=386432_758560_3&type=shadowbox&size=38'><\/script>");  
+    if (window.matchMedia("(min-width: 600px)").matches) {
+      //no popup ads on desktop
+      //document.write("<script data-cfasync='false' type='text/javascript' src='//p386432.clksite.com/adServe/banners?tid=386432_758560_1'><\/script>");      
     }
     else{
-      //no popup ads on desktop
-      //document.write("<script data-cfasync='false' type='text/javascript' src='//p386432.clksite.com/adServe/banners?tid=386432_758560_1'><\/script>");
+      document.write("<script data-cfasync='false' type='text/javascript' src='//p386432.clksite.com/adServe/banners?tid=386432_758560_3&type=shadowbox&size=38'><\/script>");  
     }
     </script>
 {% endif %}
-	<div class="container text-center">
-    	<div class="test_header">
-        	<a href="/"><img class="title-sm" src="/static/img/jiken.png"></a>
-        	<a class="help_btn" data-toggle="modal" data-target="#helpModal"><i class="fas fa-question-circle fa-lg"></i></a>
-    	</div>
-    	<!-- Modal -->
-    	<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalTitle" aria-hidden="true">
-        	<div class="modal-dialog modal-dialog-centered" role="document">
-            	<div class="modal-content">
-                    <div class="modal-body next">
-                        <img class="btn modalimg" src="/static/img/guide.png">
-                    </div>
-                </div>
+	<div class="row text-center no-gutters justify-content-around">
+    	<script>
+    	if (window.matchMedia("(min-width: 800px)").matches) {
+        	document.write("<div class='col-sm-1' style='width: 160px'><script data-cfasync='false' type='text/javascript' src='//p386432.clksite.com/adServe/banners?tid=386432_758560_7'><\/script><\/div>");
+        }
+        else{
+        	//no sidebar ads on mobile
+        }
+        </script>
+        <div class="col-xl-6">
+        	<div class="test_header">
+            	<a href="/"><img class="title-sm" src="/static/img/jiken.png"></a>
+            	<a class="help_btn" data-toggle="modal" data-target="#helpModal"><i class="fas fa-question-circle fa-lg"></i></a>
         	</div>
-    	</div>
-    	
-    	<!-- Flashcard -->    	
-    	<div class="flashcard" onclick="flip()">
-            <div class="frontside container">
-                {% if question.my_rank != 7000 %}
-                    <span class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji difficulty ranking">{{question.my_rank}}</span>
+        	<!-- Modal -->
+        	<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalTitle" aria-hidden="true">
+            	<div class="modal-dialog modal-dialog-centered" role="document">
+                	<div class="modal-content">
+                        <div class="modal-body next">
+                            <img class="btn modalimg" src="/static/img/guide.png">
+                        </div>
+                    </div>
+            	</div>
+        	</div>
+        	
+        	<!-- Flashcard -->    	
+        	<div class="flashcard" onclick="flip()">
+                <div class="frontside container">
+                    {% if question.my_rank != 7000 %}
+                        <span class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji difficulty ranking">{{question.my_rank}}</span>
+                    {% endif %}
+                    <span class="top-center">
+                        <p class="count" data-toggle="tooltip" data-placement="top" title="How many questions you've answered so far">{{cnt + 1}}</p>
+                    </span>
+                    <span class="top-right">
+                        {% if question.jlpt != 6 %}
+                            <p class="jlpt" data-toggle="tooltip" data-placement="right" title="JLPT grade level">N{{question.jlpt}}</p>
+                        {% endif %}
+                        {% if question.grade != 14 %}
+                            <p class="grade" data-toggle="tooltip" data-placement="right" title="Jōyō grade level">Gr{{question.grade|int}}</p>
+                        {% endif %}
+                    </span>
+                    <h1 class="kanji">{{question.kanji}}</h1>
+                </div>
+                <div class="backside container">
+                    <h1 class="meaning">{{question.meaning}}</h1>
+                    <h4 class="onyomi">{{question.onyomi}}</h4>
+                    <h4 class="kunyomi">{{question.kunyomi}}</h4>
+                    <a href="https://jisho.org/search/{{question.kanji}} %23kanji" class="more">...more</a>
+                </div>
+            </div>
+    
+            <!-- Buttons -->    	
+    		<a class="btn btn-success btn-lg" id="know" role="btn" href="/test?a=1&q={{question.id}}">Know it</a>
+    		<a class="btn btn-danger btn-lg" id="dunno" role="btn" href="/test?a=0&q={{question.id}}">Don't Know</a>
+    		
+    		
+    		<!-- Predictions -->    	
+        	{% if cnt >= 10 %}
+        	
+        	<div class="container-fluid pred">
+            	<p class="pred-header">Estimates</p>
+            	<span class="predrange"><span class="predrange predlower" data-toggle="tooltip" data-placement="left" title="lower bound">{{pred[2]}}</span>&nbsp; &nbsp; - &nbsp; &nbsp;</span>
+                	<span class="predmain" data-toggle="tooltip" data-placement="top" data-html="true" title="{{pred[0]}}">{{pred[0]}}</span>
+            	<span class="predrange predupper" data-toggle="tooltip" data-placement="right" title="upper bound">&nbsp; &nbsp; - &nbsp; &nbsp;{{pred[1]}}</span>
+        	</div>
+        	
+        	
+        	<!-- Chart -->    	
+        	<div class="chart-container">
+                <canvas id="predChart"></canvas>
+            </div>
+            
+            <!-- Share/Results -->    	
+    
+            <div class="btn-toolbar float-right" role="toolbar">
+            <div class="btn-group btn-group-sm sharegroup" data-toggle="tooltip" data-placement="top" title="Share your score with friends" role="group" aria-label="Share your score with friends">
+                <a type="button" class="btn btn-primary" id="sharetw" role="btn" 
+                    href=" https://twitter.com/intent/tweet?via=Ambiwlans1&url=https%3A%2F%2Fjiken.herokuapp.com%2Ft%2F{{id}}&text=I%20know%20{{pred[0]}}%20kanji%21%20Top%20me%3F&hashtags=jiken%20kanji%20challenge">
+                    <i class="fab fa-twitter fa-lg"></i></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                <a type="button" class="btn btn-primary" id="sharefb" role="btn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjiken.herokuapp.com%2Ft%2F{{id}}"><i class="fab fa-facebook fa-lg"></i></a>
+            </div>
+            <div class="btn-group btn-group-sm" role="group" aria-label="Nav Button Block">
+                <a class="btn btn-success" id="results" data-toggle="tooltip" data-placement="top" title="See your detailed test results at any time!" role="btn" href="/t/{{session['TestLog'].id}}">Results/Share</a>
+            </div>
+            </div>
+    		
+            {% else %}
+            <div class="container pred">
+                <h4 class="preest">
+                {% if cnt == 0 %}
+                    Answer at least 10 to get an estimate...
+                {% elif cnt == 1 %}
+                    The more you answer, the more accurate the estimate...
+                {% elif cnt == 2 %}
+                    Tap the card to flip it and check your answers.
+                {% elif cnt == 3 %}
+                    "<em>I should have known that one!</em>" is "<em>Don't know</em>".
+                {% elif cnt == 4 %}
+                    The top left # shows what rank/difficulty the kanji is.
+                {% elif cnt == 5 %}
+                    The top right # shows the JLPT grade level and Jouyou grade level.
+                {% elif cnt == 6 %}
+                    On PC, try mousing over things for an explanation. 
+                {% elif cnt == 7 %}
+                    Controls: [←]&nbsp;Know, [→]&nbsp;Don't&nbsp;Know, [↓]/[TAP]&nbsp;Flip&nbsp;card
+                {% elif cnt == 8 %}
+                    Remember you can keep going after the initial result...
+                {% elif cnt == 9 %}
+                    Good Luck! 頑張って!
                 {% endif %}
-                <span class="top-center">
-                    <p class="count" data-toggle="tooltip" data-placement="top" title="How many questions you've answered so far">{{cnt + 1}}</p>
-                </span>
-                <span class="top-right">
-                    {% if question.jlpt != 6 %}
-                        <p class="jlpt" data-toggle="tooltip" data-placement="right" title="JLPT grade level">N{{question.jlpt}}</p>
-                    {% endif %}
-                    {% if question.grade != 14 %}
-                        <p class="grade" data-toggle="tooltip" data-placement="right" title="Jōyō grade level">Gr{{question.grade|int}}</p>
-                    {% endif %}
-                </span>
-                <h1 class="kanji">{{question.kanji}}</h1>
+                </h4>
             </div>
-            <div class="backside container">
-                <h1 class="meaning">{{question.meaning}}</h1>
-                <h4 class="onyomi">{{question.onyomi}}</h4>
-                <h4 class="kunyomi">{{question.kunyomi}}</h4>
-                <a href="https://jisho.org/search/{{question.kanji}} %23kanji" class="more">...more</a>
-            </div>
-        </div>
-
-        <!-- Buttons -->    	
-		<a class="btn btn-success btn-lg" id="know" role="btn" href="/test?a=1&q={{question.id}}">Know it</a>
-		<a class="btn btn-danger btn-lg" id="dunno" role="btn" href="/test?a=0&q={{question.id}}">Don't Know</a>
-		
-		
-		<!-- Predictions -->    	
-    	{% if cnt >= 10 %}
-    	
-    	<div class="container pred">
-        	<p class="pred-header">Estimates</p>
-        	<span class="predrange"><span class="predrange predlower" data-toggle="tooltip" data-placement="left" title="lower bound">{{pred[2]}}</span>&nbsp; &nbsp; - &nbsp; &nbsp;</span>
-            	<span class="predmain" data-toggle="tooltip" data-placement="top" data-html="true" title="{{pred[0]}}">{{pred[0]}}</span>
-        	<span class="predrange predupper" data-toggle="tooltip" data-placement="right" title="upper bound">&nbsp; &nbsp; - &nbsp; &nbsp;{{pred[1]}}</span>
-    	</div>
-    	
-    	
-    	<!-- Chart -->    	
-    	<div class="chart-container">
-            <canvas id="predChart"></canvas>
-        </div>
-        
-        <!-- Share/Results -->    	
-
-        <div class="btn-toolbar float-right" role="toolbar">
-        <div class="btn-group btn-group-sm sharegroup" data-toggle="tooltip" data-placement="top" title="Share your score with friends" role="group" aria-label="Share your score with friends">
-            <a type="button" class="btn btn-primary" id="sharetw" role="btn" 
-                href=" https://twitter.com/intent/tweet?via=Ambiwlans1&url=https%3A%2F%2Fjiken.herokuapp.com%2Ft%2F{{id}}&text=I%20know%20{{pred[0]}}%20kanji%21%20Top%20me%3F&hashtags=jiken%20kanji%20challenge">
-                <i class="fab fa-twitter fa-lg"></i></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-            <a type="button" class="btn btn-primary" id="sharefb" role="btn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjiken.herokuapp.com%2Ft%2F{{id}}"><i class="fab fa-facebook fa-lg"></i></a>
-        </div>
-        <div class="btn-group btn-group-sm" role="group" aria-label="Nav Button Block">
-            <a class="btn btn-success" id="results" data-toggle="tooltip" data-placement="top" title="See your detailed test results at any time!" role="btn" href="/t/{{session['TestLog'].id}}">Results/Share</a>
-        </div>
-        </div>
-		
-        {% else %}
-        <div class="container pred">
-            <h4 class="preest">
-            {% if cnt == 0 %}
-                Answer at least 10 to get an estimate...
-            {% elif cnt == 1 %}
-                The more you answer, the more accurate the estimate...
-            {% elif cnt == 2 %}
-                Tap the card to flip it and check your answers.
-            {% elif cnt == 3 %}
-                "<em>I should have known that one!</em>" is "<em>Don't know</em>".
-            {% elif cnt == 4 %}
-                The top left # shows what rank/difficulty the kanji is.
-            {% elif cnt == 5 %}
-                The top right # shows the JLPT grade level and Jouyou grade level.
-            {% elif cnt == 6 %}
-                On PC, try mousing over things for an explanation. 
-            {% elif cnt == 7 %}
-                Controls: [←]&nbsp;Know, [→]&nbsp;Don't&nbsp;Know, [↓]/[TAP]&nbsp;Flip&nbsp;card
-            {% elif cnt == 8 %}
-                Remember you can keep going after the initial result...
-            {% elif cnt == 9 %}
-                Good Luck! 頑張って!
             {% endif %}
-            </h4>
         </div>
-        {% endif %}
-        
+        <script>
+    	if (window.matchMedia("(min-width: 800px)").matches) {
+        	document.write("<div class='col-sm-1' style='width: 160px'><script data-cfasync='false' type='text/javascript' src='//p386432.clksite.com/adServe/banners?tid=386432_758560_8'><\/script><\/div>");
+        }
+        else{
+        	//no sidebar ads on mobile
+        }
+        </script>
 	</div>
 {% endblock content %}
 
