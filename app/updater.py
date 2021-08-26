@@ -199,6 +199,58 @@ def update_meta(app):
         print("Known = " + str(avg_known))
         print("Answered = " + str(avg_answered))
         
+        #L2R update
+        if app.config['SESSION_REDIS'].get('TempTestMaterial') is not None:
+            print("updating L2R testmats")
+            temptestmat = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TempTestMaterial'))
+            temptestmat.to_sql("temptestmaterial", db.engine, index=False, if_exists="replace")
+##            redis_L2R_ranks = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('L2RTestMaterial')).loc[:,'my_rank'].values
+#            redis_L2R_ranks = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('L2RTestMaterial'))
+#            pprint.pprint(redis_L2R_ranks)
+#            print(type(redis_L2R_ranks))
+#            sql_L2R_ranks = db.session.query(TestMaterial.L2R_my_rank)
+##            pprint.pprint(sql_L2R_ranks)
+#            print(type(sql_L2R_ranks))
+#           dict_ranks = sql_L2R_ranks.to_dict() 
+##            sql_L2R_ranks.update()
+#            db.session.query(TestMaterial).update({TestMaterial.L2R_my_rank: redis_L2R_ranks.my_rank})
+
+#            redis_L2R_ranks = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('L2RTestMaterial')).loc[:,'my_rank'].values
+#            upd_vals_str = "VALUES " + str(redis_L2R_ranks)
+#            print(upd_vals_str)
+#            upd_sql = r"""SELECT * FROM TestMaterial
+#                JOIN ({0}) AS frame(title, owner, count)
+#                ON blog.title = frame.title
+#                WHERE blog.owner = frame.owner 
+#                ORDER BY frame.count DESC
+#                LIMIT 30;""".format(upd_vals_str)
+            
+            #Bulk update
+#            redis_L2R_ranks = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('L2RTestMaterial'))
+            
+#            mappings = []
+#            i = 0
+#            for tm in db.session.query(TestMaterial):
+#                #TODO: Is this fragile? Can test Material ever return in a different order?
+#                mappings.append({'id':tm.id, 'L2R_my_rank':redis_L2R_ranks.loc[i,'my_rank']})
+#                i = i + 1
+#                if i % 1000 == 0:
+#                    db.session.bulk_update_mappings(TestMaterial, mappings)
+#                    db.session.commit()
+#                    mappings = []
+##                    break #testing max_questions rules   
+#            db.session.bulk_update_mappings(TestMaterial, mappings)
+            
+#            i = 0
+#            for tm in db.session.query(TestMaterial):
+#                tm.L2R_my_rank = redis_L2R_ranks.loc[i,'my_rank']
+#                i = i + 1
+#                if i % 1000 == 0:
+#                    db.session.commit()
+#                    break
+        
+            db.session.commit()
+        
 # Clear ancient logs
 def clear_old_logs(app):
     with app.app_context():

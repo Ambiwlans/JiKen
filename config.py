@@ -28,7 +28,7 @@ class DevelopmentConfig:
     })
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-#    SQLALCHEMY_ECHO=True
+    SQLALCHEMY_ECHO=True
     
     # Data
     MAX_QUESTIONS_LOGGED = 4500                                   #Max # of questions before clearing them from SQL 
@@ -64,12 +64,13 @@ class DeploymentConfig:
             }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-
+    SQLALCHEMY_ECHO=False
+    
     # Data
     MAX_QUESTIONS_LOGGED = 4500                                 #Max # of questions before clearing them from SQL 
     MAX_TESTS_LOGGED = 4500                                     #Max # of tests before clearing them from SQL (must be larger than questions/test_length)
     MIN_TEST_LENGTH = 10                                        #Shorter tests won't be logged
-    TEST_TIMEOUT = 120                                           #Minutes inactive before tests get dumped to SQL
+    TEST_TIMEOUT = 120                                          #Minutes inactive before tests get dumped to SQL
     
     # Flask-Session
     SESSION_TYPE = "redis"
