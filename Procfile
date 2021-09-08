@@ -1,1 +1,1 @@
-web: gunicorn jiken:app
+web: gunicorn jiken:app --preload
