@@ -21,6 +21,8 @@ from .models import TestMaterial, \
     TestLog, QuestionLog, \
     MetaStatistics
 
+from sqlalchemy.dialects.mysql import SMALLINT
+
 #Tools
 from sqlalchemy import func
 from sqlalchemy.sql import exists
@@ -203,7 +205,8 @@ def update_meta(app):
         if app.config['SESSION_REDIS'].get('TempTestMaterial') is not None:
             print("updating L2R testmats")
             temptestmat = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TempTestMaterial'))
-            temptestmat.to_sql("temptestmaterial", db.engine, index=False, if_exists="replace")
+            temptestmat.to_sql("temptestmaterial", db.engine, index=False, if_exists="replace", \
+                               dtype={'id': SMALLINT(unsigned=True), 'L2R_my_rank': SMALLINT(unsigned=True)})
 ##            redis_L2R_ranks = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('L2RTestMaterial')).loc[:,'my_rank'].values
 #            redis_L2R_ranks = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('L2RTestMaterial'))
 #            pprint.pprint(redis_L2R_ranks)

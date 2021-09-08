@@ -11,6 +11,8 @@ from app import db
 # Data Types
 from sqlalchemy import Boolean, DateTime, Column, Integer, \
                        String, ForeignKey, Text, Numeric
+from sqlalchemy.dialects.mysql import MEDIUMINT, TINYINT, SMALLINT
+                     
 
 # Database
 from sqlalchemy.orm import relationship, backref
@@ -91,9 +93,9 @@ class TempTestMaterial(db.Model):
     __tablename__ = 'temptestmaterial'
     
     #Meta
-    id = Column(Integer, primary_key=True)  #uses ids from testmaterial
+    id = Column(SMALLINT(unsigned=True), primary_key=True)  #uses ids from testmaterial
     
-    L2R_my_rank = Column(Integer)
+    L2R_my_rank = Column(SMALLINT(unsigned=True), primary_key=True)
 
 # Meta information
     # Only 1 row, stored in DB for convenience
