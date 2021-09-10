@@ -1,51 +1,76 @@
-- hide graph on old history page (no points on graph), or say data deleted due to age, gen graph w/ no points?
-- get rid of magic numbers, switch to config variables
-- before doing meta DB update, check when it was done last (with a redis value) to avoid double updating
-
-- more history pg stats
-    - % of japanese you can read
-    - switch to percentiles (need to add bins to metadata)
-    	- could even make into graphs (you are here)         
-    ? time spent per question, total
-    - max questions answered
-    - 'level stats' 5/60 JLPT N3 etc.
+--------------------------
+TODO
+--------------------------
+Curr:
+    - Show estimated % of japanese you can read
+    - History breakdown by levels (JLPT,N3) ... show missed kanji, and estimated stats (loading bar? 92/120)
     
-#TODO - BUGS
+Code:
+    
+Rework:
+    
+New Features:
+    - add dono link since no ads. patreon, buymeacoffee
+    History
+        - hide graph on old history page (no points on graph), or say data deleted due to age, gen graph w/ no points?
+        - more history pg stats
+            - switch to percentiles (need to add bins to metadata)
+            	- could even make into graphs (you are here)         
+            ? time spent per question, total
+            - max questions answered
+
+        
+Efficiency:
+
+BUGS:
+    - occassional timeouts since changing procfile to preload
     - can go to tests that don't exist (empty tests)
     - some tests vanish (why?)
     - session mismatch
         - related to resetting the server while tests are active gives the wrong number? (check where/when the 'current ID' number is pulled from)
         - on duplicate ID found, check contents if matched, or skip that number and attempt save again
-    ? deleting a sessions doesn't sem to actually delete it... sessions may be persistent in multiple locations
     
-#TODO - PR
+PR:
     - basic seo
-    - New reddit thread: new features - ads too annoying?, shareable/saveable tests, [?] button
+    - New reddit thread
     - tweets, msg some teaching sites to see if they're interested
-    
+
+Major Extensions:
+    - convert to android app    
+    - prep for other card sets (ENG, J->E)
+
 --------------------------
-Low Prio:
-? redo regularization
-    ? change jump size penalty from regularization to just averaging
-    ? make steepness penalties exponential not logarithmic (loss should explode)
-- rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
-- ask whether to continue or to do a new test
-? switch away from using params?
-- incl some alpha stats on the readme, mention the phenomenon that allows us to use a sigmoid
-? about section (other than the github)
-- send dono http://www.edrdg.org/edrdg/licence.html
-- track user devices in testlog
-- shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')? (more readable)
-- lower # of calls to redis where viable (looks like redis stores it on the same box so little point)
-- trim the req list further?
-- switch to a slightly better ML algorithm (model family) allowing assymetries (non-sigmoid?)
-- clientside the math
-- extend hist pg kanji suggestions - tooltips, categories
-? add a 'drills' feature for kanji missed on a test
-? links to other tests with same IP. Use a cookie?
-- error screen (DB down, other) - contact info, apologies, redirect
-        
+Low Priority
+--------------------------
+
+Code:
+    - get rid of magic numbers, switch to config variables
+    - shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')? (more readable)
+
+Tweaks:
+    ? redo regularization
+        ? change jump size penalty from regularization to just averaging
+        ? make steepness penalties exponential not logarithmic (loss should explode)
+        ? switch to a slightly better ML algorithm (model family) allowing assymetries (non-sigmoid?)
+    ? switch away from using params? ... would stop refresh bugs
+
+New Features:
+    - error screen (DB down, other) - contact info, apologies, redirect
+    ? links to other tests with same IP. Use a cookie?
+    ? add a 'drills' feature for kanji missed on a test
+    - extend hist pg kanji suggestions - tooltips, categories
+    - track user devices in testlog
+    ? about section (other than the github)
+            
+Efficiency:
+    ? get rid of question log ids
+    ? clientside the math
+    - trim the req list further?
+    ? lower # of calls to redis where viable (looks like redis stores it on the same box so little point)
+    - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
+    
 Bugs:
+    ? deleting a session manually doesn't seem to actually delete it... sessions may be persistent in multiple locations
     Bad Predictions (start to Feb 2021)
         CLIFF (t>2- ie. 63005
         	- 7/4600
@@ -63,14 +88,5 @@ Bugs:
             - probably needs a gradient when t <= 0 rather than a wall. Causes differentiability issues
             - https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/fes4muo/
 
-PR
-    - medium blog post about it ... or just stuff into the github.
-    - patreon, buymeacoffee? probably not worth
-
---------------------------
-
-Extensions:
-- E->J
-    - needs example words to stop ambiguity
-- Other cards sets (vocab for English, Jpns...)
-- make an app
+PR:
+    ? medium blog post about it ... or just stuff into the github. Or add an about section?

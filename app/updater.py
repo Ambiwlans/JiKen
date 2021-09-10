@@ -97,7 +97,7 @@ def update_TestQuestionLogs(app):
                         [{"testlogid" : addTest.id,
                           "testmaterialid" : q.testmaterialid,
                           "score" : q.score} for i, q in data['QuestionLog'].iterrows()])
-                
+                db.session.commit()
                 
                 print("Upped Test #: " + str(addTest.id) + "-" + str(data['TestLog']['id']) + " with " + str(len(data.get('QuestionLog', 0))) + " questions.")
                       
@@ -150,7 +150,7 @@ def update_TestQuestionLogs(app):
                     
                     #Update the redis
                     app.config['SESSION_REDIS'].set('TempTestMaterial', temptestmat.to_msgpack(compress='zlib'))
-                    
+                db.session.commit()
                 
             except Exception: 
                 print("Failed to save test to SQL. Session content:")
