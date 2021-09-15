@@ -219,6 +219,10 @@ body {
     font-variant: small-caps;
 }
 
+.donate {
+    color: #fdb0c0;
+}
+
 .btn-group {
     margin: 0px 5px;
 }

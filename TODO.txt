@@ -2,7 +2,7 @@
 TODO
 --------------------------
 Curr:
-    - Show estimated % of japanese you can read
+    - Show estimated % of japanese you can read (just hardcode this?)
     - History breakdown by levels (JLPT,N3) ... show missed kanji, and estimated stats (loading bar? 92/120)
     
 Code:
@@ -10,7 +10,6 @@ Code:
 Rework:
     
 New Features:
-    - add dono link since no ads. patreon, buymeacoffee
     History
         - hide graph on old history page (no points on graph), or say data deleted due to age, gen graph w/ no points?
         - more history pg stats
@@ -70,6 +69,7 @@ Efficiency:
     - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
     
 Bugs:
+    - it is possible atm for logs to overrun the 10k limit (buffer from log cleanups at 7500)
     ? deleting a session manually doesn't seem to actually delete it... sessions may be persistent in multiple locations
     Bad Predictions (start to Feb 2021)
         CLIFF (t>2- ie. 63005

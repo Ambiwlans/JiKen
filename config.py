@@ -31,10 +31,10 @@ class DevelopmentConfig:
     SQLALCHEMY_ECHO=True
     
     # Data
-    MAX_QUESTIONS_LOGGED = 4500                                   #Max # of questions before clearing them from SQL 
-    MAX_TESTS_LOGGED = 4500                                       #Max # of tests before clearing them from SQL (must be larger than questions/test_length)
-    MIN_TEST_LENGTH = 1                                           #Shorter tests won't be logged
-    TEST_TIMEOUT = 600                                            #Minutes inactive before tests get dumped to SQL
+    MAX_QUESTIONS_LOGGED = 7500                                   #Max # of questions before clearing them from SQL 
+    MAX_TESTS_LOGGED = 7500                                       #Max # of tests before clearing them from SQL (must be larger than questions/test_length)
+    MIN_TEST_LENGTH = 10                                          #Shorter tests won't be logged
+    TEST_TIMEOUT = 1                                              #Minutes inactive before tests get dumped to SQL
     
     # Flask-Session
     SESSION_TYPE = "redis"
