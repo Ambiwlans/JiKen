@@ -38,7 +38,7 @@
         	than the average {{avg_answered}} of other testers. {% if curtest %}Click <a href="/test?a=-1">here</a> to keep going!{% endif %}
         	
         	<br>
-    		You know <b>{{pred[0]}}</b> kanji compared to the average of {{avg_known}}. {% if pct_known_by_appearance == 100 %} You can read at a native level. {% else %} This is <b>{{pct_known_by_appearance}}%</b> of kanji as they appear in text.{% endif %}
+    		You know <b>{{pred[0]}}</b> kanji compared to the average of {{avg_known}}. {% if pct_known_by_appearance == '100.00' %} You can read at a native level. {% else %} This is <b>{{pct_known_by_appearance}}%</b> of kanji as they appear in text.{% endif %}
     		
     		<br><br>
     		{% if jlpt_recc == 1 %}
