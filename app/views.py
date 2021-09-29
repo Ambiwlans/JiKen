@@ -328,13 +328,17 @@ def history(id):
         2136 <= pred[2] < 2965 : 2,
         2965 <= pred[2] < 6355 : 1,
         6355 <= pred[2]        : -1}[True]
+    pct_known_by_appearance = min(max(100 * ((-180/(data['TestLog'].a + 160)) + 1.08), 100),0)   #Magic formula based on data
+
     
     return  render_template('history.html', id = id, \
         a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred,\
         curtest = curtest, cnt = cnt, \
         date = data['TestLog'].start_time, \
         jlpt_recc = jlpt_recc, kk_recc = kk_recc, \
-        avg_answered = int(current_app.config['SESSION_REDIS'].get('avg_answered') or 0), avg_known = int(current_app.config['SESSION_REDIS'].get('avg_known') or 0))
+        avg_answered = int(current_app.config['SESSION_REDIS'].get('avg_answered') or 0), \
+        avg_known = int(current_app.config['SESSION_REDIS'].get('avg_known') or 0), \
+        pct_known_by_appearance = "{:.2f}".format(pct_known_by_appearance))
 
 
 

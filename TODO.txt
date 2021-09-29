@@ -2,7 +2,6 @@
 TODO
 --------------------------
 Curr:
-    - Show estimated % of japanese you can read (just hardcode this?)
     - History breakdown by levels (JLPT,N3) ... show missed kanji, and estimated stats (loading bar? 92/120)
     
 Code:
