@@ -6,7 +6,7 @@ asn1crypto==0.24.0
 astroid==2.2.5
 attrs==19.1.0
 Authlib==0.11
-Babel==2.7.0
+Babel==2.9.1
 bleach==3.3.0
 blinker==1.4
 Bootstrap-Flask==1.0.10
