@@ -49,6 +49,7 @@ class DevelopmentConfig:
     # L2R
     SHIFTSIZE_SLOPE = 500                                           # shiftsize = int(round((errorlevel * SHIFTSIZE_SLOPE) / 500) + 1)
     ERRORLEVEL_CUTOFF_PCT = .5                                      # if (errorlevel < ERRORLEVEL_CUTOFF_PCT): continue 
+    PUSH_L2R_LIVE = True                                            # pushes the temp rankings to live data automatically (use backups!)
     
 class DeploymentConfig:
 
@@ -85,6 +86,7 @@ class DeploymentConfig:
     # L2R
     SHIFTSIZE_SLOPE = 500                                           # shiftsize = int(round((errorlevel * SHIFTSIZE_SLOPE) / 500) + 1)
     ERRORLEVEL_CUTOFF_PCT = .7                                      # if (errorlevel < ERRORLEVEL_CUTOFF_PCT): continue 
+    PUSH_L2R_LIVE = False                                           # pushes the temp rankings to live data automatically (use backups!)
     
 #Easy switch for different configs
 Config = DeploymentConfig
