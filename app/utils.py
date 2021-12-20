@@ -68,8 +68,8 @@ def sigmoid_cost_regularized(params, true_X, true_Y, last_t, last_a):
     #Regularization penalties
     
     #Clip OOB values
-    if t <= 0: return (1 - t)*100
-    if a < 1: return 100
+    if t <= 0.00001: return 1000 * abs(t - 0.00001) + 100
+    if a < 1: return abs(a - 1) + 100
     
     #Penalize very large jumps
     reg += np.log((t / last_t) + (last_t / t) - 1) / i       
