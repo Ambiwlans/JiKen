@@ -21,7 +21,7 @@ New Features:
 Efficiency:
 
 BUGS:
-    - occassional timeouts since changing procfile to preload
+    ? occassional timeouts since changing procfile to preload
     - can go to tests that don't exist (empty tests)
     - some tests vanish (why?)
     - session mismatch
