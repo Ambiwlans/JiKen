@@ -46,7 +46,8 @@ def sigmoid_cost_regularized(params, true_X, true_Y, last_t, last_a):
     reg = 0
     t, a = params    
     i = len(true_X)
-    
+    if i == 0: print("Shouldn't happen 15398")
+
     # Get predictions from our sigmoid    
     pred_Y = sigmoid(true_X, t, a, 1)
     
@@ -68,7 +69,7 @@ def sigmoid_cost_regularized(params, true_X, true_Y, last_t, last_a):
     #Regularization penalties
     
     #Clip OOB values
-    if t <= 0.00001: return 1000 * abs(t - 0.00001) + 100
+    if t <= 0.0001: return 1000 * abs(t - 0.0001) + 100
     if a < 1: return abs(a - 1) + 100
     
     #Penalize very large jumps
