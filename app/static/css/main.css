@@ -19,8 +19,29 @@ Muted grey #6c757d
 
 /* Test formatting
 -------------------------------------------------- */
+.studystats{
+    margin: 5px;
+}
+
+.good{
+    color: #267f00;
+}
+
+.bad{
+    color: #B40020;
+}
+
 .test_header{
     padding-left: 41px;
+}
+
+.btn#know, .btn#dunno, .btn#flip{
+    width: 10em;
+    font-size: 4vw; /*24px*/
+}
+
+.preest{
+    font-size: 4vw; /*24px*/
 }
 
 .help_btn {
@@ -80,6 +101,7 @@ Muted grey #6c757d
 
 .meaning {
     font-size: 4vw; /*24px*/
+    width: 100%;
 }
 
 .onyomi {
@@ -98,7 +120,7 @@ Muted grey #6c757d
 }
 
 @media screen and (min-width: 600px) {
-    .meaning {
+    .meaning, .preest, .btn#know, .btn#dunno, .btn#flip {
         font-size: 24px;
     }
     .onyomi {
@@ -111,6 +133,50 @@ Muted grey #6c757d
         font-size: 12px;
     }
 }
+
+/* Attention Anim */
+
+.preest0, .preest1, .preest2, .preest9  {
+  animation: .5s wiggle ease;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(-3deg);
+  }
+  20% {
+    transform: rotate(20deg);
+  }
+  40% {
+    transform: rotate(-15deg);
+  }
+  60% {
+    transform: rotate(5deg);
+  }
+  90% {
+    transform: rotate(-1deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+/*/ JUMP
+.btn--jump.is-active {
+  animation: .4s jump ease infinite alternate;
+}
+
+@keyframes jump {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+  }
+  100% {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(0,0,0,.1);
+  }
+}
+*/
 
 /* Results */
 
@@ -209,7 +275,7 @@ body {
 /* General Styling
 -------------------------------------------------- */
 
-.explanation {
+.explanation, .outro {
      font-size: 14px;
      line-height: 1;
 }
@@ -247,4 +313,12 @@ body {
 .title-sm {
     width: 90%;
     max-width: 200px;
+}
+
+.card-header {
+    padding: 0px;
+}
+
+.collapseFAQ {
+    /*text-align: left;*/
 }

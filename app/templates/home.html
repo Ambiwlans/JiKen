@@ -3,36 +3,63 @@
 	<div class="container text-center">
 		<a href="/"><img class="title-lg" src="{{ url_for('static', filename='img/jiken.png') }}"></a>
 		<p class="slogan">Test Your Kanji</p>
-		<br>
-		<p>JiKen is kanji test, but instead of blindly asking you a ton of random kanji, it uses machine learning 
-		to ask you only the kanji most relevant to you. After only 10 questions, it will estimate how many you know. 
-		Keep going to make the estimate more accurate!</p>
-		<p>When you are done, the test results will make a study list to help prepare for Kanken or JLPT. You can also 
-		bookmark your results to see how you improve as you study Japanese. Or share your results and challenge friends.</p>
 		
-		
+		<!-- Intro --> 
 		<br>
+		<p><b>JiKen</b> is a kanji test that uses machine learning to ask you only the kanji relevant to you. </p>
+		<p>After only 10 kanji, it guesses how many words you know. <i>Keep answering</i> for more accurate results!</p>
+		<p>Your Results page will have a study list to help prepare for Kanken or JLPT. You can bookmark them for later or share your results and challenge friends.</p>
+		<br>
+		
+        <!-- Notice --> 
+        <container><p><mark><b>WARNING:</b> Currently pulling some massive updates could be buggy for 3~4 days!</mark></p></container>
+        <!--container><p><mark><b>NEW:</b> <i>Study Mode</i> finds the best words for you to learn and drills you on them, building your vocabulary!</mark></p></container-->
+        
+		<!-- FAQ --> 
+        <container>
+        <div id="accordion"><div class="card">
+            <div class="card-header" id="FAQ"><button class="btn btn-link btn-lg btn-block" data-toggle="collapse" data-target="#collapseFAQ" aria-expanded="false" aria-controls="collapseFAQ">FAQ</button></div>
+        	<div id="collapseFAQ" class="collapse" aria-labelledby="FAQ" data-parent="#accordion"><div class="card-body">
+        			<dl><dt>How do I know if "I know"?</dt><dd> Set your own standards, the results will match accordingly. If you test for "I know a reading but not the meaning...." then that's what the results will represent.</dd></dl>
+        			<dl><dt>Who is this site for?</dt><dd> Everyone that knows some kanji! Japanese learners can use it to track their studies for JLPT/Kanken and native speakers can slake their curiosity and find out how many kanji they know. The results section with missed kanji gives everyone a chance to improve no matter what their level is. In general though, the algorithm works best for people that know 100~4000 kanji.</dd></dl>
+        			<dl><dt>How many kanji are there?</dt><dd> While there are many thousands in reality, this app looks at <i>only</i> 6753.</dd></dl>
+        			<dl><dt>How long are tests saved?</dt><dd> The server saves the last 10,000 tests for space reasons. If your old test record vanished, that means 10,000 tests have been taken since then.</dd></dl>
+        			<dl><dt>What about testing English Vocab?</dt><dd> Ok, maybe this one wasn't frequently asked. But if you are interested in a similar test for English, check out <a href="https://enken.herokuapp.com/">EnTest</a>. EnTest is actually a spinoff of this site!</dd></dl>
+        			<dl><dt>How does it work?</dt><dd> The system continuously reranks every single kanji from easy "犬" to hard "㐂". It asks questions to find out what difficulty kanji you know, how varied you are, and then presents an estimate. Check the <a href="https://github.com/Ambiwlans/KTest">Github</a> for more details.</dd></dl>
+        	</div></div>
+        </div></div>
+        </container>
+        <br>
+
+		<!-- Explanation --> 
 		<div class="explanation">
-		<p>Answer <b>10</b> to start. Keep going for a more accurate estimate!</p>
-    	<p>Controls: [←] Know, [→] Don't Know, [↓]/[TAP]&nbsp;Flip&nbsp;card</p>
-    	
-		<br>
-		<a id="start" class="btn btn-success btn-lg" role="btn" href="/test">START</a>
-		<br><br>		
-		<p>Please <a href="https://github.com/Ambiwlans/KTest">Report any bugs</a> you find!</p>
-		<p>You can find me on <a href="https://github.com/Ambiwlans/KTest">Github</a>, <a href="https://twitter.com/Ambiwlans1">twitter</a> or <a href="https://www.reddit.com/message/compose/?to=Ambiwlans">reddit</a>.</p> 
-		<p>If you really like this tool or like that there are no ads and want to <a class="donate" href="https://paypal.me/jikentest">paypal me a coffee</a>, it would be greatly appreciated.</p>
-		<p>Credit to the <a href="http://www.edrdg.org/wiki/index.php/KANJIDIC_Project">KANJIDIC</a> team for the kanji list/definitions.</p></div>
+    		<p>Answer <b>10</b> to start. Keep going for a more accurate estimate!</p>
+        	<p>Controls: <b>[←]</b> Know, <b>[→]</b> Don't Know, <b>[↓]</b>/<b>[TAP]</b>&nbsp;Flip&nbsp;card</p>
+        	<p>Study Mode reviews words you've missed as you go.</p>
+		</div>	
 		
+		<!-- Button Block --> 
+		<p>
+    		<a id="start_test" class="btn btn-success btn-lg" role="btn" href="/test?s=0">START TEST</a>
+    		<!--a id="start_study" class="btn btn-warning btn-lg" role="btn" href="/test?s=1">STUDY MODE (ALPHA)</a-->
+		</p>
+		
+		<!-- Outro -->	
+		<div class="outro">
+    		<br>		
+    		<p>Please <a href="https://github.com/Ambiwlans/KTest">Report any bugs</a> you find!</p>
+    		<p>You can find me on <a href="https://github.com/Ambiwlans/KTest">Github</a>, <a href="https://twitter.com/Ambiwlans1">twitter</a> or <a href="https://www.reddit.com/message/compose/?to=Ambiwlans">reddit</a>.</p> 
+    		<p>If you really like this tool or like that there are no ads and want to <a class="donate" href="https://paypal.me/jikentest">paypal me a coffee</a>, it would be greatly appreciated.</p>
+    		<p>Credit to the <a href="http://www.edrdg.org/wiki/index.php/KANJIDIC_Project">KANJIDIC</a> team for the kanji list/definitions.</p></div>
+    	</div>	
 	</div>
 	
     <script>
     document.onkeydown=function(e){
         if (e.which == 32){
             e.preventDefault();
-            window.location.href = $("#start").attr("href");
+            window.location.href = $("#start_test").attr("href");
         }
     }
     </script>
 {% endblock content %}
-
