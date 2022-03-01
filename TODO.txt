@@ -1,11 +1,11 @@
 ----
 REWORK from ENTest notes:
- - redo 2do
- - re-enable code on frontpage
- - refactor kanji->question meaning->answer etc.
  - later
      - add study mode
      - regularization / error bounds
+     - redo 2do
+     - re-enable code on frontpage
+     - refactor kanji->question meaning->answer etc.
  - ignored 
      - the cur_pred stuff for now
      - culm_pct ... don't need for kanji

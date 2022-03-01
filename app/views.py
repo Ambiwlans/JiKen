@@ -192,9 +192,9 @@ def test():
         
         # left half of graph if last question wrong, right half if correct (skew selection slightly away from the middle)
         if score == 1:
-            x = int(logit((random.random()**current_app.config['QUESTION_VARIABLITY'])/2, *res.x))
+            x = int(logit((random.random()**current_app.config['TEST_VARIABLITY'])/2, *res.x))
         elif score == 0:
-            x = int(logit((random.random()**current_app.config['QUESTION_VARIABLITY'])/(-2) + 1, *res.x))
+            x = int(logit((random.random()**current_app.config['TEST_VARIABLITY'])/(-2) + 1, *res.x))
         elif score == -1:
             x = int(logit(random.random(), *res.x))
         else:
