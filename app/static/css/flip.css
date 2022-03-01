@@ -4,6 +4,10 @@
 
 -------------------------------------------------- */
 
+.flipped {
+    overflow: auto;
+}
+
 .flipped .backside {
 -webkit-transform: rotateY(0deg);
 -moz-transform: rotateY(0deg);
@@ -30,6 +34,9 @@ transform: rotateY(180deg);
 transition: 1s;
 transform-style: preserve-3d;
 cursor: pointer;
+    display: grid;
+    max-height: 200px;
+    min-height: 150px;
 }
  
 .frontside, .backside {
@@ -37,25 +44,26 @@ cursor: pointer;
 -moz-backface-visibility: hidden;
 -ms-backface-visibility: hidden;
 backface-visibility: hidden;
--webkit-transition: 1s;
+-webkit-transition: -webkit-transform 1s;
 -webkit-transform-style: preserve-3d;
--moz-transition: 1s;
+-moz-transition: -moz-transform 1s;
 -moz-transform-style: preserve-3d;
--o-transition: 1s;
+-o-transition: -o-transform 1s;
 -o-transform-style: preserve-3d;
--ms-transition: 1s;
+-ms-transition: -ms-transform 1s;
 -ms-transform-style: preserve-3d;
-transition: 1s;
+transition: transform 1s;
 transform-style: preserve-3d;
-position: absolute;
-top: 0;
-left: 0;
+    grid-area: 1/1;
+
+
 }
- 
+
 .frontside {
 -webkit-transform: rotateY(0deg);
 -ms-transform: rotateY(0deg);
 z-index: 2;
+/* can use align-self top vert center the front face w/ tall back face */
 }
  
 .backside {
@@ -66,4 +74,4 @@ background: white;
 -ms-transform: rotateY(-180deg);
 transform: rotateY(-180deg);
 }
- 
+

@@ -24,7 +24,7 @@
         </script>
         <div class="col-xl-6">
         	<div class="test_header">
-            	<a href="/"><img class="title-sm" src="/static/img/jiken.png"></a>
+            	<a href="/"><img class="title-sm" src="/static/img/jiken.png" height="80px" width="200px"></a>
             	<a class="help_btn" data-toggle="modal" data-target="#helpModal"><i class="fas fa-question-circle fa-lg"></i></a>
         	</div>
         	<!-- Modal -->
@@ -45,7 +45,7 @@
                         <span class="my_rank" data-toggle="tooltip" data-placement="left" title="Kanji difficulty ranking">{{question.my_rank}}</span>
                     {% endif %}
                     <span class="top-center">
-                        <p class="count" data-toggle="tooltip" data-placement="top" title="How many questions you've answered so far">{{cnt + 1}}</p>
+                        <p class="count" data-toggle="tooltip" data-placement="top" title="How many you've answered so far">{% if cnt == 68 %}nice{% elif cnt == 419 %}blaze it{% else %}{{cnt + 1}}{% endif %}</p>
                     </span>
                     <span class="top-right">
                         {% if question.jlpt != 6 %}
@@ -61,20 +61,36 @@
                     <h1 class="meaning">{{question.meaning}}</h1>
                     <h4 class="onyomi">{{question.onyomi}}</h4>
                     <h4 class="kunyomi">{{question.kunyomi}}</h4>
-                    <a href="https://jisho.org/search/{{question.kanji}} %23kanji" class="more">...more</a>
+                    <a href="https://jisho.org/search/{{question.kanji}}%23kanji" class="more">...more</a>
                 </div>
             </div>
     
             <!-- Buttons -->    	
-    		<a class="btn btn-success btn-lg" id="know" role="btn" href="/test?a=1&q={{question.id}}">Know it</a>
-    		<a class="btn btn-danger btn-lg" id="dunno" role="btn" href="/test?a=0&q={{question.id}}">Don't Know</a>
-    		
+            <div class="btn-group front">
+        		<a class="btn btn-primary btn-lg" id="flip" role="btn" href="javascript:flip()">Flip <i class="fas fa-arrow-down"></i></a>
+            </div>
+            <div class="btn-group back" style="display: none">
+        		<a class="btn btn-success btn-lg" id="know" role="btn" href="/test?s={{s}}&a=1&q={{question.id}}"><i class="fas fa-arrow-left"></i> Know it</a>
+        		<a class="btn btn-danger btn-lg" id="dunno" role="btn" href="/test?s={{s}}&a=0&q={{question.id}}">Don't Know <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
     		
     		<!-- Predictions -->    	
         	{% if cnt >= 10 %}
+
+    	    <!-- Study Stats -->
+    		{% if s == 1 %}
+    		<div class="container studystats font-weight-bold">
+                <div class="row justify-content-md-center">
+                    <div class="col col-sm-2">Reviewing:<br>{{active_cnt}}</div>
+                    <div class="col col-sm-2">Learned:<br><div class="good">{{learned_cnt}}</div></div> 
+                    <div class="col col-sm-2">Dropped:<br><div class="bad">{{dropped_cnt}}</div></div>  
+                </div>
+            </div>
+        	{% endif %}
         	
         	<div class="container-fluid pred">
-            	<p class="pred-header">Estimates</p>
+            	<p class="pred-header">How Many You Know</p>
             	<span class="predrange"><span class="predrange predlower" data-toggle="tooltip" data-placement="left" title="lower bound">{{pred[2]}}</span>&nbsp; &nbsp; - &nbsp; &nbsp;</span>
                 	<span class="predmain" data-toggle="tooltip" data-placement="top" data-html="true" title="{{pred[0]}}">{{pred[0]}}</span>
             	<span class="predrange predupper" data-toggle="tooltip" data-placement="right" title="upper bound">&nbsp; &nbsp; - &nbsp; &nbsp;{{pred[1]}}</span>
@@ -102,27 +118,51 @@
     		
             {% else %}
             <div class="container pred">
-                <h4 class="preest">
-                {% if cnt == 0 %}
-                    Answer at least 10 to get an estimate...
-                {% elif cnt == 1 %}
-                    The more you answer, the more accurate the estimate...
-                {% elif cnt == 2 %}
-                    Tap the card to flip it and check your answers.
-                {% elif cnt == 3 %}
-                    "<em>I should have known that one!</em>" is "<em>Don't know</em>".
-                {% elif cnt == 4 %}
-                    The top left # shows what rank/difficulty the kanji is.
-                {% elif cnt == 5 %}
-                    The top right # shows the JLPT grade level and Jouyou grade level.
-                {% elif cnt == 6 %}
-                    On PC, try mousing over things for an explanation. 
-                {% elif cnt == 7 %}
-                    Controls: [←]&nbsp;Know, [→]&nbsp;Don't&nbsp;Know, [↓]/[TAP]&nbsp;Flip&nbsp;card
-                {% elif cnt == 8 %}
-                    Remember you can keep going after the initial result...
-                {% elif cnt == 9 %}
-                    Good Luck! 頑張って!
+                <h4 class="preest{{cnt}}">
+                {% if s == 1 %}
+                    {% if cnt == 0 %}
+                        Answer a few so we know where to focus.
+                    {% elif cnt == 1 %}
+                        Once your level is determined, you will start being drilled.
+                    {% elif cnt == 2 %}
+                        Miss a kanji twice and it is 'dropped'. Know it twice to add it to 'learned'.
+                    {% elif cnt == 3 %}
+                        You can always get your test results bottom right like a normal test.
+                    {% elif cnt == 4 %}
+                        Be Honest. "<em>I should have known that one!</em>" is "<em>Don't know</em>".
+                    {% elif cnt == 5 %}
+                        If the definition isn't enough, click 'more..' for the full dictionary page.
+                    {% elif cnt == 6 %}
+                        Try to learn 20 new kanji per session.
+                    {% elif cnt == 7 %}
+                        Use hotkeys to drill faster!
+                    {% elif cnt == 8 %}
+                        Controls: [←]&nbsp;Know, [→]&nbsp;Don't&nbsp;Know, [↓]/[TAP]&nbsp;Flip&nbsp;card
+                    {% elif cnt == 9 %}
+                        ファイト! When you've had enough, click "Results" in the bottom right.
+                    {% endif %}
+                {% else %}
+                    {% if cnt == 0 %}
+                        Answer <em>at least 10</em> to get an estimate...
+                    {% elif cnt == 1 %}
+                        The more you answer, the more accurate the estimate...
+                    {% elif cnt == 2 %}
+                        Tap the word to flip it and check your answers.
+                    {% elif cnt == 3 %}
+                        Be Honest. "<em>I should have known that one!</em>" is "<em>Don't know</em>".
+                    {% elif cnt == 4 %}
+                        The top left # shows what rank/difficulty the kanji is.
+                    {% elif cnt == 5 %}
+                        The # above your word shows how many you've answered.
+                    {% elif cnt == 6 %}
+                        The top right # shows the JLPT grade level and Jouyou grade level.
+                    {% elif cnt == 7 %}
+                        On PC, try mousing over things for an explanation. 
+                    {% elif cnt == 8 %}
+                        Controls: [←]&nbsp;Know, [→]&nbsp;Don't&nbsp;Know, [↓]/[TAP]&nbsp;Flip&nbsp;card
+                    {% elif cnt == 9 %}
+                        Good Luck! 頑張って!
+                    {% endif %}
                 {% endif %}
                 </h4>
             </div>
@@ -148,6 +188,7 @@
     {{super()}}
     <script type="text/javascript" src="{{url_for('static', filename='js/hotkeys.js')}}"></script>
     <script type="text/javascript" src="{{url_for('static', filename='js/tooltip.js')}}"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
     {%- include 'chart.js' -%}
     <script>
         $(".next").click(function() {

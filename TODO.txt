@@ -1,3 +1,13 @@
+----
+REWORK from ENTest notes:
+ - redo 2do
+ - re-enable code on frontpage
+ - refactor kanji->question meaning->answer etc.
+ - ignored 
+     - the cur_pred stuff for now
+     - culm_pct ... don't need for kanji
+     - scaler
+
 --------------------------
 TODO
 --------------------------
@@ -10,6 +20,7 @@ Rework:
     
 New Features:
     History
+        - translate history page
         - hide graph on old history page (no points on graph), or say data deleted due to age, gen graph w/ no points?
         - more history pg stats
             - switch to percentiles (need to add bins to metadata)

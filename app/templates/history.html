@@ -9,7 +9,7 @@
 		
 		<!-- Predictions -->    	    	
     	<div class="container pred">
-        	<p class="pred-header">Estimates</p>
+        	<p class="pred-header">Estimate</p>
         	<span class="predrange"><span class="predrange predlower" data-toggle="tooltip" data-placement="left" title="lower bound">{{pred[2]}}</span>&nbsp; &nbsp; - &nbsp; &nbsp;</span>
             	<span class="predmain" data-toggle="tooltip" data-placement="top" data-html="true" title="{{pred[0]}}">{{pred[0]}}</span>
         	<span class="predrange predupper" data-toggle="tooltip" data-placement="right" title="upper bound">&nbsp; &nbsp; - &nbsp; &nbsp;{{pred[1]}}</span>
@@ -64,15 +64,50 @@
                 You're also 'ready' for <b><a href="https://www.kanken.or.jp/">Kanken</a> level {{kk_recc}}</b>! (Kanken is notoriously brutal, make sure you are drawing these kanji in your sleep before trying!)
             {% endif %}
             </p>
-            <!-- Relevant kanji lists -->
+            
+            <!-- Flavour -->
+            <br>
+            <p><i>~~ {{["The word for 'but of course' 流石（さすが） combining 'flow' and 'rock' ... of course.",
+                    "Put together くノ一(female ninja) and you get 女 woman!",
+                    "The name 小鳥遊(small birds play) is actually read as 'たかなし' or 'no hawks'.",
+                    "The name 月見里(moon see village) is actually read as 'やまなし' or 'no mountain'.",
+                    "'The least common onyomi is びゅう' -toro",
+                    "鉄(steel) has the reading 'くろがね' black metal. 銀(silver)->'しろがね' white metal. 銅(copper)->'あかがね' red metal.",
+                    "娶る(めとる) means to marry and can be seen as woman/女/め +　take/取/とる.",
+                    "Some kanji can be stacked in different ways. 鵞=鵝. 松=枩. 鯊=沙魚.",
+                    "The kanji for love is 好 woman/女 and child/子. But 3 women 姦 means wicked/noisy. And a woman with a rock/石 is jealous/妬!",
+                    "If anyone calls your house/家 a pigsty, they might be right. 豕 is the radical for pig and it is right in the middle!",
+                    "Dark/暗 has two suns/日 in it!",
+                    "Tease/なぶる can be written as 嫐る or 嬲る! (女/woman, 男/man)"] 
+                | random}} ~~</i></p>
+            
+            <!-- Histogram 
+            <br>
+            <h3 class="text-left">How you compare to other users:</h3>
+            <div class="chart-container"><canvas id="histoChart"></canvas></div>
+            <p><i>(You fall in the green bar)</i></p> -->
+            
+            <!-- Study list -->
             {% if wronganswers|length > 0 %}
-                <h3 class="text-left">Kanji to review:</h3>
-            	<h1>
-        		{% for q in wronganswers[:10] %}
-                    <a href="https://jisho.org/search/{{q[1]}} %23kanji" class="review">{{q[1]}}</a>{{ " - " if not loop.last }} 		
-        		{% endfor %}
-        		</h1>	
+            <h3 class="text-left">Words you missed:</h3>
+            <table id="missed_words_table" class="table">
+                <thead><tr>
+                    <th>Difficulty&nbsp;#</th>
+                    <th>字</th>
+                    <th>Definition</th>
+                </tr></thead>
+                <tbody>
+                    {% for q in wronganswers %}
+                    <tr>
+                        <td class="mwt_numb">{{(q[0])|int}}</td>
+                        <td class="mwt_q"><a href="https://jisho.org/search/{{q[1]}}%23kanji" class="review" target="_blank" rel="noopener noreferrer">{{q[1]}}</a></td>
+                        <td class="mwt_def">{{q[2]}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             {% endif %}
+            
             <br>
             <p>Tip: Be sure to bookmark this page to compare to the next time you take a test</p>
         </div>
@@ -100,7 +135,29 @@
 
 {% block scripts %}
     {{super()}}
-    {%- include 'chart.js' -%}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+	{%- include 'chart.js' -%}
+    
+
+	<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#missed_words_table').DataTable( {
+                "paging":   true,
+                "lengthChange": false,
+                "pageLength": 10,
+                "ordering": true,
+                "info":     false,
+                "searching": false,
+                "order": [[0, "asc" ]],
+                columnDefs: [{
+                    targets: 0,
+                    render: $.fn.dataTable.render.number(',', '.', 0, '#')
+                }]
+            } );
+        } );
+    </script>
 {% endblock %}
 
 

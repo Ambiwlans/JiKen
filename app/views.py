@@ -274,7 +274,7 @@ def history(id):
     rightanswers = oldquestions[oldquestions['score']==1]
     rightanswers = [(r.my_rank, r.kanji) for i, r in rightanswers.iterrows()]
     wronganswers = oldquestions[oldquestions['score']==0]
-    wronganswers = [(r.my_rank, r.kanji) for i, r in wronganswers.iterrows()]
+    wronganswers = [(r.my_rank, r.kanji, r.meaning) for i, r in wronganswers.iterrows()]
     
     try:
         cnt = data['TestLog'].number_of_questions
