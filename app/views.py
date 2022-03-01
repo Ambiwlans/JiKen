@@ -64,6 +64,8 @@ def forceupdate():
         return("update success")
     return render_template('home.html')
 
+### GENERAL ROUTES
+
 @bp.route("/test")
 def test():
     
@@ -334,6 +336,7 @@ def history(id):
     return  render_template('history.html', id = id, \
         a = data['TestLog'].a, t = data['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred,\
         curtest = curtest, cnt = cnt, \
+        hist = list(zip(pd.read_msgpack(current_app.config['SESSION_REDIS'].get('Hist')).index,pd.read_msgpack(current_app.config['SESSION_REDIS'].get('Hist')))), \
         date = data['TestLog'].start_time, \
         jlpt_recc = jlpt_recc, kk_recc = kk_recc, \
         avg_answered = int(current_app.config['SESSION_REDIS'].get('avg_answered') or 0), \

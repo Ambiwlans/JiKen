@@ -81,11 +81,11 @@
                     "Tease/なぶる can be written as 嫐る or 嬲る! (女/woman, 男/man)"] 
                 | random}} ~~</i></p>
             
-            <!-- Histogram 
+            <!-- Histogram -->
             <br>
             <h3 class="text-left">How you compare to other users:</h3>
             <div class="chart-container"><canvas id="histoChart"></canvas></div>
-            <p><i>(You fall in the green bar)</i></p> -->
+            <p><i>(You fall in the green bar)</i></p>
             
             <!-- Study list -->
             {% if wronganswers|length > 0 %}
@@ -137,7 +137,7 @@
     {{super()}}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
 	{%- include 'chart.js' -%}
-    
+    {%- include 'hist.js' -%}
 
 	<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
