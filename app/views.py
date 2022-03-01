@@ -35,7 +35,8 @@ import datetime
 
 @bp.errorhandler(500)
 def server_error(e):
-    return "There was an internal server error. Contact <a href='https://github.com/Ambiwlans' target='_blank'>Ambiwlans</a> or return to the <a href='/'>home page</a>.", 500
+    return render_template('error.html', err = "500", \
+        msg = "Your test timed out or there was an internal server error. Contact <a href='https://github.com/Ambiwlans' target='_blank'>Ambiwlans</a> or return to the <a href='/'>home page</a>.")
 
 @bp.errorhandler(404)
 def notfound_error(e):
@@ -46,6 +47,19 @@ def notfound_error(e):
 def home():
     return render_template('home.html')
 
+### ADMIN ROUTES
+
+@bp.route("/adminpanel")
+def adminpanel():
+    if request.args.get('p') != current_app.config['SECRET_KEY']:    
+        return render_template('home.html')
+    recent_t_ids = db.session.query(TestLog.id).order_by(TestLog.id.desc()).limit(5).all() or 0
+    recent_t_ids = [r for r, in recent_t_ids]
+    return render_template('admin.html', p = request.args.get('p'), \
+        hist = list(zip(pd.read_msgpack(current_app.config['SESSION_REDIS'].get('Hist')).index,pd.read_msgpack(current_app.config['SESSION_REDIS'].get('Hist')))), \
+        pred = [int(current_app.config['SESSION_REDIS'].get('avg_known') or 0)],
+        recent_t_ids = recent_t_ids)
+    
 @bp.route("/forcemetaupdate")
 def forcemetaupdate():
     print("Force metaupdate attempt")
