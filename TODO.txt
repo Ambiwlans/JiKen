@@ -3,10 +3,13 @@ REWORK from ENTest notes:
  - redo 2do
  - re-enable code on frontpage
  - refactor kanji->question meaning->answer etc.
+ - later
+     - add study mode
+     - regularization / error bounds
  - ignored 
      - the cur_pred stuff for now
      - culm_pct ... don't need for kanji
-     - scaler
+     - scaler (could add and set to 1 but meh.)
 
 --------------------------
 TODO

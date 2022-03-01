@@ -29,6 +29,9 @@ from sqlalchemy.sql import exists
 import datetime
 from app.utils import sigmoid#, logit
     
+from scipy.integrate import quad
+from math import ceil
+
 #DB
 from app import db
 
@@ -91,13 +94,21 @@ def update_TestQuestionLogs(app):
                 db.session.add(addTest)
                 db.session.commit()
                 
-                #Bulk dump the question log
+                #Delete old questions first to avoid orphaned questions (delete 1000 more than the max to avoid frequent clears)
+                cutoff = max(db.session.query(QuestionLog.id).count() - current_app.config['MAX_QUESTIONS_LOGGED'], 0)
+                if cutoff > 0:
+                    cutoff_id = db.session.query(QuestionLog).order_by(QuestionLog.id)[cutoff + 1000].id
+                    db.session.query(QuestionLog).filter(QuestionLog.id < cutoff_id).delete()
+                    print(str(cutoff) + " old questions deleted")
+        
+                #Bulk dump the question log (only save MAX_QUESTIONS_LOGGED_EACH per test)
                 db.engine.execute(
                         QuestionLog.__table__.insert(),
                         [{"testlogid" : addTest.id,
                           "testmaterialid" : q.testmaterialid,
-                          "score" : q.score} for i, q in data['QuestionLog'].iterrows()])
+                          "score" : q.score} for i, q in data['QuestionLog'].iterrows()][-current_app.config['MAX_QUESTIONS_LOGGED_EACH']:])
                 db.session.commit()
+                
                 
                 print("Upped Test #: " + str(addTest.id) + "-" + str(data['TestLog']['id']) + " with " + str(len(data.get('QuestionLog', 0))) + " questions.")
                       
@@ -195,6 +206,16 @@ def update_meta(app):
         
         db.session.commit()
         
+        #Calculate Histogram
+        # bin count from config, ensure that the end result rounds to nice graphable 100s
+        binsize = (ceil((current_app.config['MAX_X'] / current_app.config['HIST_BINS'])/100)*100)
+        bins = list(np.arange(0, current_app.config['MAX_X'] + binsize, binsize))
+        testlogs = [[t[0],a[0]] for t,a in zip(db.session.query(TestLog.t), db.session.query(TestLog.a))]
+        ests = [quad(sigmoid, 0, current_app.config['MAX_X'], args=(*x,1))[0] for x in testlogs]
+        current_app.config['SESSION_REDIS'].set('Hist', pd.cut(ests, bins, include_lowest=True,labels=bins[0:-1]).value_counts().to_msgpack(compress='zlib'))
+#        print(pd.read_msgpack(current_app.config['SESSION_REDIS'].get('Hist')))
+  
+    
         print("Successfully Updated Meta vals")
         print("A = " + str(int(current_app.config['SESSION_REDIS'].get('default_kanji'))))
         print("T = " + str(float(current_app.config['SESSION_REDIS'].get('default_tightness'))))
@@ -233,16 +254,18 @@ def update_meta(app):
 def clear_old_logs(app):
     with app.app_context():
         print("--------LOG CLEANUP------------")
-        #Delete old questions first to avoid orphaned questions
+        #Delete old questions first to avoid orphaned questions (delete 1000 more than the max to avoid frequent clears)
         cutoff = max(db.session.query(QuestionLog.id).count() - current_app.config['MAX_QUESTIONS_LOGGED'], 0)
-        cutoff_id = db.session.query(QuestionLog).order_by(QuestionLog.id)[cutoff].id
-        db.session.query(QuestionLog).filter(QuestionLog.id < cutoff_id).delete()
-        print(str(cutoff) + " old questions deleted")
+        if cutoff > 0:
+            cutoff_id = db.session.query(QuestionLog).order_by(QuestionLog.id)[cutoff + 1000].id
+            db.session.query(QuestionLog).filter(QuestionLog.id < cutoff_id).delete()
+            print(str(cutoff) + " old questions deleted")
         
         cutoff = max(db.session.query(TestLog.id).count() - current_app.config['MAX_TESTS_LOGGED'], 0)
-        cutoff_id = db.session.query(TestLog).order_by(TestLog.id)[cutoff].id
-        db.session.query(TestLog).filter(TestLog.id < cutoff_id).delete()
-        print(str(cutoff) + " old tests deleted")
+        if cutoff > 0:
+            cutoff_id = db.session.query(TestLog).order_by(TestLog.id)[cutoff + 1000].id
+            db.session.query(TestLog).filter(TestLog.id < cutoff_id).delete()
+            print(str(cutoff) + " old tests deleted")
         
         db.session.commit()
         
