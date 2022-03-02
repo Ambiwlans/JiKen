@@ -86,6 +86,11 @@ def test():
     ###
     ### Log Answer/Score
     ###
+
+    study = request.args.get('s')
+    if study is None: 
+        study = 0
+    study = int(study)
     
     score = request.args.get('a')
     testmaterialid = request.args.get('q')
@@ -111,19 +116,58 @@ def test():
         session['QuestionLog'] = pd.DataFrame(columns=['testmaterialid','score'], dtype='int64')
         session['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
         
+        if study:
+            session['Study'] = 1
+            session['Study_List'] = pd.DataFrame(columns=['testmaterialid', 'times_right','times_wrong'], dtype='int64')
+            session['learned_cnt'] = 0
+            session['dropped_cnt'] = 0
+        else:
+            session['Study'] = 0
+
         current_app.config['SESSION_REDIS'].incr('cur_testlog_id')
     elif int(score) == -1:
         # Flag to just continue a test
         score = int(score)
+        study = session['Study']
         #print("Continuing test")
         pass
     else:
         # Got an answer, log it (to redis session)
         score = bool(int(score))
-        if (session['QuestionLog']['testmaterialid'].astype('int') == testmaterialid).any():
-            session['QuestionLog'][session['QuestionLog']['testmaterialid'].astype('int') == testmaterialid].score = score
+#        print(f"logging: {testmaterialid}")
+#        print(session['QuestionLog'])
+#        print(session['Study_List'])
+        if testmaterialid is None: 
+            print("Error. Got answer with no question.")
+            abort(500)
         else:
-            session['QuestionLog'] = session['QuestionLog'].append({'testmaterialid' : testmaterialid, 'score' : score}, ignore_index=True)
+            testmaterialid = int(testmaterialid)
+        
+        # In study mode, log new questions and track the study list
+        if study:
+            if (session['QuestionLog']['testmaterialid'].astype('int') == testmaterialid).any():
+                if (session['Study_List']['testmaterialid'].astype('int') == testmaterialid).any():
+                    if score:
+                        session['Study_List'].loc[session['Study_List']['testmaterialid'].astype('int') == testmaterialid, 'times_right'] += 1
+                        if session['Study_List'][session['Study_List']['testmaterialid'].astype('int') == testmaterialid].iloc[0].times_right >= int(current_app.config['MAX_TIMES_RIGHT']):
+                           session['learned_cnt'] += 1
+                           session['Study_List'].drop(session['Study_List'][session['Study_List']['testmaterialid'].astype('int') == testmaterialid].index, inplace=True)
+                    else:
+                        session['Study_List'].loc[session['Study_List']['testmaterialid'].astype('int') == testmaterialid, 'times_wrong'] += 1
+                        if session['Study_List'][session['Study_List']['testmaterialid'].astype('int') == testmaterialid].iloc[0].times_wrong >= int(current_app.config['MAX_TIMES_WRONG']):
+                           session['dropped_cnt'] += 1
+                           session['Study_List'].drop(session['Study_List'][session['Study_List']['testmaterialid'].astype('int') == testmaterialid].index, inplace=True)
+            else:
+                session['QuestionLog'] = session['QuestionLog'].append({'testmaterialid' : testmaterialid, 'score' : score}, ignore_index=True)
+                if not score:
+                    session['Study_List'] = session['Study_List'].append({'testmaterialid' : testmaterialid, 'times_right' : 0, 'times_wrong' : 0}, ignore_index=True)            
+        # In test mode, log questions, for dupes, overwrite last answer
+        else:
+            if (session['QuestionLog']['testmaterialid'].astype('int') == testmaterialid).any():
+                session['QuestionLog'][session['QuestionLog']['testmaterialid'].astype('int') == testmaterialid].score = score
+            else:
+                session['QuestionLog'] = session['QuestionLog'].append({'testmaterialid' : testmaterialid, 'score' : score}, ignore_index=True)
+
         
     ###
     ### Handle Data, Prep output
@@ -147,7 +191,15 @@ def test():
     xdata = []
     ydata = []
     pred = [0,0,0]
+    studyword = 0
     
+    active_cnt = 0
+    question_variability = current_app.config['TEST_VARIABLITY']
+    if study: 
+        active_cnt = len(session['Study_List'])
+        if len(history) > 15:
+            question_variability = current_app.config['STUDY_VARIABLITY']
+
     if score is None:
         #For the first question, ask a random kanji (for data gathering purposes)
         newquestion = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')).sample().iloc[0]
@@ -167,7 +219,7 @@ def test():
         
         p0 = [session['TestLog'].t, session['TestLog'].a]       # use last LOBF as starting point for new one
         
-        res = minimize(sigmoid_cost_regularized, p0, args=(xdata, ydata, p0[0], p0[1]),method="Nelder-Mead")
+        res = minimize(sigmoid_cost_regularized, p0, args=(xdata, ydata, p0[0], p0[1], float(current_app.config['SESSION_REDIS'].get('default_t') or 0.005)),method="Nelder-Mead")
             #,options={'eps': [0.0001,1]})#, bounds=[(0,10),(1,7000)])
         
         session['TestLog'].a = float(res.x[1])
@@ -190,36 +242,57 @@ def test():
             
         # Select next question
         
-        # left half of graph if last question wrong, right half if correct (skew selection slightly away from the middle)
-        if score == 1:
-            x = int(logit((random.random()**current_app.config['TEST_VARIABLITY'])/2, *res.x))
-        elif score == 0:
-            x = int(logit((random.random()**current_app.config['TEST_VARIABLITY'])/(-2) + 1, *res.x))
-        elif score == -1:
-            x = int(logit(random.random(), *res.x))
-        else:
-            # Score not given, fail gracefully
-            abort(500)
-        
-        if x < 1 : x = 1
-        if x > current_app.config['MAX_X']: x = current_app.config['MAX_X']
-
-        # don't ask repeats
-        searchkey = 1
-        while (history['my_rank']==x).sum() or x < 1 or x > current_app.config['MAX_X']:
-            x += searchkey
-            
-            if searchkey > 0:
-                searchkey = -searchkey - 1
-            else:
-                searchkey = -searchkey + 1
-            
-            if x > current_app.config['MAX_X'] and x + searchkey < 1: 
-                print("Test # " + str(session['TestLog'].id) + " asked every question!")
-                # Go to history page when a user has completed every question... wowza
-                return "Holy crap!! You actually answered every kanji. I don't really expect anyone to maneage this so I don't have anything ready.... uhh, check your <a href='/t/"+session['TestLog'].id+"'>results</a> and tweet them to me! Damn... good job!"
+        if active_cnt > random.randrange(0, int(current_app.config['TGT_ACTIVE'])):
+            x_id = int(session['Study_List'].iloc[random.randrange(0, active_cnt)]['testmaterialid'])
+            print(x_id)
+            newquestion = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))[pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))['id']==x_id].iloc[0]
+            studyword = 1
+        else:     
+            # Try a few rerolls if you land on a repeat
+            rerolls = 0
+            while True:
+                rerolls += 1
+                # left half of graph if last question wrong, right half if correct (skew selection slightly away from the middle)
+                if score == 1:
+                    x = int(logit((random.random()**question_variability)/2, *res.x))
+                elif score == 0:
+                    x = int(logit((random.random()**question_variability)/(-2) + 1, *res.x))
+                elif score == -1:
+                    x = int(logit(random.random(), *res.x))
+                else:
+                    # Score not given, fail gracefully
+                    abort(500)
                 
-        newquestion = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))[pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))['my_rank']==x].iloc[0]
+                oob = False
+                if x < 1 : 
+                    x = 1
+                    oob = True
+                if x > current_app.config['MAX_X']: 
+                    x = current_app.config['MAX_X']
+                    oob = True
+                
+                # if the question is new (hasn't been answered) and in-bounds, or we've tried random 3x, then move on
+                if ((history['my_rank']==x).sum() == 0 and not oob) or rerolls > current_app.config['OOB_REROLLS']:               
+                    break
+            
+            # Scan through if you are still on a repeat
+            searchkey = 1
+            while ((history['my_rank']==x).sum())\
+                    or x < 1 or x > current_app.config['MAX_X']:
+                
+                x += searchkey
+                
+                if searchkey > 0:
+                    searchkey = -searchkey - 1
+                else:
+                    searchkey = -searchkey + 1
+                
+                if x > current_app.config['MAX_X'] and x + searchkey < 1: 
+                    print("Test # " + str(session['TestLog'].id) + " asked every question!")
+                    # Go to history page when a user has completed every question... wowza
+                    return "Holy crap!! You actually answered every kanji.... I don't really expect anyone to maneage this so I don't have anything ready.... uhh, check your <a href='/t/"+session['TestLog'].id+"'>results</a> and tweet them to me! Damn... good job!"
+        
+            newquestion = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))[pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))['my_rank']==x].iloc[0]                
 
     
     #Find a sensible max x value
@@ -228,10 +301,18 @@ def test():
     #Refresh the timeout flag
     session['last_touched'] = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
     
-    print("Test #" + str(session['TestLog'].id) + ": A = " + str(session['TestLog'].a) + ",  T = " + str(session['TestLog'].t) + ",  # = " + str(len(session['QuestionLog'])) + " Kanji#: " + str(newquestion['my_rank']))
-
-    return render_template('test.html', question = newquestion, cnt = len(history), id = session['TestLog'].id, \
-        a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred)
+    if studyword:
+        print(f"Review! Active= {active_cnt}, Learned = {session['learned_cnt']}, Dropped = {session['dropped_cnt']}")
+    print(f"Test #{session['TestLog'].id}, A = {session['TestLog'].a}, T = {session['TestLog'].t} ||  #{len(session['QuestionLog'])}, Rank#: {newquestion['my_rank']}, 字: {newquestion['kanji']}")
+    
+    if study:
+        return render_template('test.html', s = study, question = newquestion, cnt = len(history), id = session['TestLog'].id, \
+            a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred, \
+            studyword = studyword, active_cnt = active_cnt, learned_cnt = session['learned_cnt'], dropped_cnt = session['dropped_cnt'])
+    else:
+        return render_template('test.html', s = study, question = newquestion, cnt = len(history), id = session['TestLog'].id, \
+            a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred)
+    
 
 @bp.route("/t/<id>")
 @bp.route("/history/<id>")

@@ -42,7 +42,7 @@ def logit(y, t, a):
         
         # 0<a<6000
         # ~400 is average but this value need not be particularly penalized
-def sigmoid_cost_regularized(params, true_X, true_Y, last_t, last_a):
+def sigmoid_cost_regularized(params, true_X, true_Y, last_t, last_a, default_t):
     reg = 0
     t, a = params    
     i = len(true_X)

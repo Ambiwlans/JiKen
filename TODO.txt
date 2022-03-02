@@ -1,11 +1,10 @@
 ----
-REWORK from ENTest notes:
+REWORK from ENTest notes: 
  - later
-     - add study mode
      - regularization / error bounds
      - redo 2do
-     - re-enable code on frontpage
      - refactor kanji->question meaning->answer etc.
+     - add yomi to the history page review
  - ignored 
      - the cur_pred stuff for now
      - culm_pct ... don't need for kanji
