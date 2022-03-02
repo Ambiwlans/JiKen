@@ -1,6 +1,10 @@
 ----
 REWORK from ENTest notes: 
  - later
+     - track study mode usage
+     - bug - backside is too wide sometimes.
+     - ignore overly high missed words in study mode
+     - fix printout to show kanji properly
      - regularization / error bounds
      - redo 2do
      - refactor kanji->question meaning->answer etc.

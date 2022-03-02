@@ -104,29 +104,20 @@ Muted grey #6c757d
     width: 100%;
 }
 
-.onyomi {
+.onyomi, .kunyomi {
     font-size: 3vw; /*16px*/
-}
-
-.kunyomi {
-    font-size: 3vw; /*16px*/
+    width: 50%;
 }
 
 .more {
     font-size: 3vw; /*12px*/
-    float: right;
-    right: 5px;
-    bottom: 5px;
 }
 
 @media screen and (min-width: 600px) {
     .meaning, .preest, .btn#know, .btn#dunno, .btn#flip {
         font-size: 24px;
     }
-    .onyomi {
-        font-size: 16px;
-    }
-    .kunyomi {
+    .onyomi, .kunyomi {
         font-size: 16px;
     }
     .more {
