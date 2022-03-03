@@ -1,6 +1,35 @@
 {% block chart %}
 <script>
 
+const verticalLinePlugin = {
+    renderVerticalLine: function (chartInstance, xVal, text) {
+        const yscale = chartInstance.scales['y-axis-0'];
+        const xscale = chartInstance.scales['x-axis-0'];
+        const context = chartInstance.chart.ctx;
+        const lineLeftOffset = xscale.getPixelForValue(xVal);
+        
+        // render vertical line
+        context.beginPath();
+        context.strokeStyle = '#267f00';
+        context.moveTo(lineLeftOffset, yscale.top);
+        context.lineTo(lineLeftOffset, yscale.bottom);
+        context.stroke();
+        
+        // write label
+        context.fillStyle = "#267f00";
+        context.textAlign = 'center';
+        context.fillText(text, lineLeftOffset, (yscale.bottom - yscale.top) / 2 + yscale.top);
+    },
+    
+    afterDatasetsDraw: function (chart, easing) {
+        if (chart.config.lineAtxVal) {
+            chart.config.lineAtxVal.forEach(item => this.renderVerticalLine(chart, item[0], item[1]));
+        }
+    }
+};
+
+Chart.plugins.register(verticalLinePlugin);
+          
 var prediction =  makePrediction();
 var ctx = document.getElementById('predChart').getContext('2d');
 var myLineChart = new Chart(ctx, {
@@ -32,6 +61,7 @@ var myLineChart = new Chart(ctx, {
             pointRadius: 0
         }]
     },
+    lineAtxVal: [[80,"    Gr1"],[240,"    Gr2"],[440,"    Gr3"],[640,"    Gr4"],[440,"    Gr5"],[825,"    Gr6"],[1026,"    教育"],[2136,"    常用"]],
     options: {
         responsive: true,
         maintainAspectRatio: false,
