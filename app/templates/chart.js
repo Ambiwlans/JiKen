@@ -61,7 +61,7 @@ var myLineChart = new Chart(ctx, {
             pointRadius: 0
         }]
     },
-    lineAtxVal: [[80,"    Gr1"],[240,"    Gr2"],[440,"    Gr3"],[640,"    Gr4"],[440,"    Gr5"],[825,"    Gr6"],[1026,"    教育"],[2136,"    常用"]],
+    lineAtxVal: [[80,"　 　Gr1"],[240,"　 　Gr2"],[440,"　 　Gr3"],[640,"　 　Gr4"],[440,"　 　Gr5"],[825,"　 　Gr6"],[1026,"　 　教育"],[2136,"　 　常用"]],
     options: {
         responsive: true,
         maintainAspectRatio: false,
