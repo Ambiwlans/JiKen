@@ -100,7 +100,7 @@
                     <th>Grade</th>
                     <th>JLPT</th>
                     <th>漢検</th>
-                    <th> </th>
+                    <th>Meaning</th>
                 </tr></thead>
                 <tbody>
                     {% for q in wronganswers %}
@@ -173,6 +173,10 @@
                 columnDefs: [{
                     targets: 0,
                     render: $.fn.dataTable.render.number(',', '.', 0, '#')
+                },
+                {
+                    targets: [2,3],
+                    width: "8em"
                 },
                 {
                     targets: hiddencols,
