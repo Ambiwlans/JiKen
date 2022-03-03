@@ -14,9 +14,11 @@ Front end:
     ? Language setting   
     
 History:
-    + study list export to anki
-    - breakdown by levels (JLPT,N3) ... show missed kanji, and estimated stats (loading bar? 92/120)
-        - just add columns to the list?
+    + study list export to anki, pdf, print
+        https://datatables.net/extensions/buttons/examples/split/dataTables.html
+    - prettier breakdown by levels (JLPT,N3)
+        ? show estimated score per grade (loading bar? 92/120)
+        ? add study buttons for 'by grade study'
         - Add lines on results graph for Grade levels and JLPT levels
         - circle graphs for levels? meh.
     ? time spent per question, total

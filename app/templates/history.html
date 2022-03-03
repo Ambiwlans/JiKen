@@ -95,6 +95,11 @@
                 <thead><tr>
                     <th>Difficulty&nbsp;#</th>
                     <th>字</th>
+                    <th>音</th>
+                    <th>訓</th>
+                    <th>Grade</th>
+                    <th>JLPT</th>
+                    <th>漢検</th>
                     <th> </th>
                 </tr></thead>
                 <tbody>
@@ -102,7 +107,13 @@
                     <tr>
                         <td class="mwt_numb">{{(q[0])|int}}</td>
                         <td class="mwt_q"><a href="https://jisho.org/search/{{q[1]}}%23kanji" class="review" target="_blank" rel="noopener noreferrer">{{q[1]}}</a></td>
-                        <td class="mwt_def">{{q[2]}}[{{q[3]}} - {{q[4]}}]</td>
+                        <td class="mwt_on">{{q[3]}}</td>
+                        <td class="mwt_kun">{{q[4]}}</td>
+                        <td class="mwt_gr">{{q[5]}}</td>
+                        <td class="mwt_jlpt">{{q[6]}}</td>
+                        <td class="mwt_kanken">{{q[7]}}</td>
+                        <td class="mwt_def">{{q[2]}}</td>
+                        
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -142,19 +153,34 @@
 
 	<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
     <script>
         $(document).ready(function() {
+            if (screen.width < 500) {hiddencols=[2,3,4,5,6];}
+            else {hiddencols=[4,5,6];}
+            
             $('#missed_words_table').DataTable( {
+                dom: 'Brtp',
                 "paging":   true,
                 "lengthChange": false,
                 "pageLength": 10,
                 "ordering": true,
+                "buttons": true,
                 "info":     false,
                 "searching": false,
                 "order": [[0, "asc" ]],
                 columnDefs: [{
                     targets: 0,
                     render: $.fn.dataTable.render.number(',', '.', 0, '#')
+                },
+                {
+                    targets: hiddencols,
+                    visible: false
+                }],
+                buttons: [{
+                    extend: 'columnsToggle',
+                    columns: hiddencols
                 }]
             } );
         } );
