@@ -1,91 +1,83 @@
-----
-REWORK from ENTest notes: 
- - later
-     - track study mode usage
-     - ignore overly high missed words in study mode
-     - fix printout to show kanji properly
-     - regularization / error bounds
-     - redo 2do
-     - refactor kanji->question meaning->answer etc.
-     - add yomi to the history page review
- - ignored 
-     - the cur_pred stuff for now
-     - culm_pct ... don't need for kanji
-     - scaler (could add and set to 1 but meh.)
+###########
+CUR
+########### 
+     
+- ignore overly high missed words in study mode
+- regularization / error bounds
++ add yomi to the history page review (same col)
+     
++++++++++++
+MAIN
++++++++++++
 
---------------------------
-TODO
---------------------------
-Curr:
-    - History breakdown by levels (JLPT,N3) ... show missed kanji, and estimated stats (loading bar? 92/120)
+Front end:
+    ? more details on error page
+    ? Language setting   
     
-Code:
-    
-Rework:
-    
-New Features:
-    History
-        - translate history page
-        - hide graph on old history page (no points on graph), or say data deleted due to age, gen graph w/ no points?
-        - more history pg stats
-            - switch to percentiles (need to add bins to metadata)
-            	- could even make into graphs (you are here)         
-            ? time spent per question, total
-            - max questions answered
+History:
+    + study list export to anki
+    - breakdown by levels (JLPT,N3) ... show missed kanji, and estimated stats (loading bar? 92/120)
+        - just add columns to the list?
+        - Add lines on results graph for Grade levels and JLPT levels
+        - circle graphs for levels? meh.
+    ? time spent per question, total
+    ? links to other tests with same IP. Use a cookie?
 
+Study Mode:
+    + setting for a max grade or jlpt level
+    
+Code Refactoring:
+    ? kanji->question meaning->answer etc.
+    + get rid of magic numbers, switch to config variables, clean CSS, redo comments
+    ? trim the req list further
+    ? shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')? (more readable)
+    - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
         
-Efficiency:
-
-BUGS:
-    ? occassional timeouts since changing procfile to preload
-    - can go to tests that don't exist (empty tests)
-    - some tests vanish (why?)
-    - session mismatch
-        - related to resetting the server while tests are active gives the wrong number? (check where/when the 'current ID' number is pulled from)
-        - on duplicate ID found, check contents if matched, or skip that number and attempt save again
+DB:
+    ? track user devices in testlog (better user guessing)
+    - track study mode usage
+    ? save est result to testlog (mildly more accurate than saving a,t)
     
 PR:
     - basic seo
     - New reddit thread
     - tweets, msg some teaching sites to see if they're interested
+    ? medium blog post about it ... or just stuff into the github. Or add an about section?
+    
+BUGS:
 
-Major Extensions:
-    - convert to android app    
-    - prep for other card sets (ENG, J->E)
+Misc:
+            
+BOTH/CORE:
+    + review git log to find changes to push across
 
---------------------------
-Low Priority
---------------------------
++++++++++++
+LATER/Low Prio
++++++++++++
 
-Code:
-    - get rid of magic numbers, switch to config variables
-    - shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')? (more readable)
+- convert to android app
+? jp vocab vers
+        
++++++++++++
+MAYBE
++++++++++++
+
+From EN:
+     ? the cur_pred stuff for now
+     ? culm_pct ... don't need for kanji
+     ? scaler (could add and set to 1 but meh.)
+     
+History:
+    ? translate history page (not sure how it'd work for guests that don't speak jpns)
+    ? hide graph on old history page (no points on graph), or say data deleted due to age, gen graph w/ no points?
 
 Tweaks:
+    ? get rid of question log ids
+    ? clientside the math
     ? redo regularization
         ? change jump size penalty from regularization to just averaging
         ? make steepness penalties exponential not logarithmic (loss should explode)
         ? switch to a slightly better ML algorithm (model family) allowing assymetries (non-sigmoid?)
-    ? switch away from using params? ... would stop refresh bugs
-
-New Features:
-    - error screen (DB down, other) - contact info, apologies, redirect
-    ? links to other tests with same IP. Use a cookie?
-    ? add a 'drills' feature for kanji missed on a test
-    - extend hist pg kanji suggestions - tooltips, categories
-    - track user devices in testlog
-    ? about section (other than the github)
-            
-Efficiency:
-    ? get rid of question log ids
-    ? clientside the math
-    - trim the req list further?
-    ? lower # of calls to redis where viable (looks like redis stores it on the same box so little point)
-    - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
-    
-Bugs:
-    - it is possible atm for logs to overrun the 10k limit (buffer from log cleanups at 7500)
-    ? deleting a session manually doesn't seem to actually delete it... sessions may be persistent in multiple locations
     Bad Predictions (start to Feb 2021)
         CLIFF (t>2- ie. 63005
         	- 7/4600
@@ -101,7 +93,13 @@ Bugs:
         	- possibly fixed
     	    - crazy prediction bug from minimize fn leading to /0 error ... re. images
             - probably needs a gradient when t <= 0 rather than a wall. Causes differentiability issues
-            - https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/fes4muo/
+            - https://www.reddit.com/r/LearnJapanese/comments/eq380w/made_an_app_that_tests_your_kanji_level_in_30/fes4muo/    
+    ? switch away from using params in urls? ... would stop refresh bugs
 
-PR:
-    ? medium blog post about it ... or just stuff into the github. Or add an about section?
+BUGS:
+    ? occassional timeouts since changing procfile to preload (only on jiken, not entest..?)
+    ? some tests vanish (why?)
+    ? session mismatch (hasn't happened in ages)
+        - related to resetting the server while tests are active gives the wrong number? (check where/when the 'current ID' number is pulled from)
+        - on duplicate ID found, check contents if matched, or skip that number and attempt save again
+    ? deleting a session manually doesn't seem to actually delete it... sessions may be persistent in multiple locations
