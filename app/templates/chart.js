@@ -8,6 +8,10 @@ const verticalLinePlugin = {
         const context = chartInstance.chart.ctx;
         const lineLeftOffset = xscale.getPixelForValue(xVal);
         
+        if (lineLeftOffset > xscale.right - 20){
+            lineLeftOffset = lineLeftOffset + 1000;
+        }
+        
         // render vertical line
         context.beginPath();
         context.strokeStyle = '#267f00';
