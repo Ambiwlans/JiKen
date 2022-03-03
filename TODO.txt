@@ -4,7 +4,6 @@ CUR
      
 - ignore overly high missed words in study mode
 - regularization / error bounds
-+ add yomi to the history page review (same col)
      
 +++++++++++
 MAIN
@@ -45,7 +44,8 @@ PR:
     ? medium blog post about it ... or just stuff into the github. Or add an about section?
     
 BUGS:
-
+    ? occassional timeouts since changing procfile to preload (only on jiken, not entest..?) (runs twice on opening?)
+    
 Misc:
             
 BOTH/CORE:
@@ -97,7 +97,6 @@ Tweaks:
     ? switch away from using params in urls? ... would stop refresh bugs
 
 BUGS:
-    ? occassional timeouts since changing procfile to preload (only on jiken, not entest..?)
     ? some tests vanish (why?)
     ? session mismatch (hasn't happened in ages)
         - related to resetting the server while tests are active gives the wrong number? (check where/when the 'current ID' number is pulled from)

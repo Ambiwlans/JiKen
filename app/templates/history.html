@@ -95,14 +95,14 @@
                 <thead><tr>
                     <th>Difficulty&nbsp;#</th>
                     <th>字</th>
-                    <th>Definition</th>
+                    <th> </th>
                 </tr></thead>
                 <tbody>
                     {% for q in wronganswers %}
                     <tr>
                         <td class="mwt_numb">{{(q[0])|int}}</td>
                         <td class="mwt_q"><a href="https://jisho.org/search/{{q[1]}}%23kanji" class="review" target="_blank" rel="noopener noreferrer">{{q[1]}}</a></td>
-                        <td class="mwt_def">{{q[2]}}</td>
+                        <td class="mwt_def">{{q[2]}}[{{q[3]}} - {{q[4]}}]</td>
                     </tr>
                     {% endfor %}
                 </tbody>
