@@ -17,10 +17,10 @@ Front end:
 History:
     + study list export to anki, pdf, print
         https://datatables.net/extensions/buttons/examples/split/dataTables.html
+    - main graph, toggleable grade level vertbars for each grading type
     - prettier breakdown by levels (JLPT,N3)
         ? show estimated score per grade (loading bar? 92/120)
         ? add study buttons for 'by grade study'
-        - selectable grade splits on graph
         ? make lines visible only on history chart?
         - circle graphs for levels? meh.
     ? time spent per question, total

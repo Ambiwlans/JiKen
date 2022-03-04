@@ -7,6 +7,8 @@ const verticalLinePlugin = {
         const xscale = chartInstance.scales['x-axis-0'];
         const context = chartInstance.chart.ctx;
         const lineLeftOffset = xscale.getPixelForValue(xVal);
+        var linecolour = '#267f00';
+        if (xVal > {{pred[0]}}){linecolour = '#B40020'}
         
         if (lineLeftOffset > xscale.right - 20){
             lineLeftOffset = lineLeftOffset + 1000;
@@ -14,13 +16,14 @@ const verticalLinePlugin = {
         
         // render vertical line
         context.beginPath();
-        context.strokeStyle = '#267f00';
+        
+        context.strokeStyle = linecolour;
         context.moveTo(lineLeftOffset, yscale.top);
         context.lineTo(lineLeftOffset, yscale.bottom);
         context.stroke();
         
         // write label
-        context.fillStyle = "#267f00";
+        context.fillStyle = linecolour;
         context.textAlign = 'center';
         context.fillText(text, lineLeftOffset, (yscale.bottom - yscale.top) / 2 + yscale.top);
     },
