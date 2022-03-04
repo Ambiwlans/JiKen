@@ -10,6 +10,8 @@ CUR
 MAIN
 +++++++++++
 
+- bold active tests in adminpage
+
 Front end:
     ? more details on error page
     ? Language setting   
@@ -51,8 +53,6 @@ PR:
     
 BUGS:
     ? occassional timeouts since changing procfile to preload (only on jiken, not entest..?) (runs twice on opening?)
-    
-Misc:
             
 BOTH/CORE:
     + review git log to find changes to push across
