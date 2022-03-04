@@ -180,6 +180,19 @@
                     render: $.fn.dataTable.render.number(',', '.', 0, '#')
                 },
                 {
+                    targets: 4,
+                    render: function ( data, type, row, meta ) {
+                      if(data == 14){return '';}
+                      return data;
+                    }
+                },
+                {
+                    targets: 5,
+                    render: function ( data, type, row, meta ) {
+                      if(data == 6){return '';}
+                      return data;
+                    }
+                },                {
                     targets: [2,3],
                     width: "8em"
                 },

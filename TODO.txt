@@ -4,13 +4,11 @@ CUR
      
 - ignore overly high missed words in study mode
 - regularization / error bounds
-- bug change jlpt 6 to blank on list
+- bold active tests in adminpage
 
 +++++++++++
 MAIN
 +++++++++++
-
-- bold active tests in adminpage
 
 Front end:
     ? more details on error page
@@ -56,7 +54,8 @@ BUGS:
             
 BOTH/CORE:
     + review git log to find changes to push across
-
+    * update FP notices, tweak config, push through L2r changes if needed
+    
 +++++++++++
 LATER/Low Prio
 +++++++++++
