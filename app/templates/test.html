@@ -204,6 +204,10 @@
             }
         });
     </script>
+    <script>
+        // Bold kanji in example words
+        $(".examples").html($(".examples").html().replaceAll('{{question.kanji}}', '<b>{{question.kanji}}</b>'));
+    </script>
 {% endblock %}
 
 

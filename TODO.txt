@@ -6,8 +6,6 @@ CUR
 - ignore words from 1st 10.
 - only study words that had a > 40% chance of getting right (not too hard)
 
-- bold the selected kanji in sample vocab
-
 - regularization / error bounds
 
 - bold active tests in adminpage
