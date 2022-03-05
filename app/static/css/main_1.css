@@ -285,6 +285,16 @@ body {
 /* General Styling
 -------------------------------------------------- */
 
+#start_test {
+    width: 20em;
+    max-width: 90%;
+}
+
+#start_study{
+    width: 15em;
+    max-width: 90%;
+}
+
 .explanation, .outro {
      font-size: 14px;
      line-height: 1;
