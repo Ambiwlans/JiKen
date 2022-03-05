@@ -2,13 +2,15 @@
 CUR
 ########### 
      
-- move bar to above words? (and hide it preest)
+- move study bar to above words? (and hide it preest)
 - ignore words from 1st 10.
 - only study words that had a > 40% chance of getting right (not too hard)
-- bold the selected kanji in sample vocab
-- regularization / error bounds
-- bold active tests in adminpage
 
+- bold the selected kanji in sample vocab
+
+- regularization / error bounds
+
+- bold active tests in adminpage
 - make a flush redis button in admin
 
 +++++++++++
