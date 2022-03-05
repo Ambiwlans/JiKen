@@ -2,6 +2,8 @@
 CUR
 ########### 
      
+- manually add vocab for 100 common kanji (1hr?)
+
 - move study bar to above words? (and hide it preest)
 - ignore words from 1st 10.
 - only study words that had a > 40% chance of getting right (not too hard)

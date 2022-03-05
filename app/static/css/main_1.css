@@ -247,6 +247,10 @@ Muted grey #6c757d
     text-align: right;
 }
 
+.mwt_q {
+  font-size: larger;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
