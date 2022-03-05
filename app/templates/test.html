@@ -61,6 +61,7 @@
                     <h1 class="meaning">{{question.meaning}}</h1>
                     <h4 class="onyomi">{{question.onyomi}}</h4>
                     <h4 class="kunyomi">{{question.kunyomi}}</h4>
+                    {%if question.examples %}<h4 class="examples">{{question.examples | safe}}</h4>{% endif %}
                     <a href="https://dictionary.goo.ne.jp/word/kanji/{{question.kanji}}" class="more col-4" target="_blank" rel="noopener noreferrer">Goo</a>
                     <a href="https://wiktionary.org/wiki/{{question.kanji}}#日本語" class="more col-4" target="_blank" rel="noopener noreferrer">Wiktionary</a>
                     <a href="https://jisho.org/search/{{question.kanji}}%23kanji" class="more col-4" target="_blank" rel="noopener noreferrer">Jisho</a>

@@ -2,9 +2,14 @@
 CUR
 ########### 
      
-- ignore overly high missed words in study mode
+- move bar to above words? (and hide it preest)
+- ignore words from 1st 10.
+- only study words that had a > 40% chance of getting right (not too hard)
+- bold the selected kanji in sample vocab
 - regularization / error bounds
 - bold active tests in adminpage
+
+- make a flush redis button in admin
 
 +++++++++++
 MAIN
@@ -13,21 +18,25 @@ MAIN
 Front end:
     ? more details on error page
     ? Language setting   
-    
-History:
-    + study list export to anki, pdf, print
-        https://datatables.net/extensions/buttons/examples/split/dataTables.html
-    - main graph, toggleable grade level vertbars for each grading type
-    - prettier breakdown by levels (JLPT,N3)
-        ? show estimated score per grade (loading bar? 92/120)
-        ? add study buttons for 'by grade study'
+    Main graph
+        - toggleable grade level vertbars for each grading type
+        + they can overlap and look ugly on smaller devices .. auto hide based on overlap? or just show half based on view width? remember last one and check for overlap?
         ? make lines visible only on history chart?
-        - circle graphs for levels? meh.
-    ? time spent per question, total
-    ? links to other tests with same IP. Use a cookie?
+        
+History:
+    Study list 
+        + export to anki, pdf, print
+            https://datatables.net/extensions/buttons/examples/split/dataTables.html
+    More Data
+        ? time spent per question, total
+        ? links to other tests with same IP. Use a cookie?
+        - prettier breakdown by levels (JLPT,N3)
+            - show estimated score per grade (loading bar? 92/120)
+            ? circle graphs for levels? meh.
 
 Study Mode:
     + setting for a max grade or jlpt level
+
     
 Code Refactoring:
     ? kanji->question meaning->answer etc.
@@ -37,8 +46,6 @@ Code Refactoring:
     - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
         
 DB:
-    + add common words for each kanji (anki lists? jisho?)
-        - bold the selected kanji
     ? track user devices in testlog (better user guessing)
     - track study mode usage
     ? save est result to testlog (mildly more accurate than saving a,t)

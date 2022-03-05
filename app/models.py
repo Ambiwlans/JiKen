@@ -85,6 +85,8 @@ class TestMaterial(db.Model):
     jlpt = Column(String)
     kanken = Column(String)
     
+    examples =  Column(String)
+    
     #Statistical
     frequency = Column(Integer)
     my_rank = Column(Integer)

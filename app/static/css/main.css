@@ -97,7 +97,7 @@ Muted grey #6c757d
     right: 0px;
     max-width: 600px;
     margin: 0px auto;
-    max-height: 200px;
+    max-height: 350px;
     min-height: 150px;
     overflow: auto;
 }
@@ -112,6 +112,15 @@ Muted grey #6c757d
     width: 50%;
 }
 
+.examples {
+    font-size: 3vw; /*16px*/
+    text-align: left;
+    border-block-style: dotted;
+    padding: 10px 5px;
+    margin: 5px 0px;
+    width: 100%;
+}
+
 .more {
     font-size: 3vw; /*12px*/
 }
@@ -120,7 +129,7 @@ Muted grey #6c757d
     .meaning, .preest, .btn#know, .btn#dunno, .btn#flip {
         font-size: 24px;
     }
-    .onyomi, .kunyomi {
+    .onyomi, .kunyomi, .examples {
         font-size: 16px;
     }
     .more {
