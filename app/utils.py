@@ -14,7 +14,7 @@ from scipy.stats import norm
 ##########################################
 
 # Our sigmoid/logistic function that we fit to the data
-# e term allows a warp to find upper/lower bounds
+# e term allows a warp to find upper/lower bounds (default 1)
 def sigmoid(x, t, a, e):
     return (1 / (1 + np.exp(t*(x-a)))) ** e
 

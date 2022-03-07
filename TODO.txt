@@ -2,11 +2,9 @@
 CUR
 ########### 
      
-- manually add vocab for 100 common kanji (1hr?)
+- manually add vocab for 50 common kanji (1hr?)
 
 - move study bar to above words? (and hide it preest)
-- ignore words from 1st 10.
-- only study words that had a > 40% chance of getting right (not too hard)
 
 - regularization / error bounds
 
@@ -29,6 +27,8 @@ History:
     Study list 
         + export to anki, pdf, print
             https://datatables.net/extensions/buttons/examples/split/dataTables.html
+        - make sort order better
+        + examples + toggle
     More Data
         ? time spent per question, total
         ? links to other tests with same IP. Use a cookie?
@@ -48,14 +48,14 @@ Code Refactoring:
     - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
         
 DB:
-    ? track user devices in testlog (better user guessing)
+    ? track user devices in testlog (better return user guessing)
     - track study mode usage
-    ? save est result to testlog (mildly more accurate than saving a,t)
+    - save est result to testlog (mildly more accurate than saving a,t)
     
 PR:
     - basic seo
-    - New reddit thread
-    - tweets, msg some teaching sites to see if they're interested
+    + New reddit thread
+    + tweets, msg some teaching sites to see if they're interested
     ? medium blog post about it ... or just stuff into the github. Or add an about section?
     
 BUGS:

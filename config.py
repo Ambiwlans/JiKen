@@ -42,15 +42,17 @@ class DevelopmentConfig:
     
     # Study
     MAX_TIMES_RIGHT = 2
-    MAX_TIMES_WRONG = 2
-    TGT_ACTIVE = 7
+    MAX_TIMES_WRONG = 2                                             
+    TGT_ACTIVE = 7                                                  # How many active unlearned words will we go up to?
+    PCT_CUTOFF = .3                                                 # will only drill on questions it was -this- sure user would know
+    VARIABILITY_SHIFT = 20                                          # Study mode starts with test variability, when to drop it down to focus study?
+    STUDY_VARIABLITY = .5                                           # .1 = low variance from the prediction, 2 = high variance | Study should pick more near center
     
     # App
     GRAPH_AFTER = 9
     GRAPH_MAX_X = 6750
     MAX_X = 6750
     TEST_VARIABLITY = 1.2                                           # .1 = low variance from the prediction, 2 = high variance
-    STUDY_VARIABLITY = .5                                           # .1 = low variance from the prediction, 2 = high variance | Study should pick more near center
     OOB_REROLLS = 5                                                 # how many random rerolls on to avoid OOB scanning
     HIST_BINS = 100                                                 # how many bins in our histogram
     
@@ -88,15 +90,17 @@ class DeploymentConfig:
     
     # Study
     MAX_TIMES_RIGHT = 2
-    MAX_TIMES_WRONG = 2
-    TGT_ACTIVE = 7
+    MAX_TIMES_WRONG = 2                                             
+    TGT_ACTIVE = 7                                                  # How many active unlearned words will we go up to?
+    PCT_CUTOFF = .3                                                 # will only drill on questions it was -this- sure user would know
+    VARIABILITY_SHIFT = 20                                          # Study mode starts with test variability, when to drop it down to focus study?
+    STUDY_VARIABLITY = .5                                           # .1 = low variance from the prediction, 2 = high variance | Study should pick more near center
     
     # App
     GRAPH_AFTER = 9
     GRAPH_MAX_X = 6750
     MAX_X = 6750
     TEST_VARIABLITY = 1.2                                           # .1 = low variance from the prediction, 2 = high variance
-    STUDY_VARIABLITY = .5                                           # .1 = low variance from the prediction, 2 = high variance | Study should pick more near center
     OOB_REROLLS = 5                                                 # how many random rerolls on to avoid OOB scanning
     HIST_BINS = 100                                                 # how many bins in our histogram
     

@@ -159,8 +159,10 @@ def test():
                            session['Study_List'].drop(session['Study_List'][session['Study_List']['testmaterialid'].astype('int') == testmaterialid].index, inplace=True)
             else:
                 session['QuestionLog'] = session['QuestionLog'].append({'testmaterialid' : testmaterialid, 'score' : score}, ignore_index=True)
-                if not score:
-                    session['Study_List'] = session['Study_List'].append({'testmaterialid' : testmaterialid, 'times_right' : 0, 'times_wrong' : 0}, ignore_index=True)            
+                if not score and len(session['QuestionLog']) > current_app.config['GRAPH_AFTER']:
+                    tested_x = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))[pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))['id']==testmaterialid].iloc[0]['my_rank']
+                    if (sigmoid(tested_x, session['TestLog'].t, session['TestLog'].a, 1) > current_app.config['PCT_CUTOFF']):
+                        session['Study_List'] = session['Study_List'].append({'testmaterialid' : testmaterialid, 'times_right' : 0, 'times_wrong' : 0}, ignore_index=True)            
         # In test mode, log questions, for dupes, overwrite last answer
         else:
             if (session['QuestionLog']['testmaterialid'].astype('int') == testmaterialid).any():
@@ -177,6 +179,8 @@ def test():
                        pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')), \
                        left_on=session['QuestionLog'].testmaterialid.astype(int), \
                        right_on='id')
+    
+    len_history = len(history)
     
     #Get some history to show (do this before sort)
     oldquestions = history[:100]
@@ -197,7 +201,7 @@ def test():
     question_variability = current_app.config['TEST_VARIABLITY']
     if study: 
         active_cnt = len(session['Study_List'])
-        if len(history) > 15:
+        if len_history > 15:
             question_variability = current_app.config['STUDY_VARIABLITY']
 
     if score is None:
@@ -226,7 +230,6 @@ def test():
         session['TestLog'].t = float(res.x[0])
         
         # Predict known kanji
-        len_history = len(history)
         if len_history > current_app.config['GRAPH_AFTER']:
             #[mid, upper, lower]
             pred = [(quad(sigmoid,0,current_app.config['MAX_X'],args=(*res.x,1))[0]),
@@ -306,11 +309,11 @@ def test():
     print(f"Test #{session['TestLog'].id}, A = {session['TestLog'].a}, T = {session['TestLog'].t} ||  #{len(session['QuestionLog'])}, Rank#: {newquestion['my_rank']}, 字: {newquestion['kanji']}")
     
     if study:
-        return render_template('test.html', s = study, question = newquestion, cnt = len(history), id = session['TestLog'].id, \
+        return render_template('test.html', s = study, question = newquestion, cnt = len_history, id = session['TestLog'].id, \
             a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred, \
             studyword = studyword, active_cnt = active_cnt, learned_cnt = session['learned_cnt'], dropped_cnt = session['dropped_cnt'])
     else:
-        return render_template('test.html', s = study, question = newquestion, cnt = len(history), id = session['TestLog'].id, \
+        return render_template('test.html', s = study, question = newquestion, cnt = len_history, id = session['TestLog'].id, \
             a = session['TestLog'].a, t = session['TestLog'].t, wronganswers = wronganswers, rightanswers = rightanswers, xmax = xmax, pred = pred)
     
 
