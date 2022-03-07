@@ -25,7 +25,6 @@ History:
         + export to anki, pdf, print
             https://datatables.net/extensions/buttons/examples/split/dataTables.html
         - make sort order better
-        + examples + toggle
     More Data
         ? time spent per question, total
         ? links to other tests with same IP. Use a cookie?

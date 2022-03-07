@@ -106,7 +106,8 @@
                     <th>Grade</th>
                     <th>JLPT</th>
                     <th>漢検</th>
-                    <th>Meaning</th>
+                    <th>Meanings</th>
+                    <th>Examples</th>
                 </tr></thead>
                 <tbody>
                     {% for q in wronganswers %}
@@ -118,8 +119,8 @@
                         <td class="mwt_gr">{{q[5]}}</td>
                         <td class="mwt_jlpt">{{q[6]}}</td>
                         <td class="mwt_kanken">{{q[7]}}</td>
-                        <td class="mwt_def">{{q[2]}}</td>
-                        
+                        <td class="mwt_def"><b>{{q[2]}}</b></td>
+                        <td class="mwt_ex">{{q[8] | safe}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -163,7 +164,7 @@
 	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
     <script>
         $(document).ready(function() {
-            if (screen.width < 500) {hiddencols=[2,3,4,5,6];}
+            if (screen.width < 500) {hiddencols=[2,3,4,5,6,8];}
             else {hiddencols=[4,5,6];}
             
             $('#missed_words_table').DataTable( {
@@ -203,7 +204,7 @@
                 }],
                 buttons: [{
                     extend: 'columnsToggle',
-                    columns: hiddencols
+                    columns: [2,3,4,5,6,8]
                 }]
             } );
         } );
