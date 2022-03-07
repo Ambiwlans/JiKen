@@ -101,8 +101,7 @@
                 <thead><tr>
                     <th>Difficulty&nbsp;#</th>
                     <th>字</th>
-                    <th>音</th>
-                    <th>訓</th>
+                    <th>Readings</th>
                     <th>Grade</th>
                     <th>JLPT</th>
                     <th>漢検</th>
@@ -114,8 +113,7 @@
                     <tr>
                         <td class="mwt_numb">{{(q[0])|int}}</td>
                         <td class="mwt_q"><a href="https://jisho.org/search/{{q[1]}}%23kanji" class="review" target="_blank" rel="noopener noreferrer">{{q[1]}}</a></td>
-                        <td class="mwt_on">{{q[3]}}</td>
-                        <td class="mwt_kun">{{q[4]}}</td>
+                        <td class="mwt_yomi">{{q[3]}}<br>{{q[4]}}</td>
                         <td class="mwt_gr">{{q[5]}}</td>
                         <td class="mwt_jlpt">{{q[6]}}</td>
                         <td class="mwt_kanken">{{q[7]}}</td>
@@ -164,8 +162,8 @@
 	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
     <script>
         $(document).ready(function() {
-            if (screen.width < 500) {hiddencols=[2,3,4,5,6,8];}
-            else {hiddencols=[4,5,6];}
+            if (screen.width < 500) {hiddencols=[2,3,4,5,7];}
+            else {hiddencols=[3,4,5];}
             
             $('#missed_words_table').DataTable( {
                 dom: 'Brtp',
@@ -182,21 +180,21 @@
                     render: $.fn.dataTable.render.number(',', '.', 0, '#')
                 },
                 {
-                    targets: 4,
+                    targets: 3,
                     render: function ( data, type, row, meta ) {
                       if(data == 14){return '';}
                       return data;
                     }
                 },
                 {
-                    targets: 5,
+                    targets: 4,
                     render: function ( data, type, row, meta ) {
                       if(data == 6){return '';}
                       return data;
                     }
                 },                {
-                    targets: [2,3],
-                    width: "8em"
+                    targets: 2,
+                    width: "15em"
                 },
                 {
                     targets: hiddencols,
@@ -204,7 +202,7 @@
                 }],
                 buttons: [{
                     extend: 'columnsToggle',
-                    columns: [2,3,4,5,6,8]
+                    columns: [2,3,4,5,7]
                 }]
             } );
         } );
