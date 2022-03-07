@@ -18,7 +18,6 @@ Front end:
     ? Language setting   
     Main graph
         - toggleable grade level vertbars for each grading type
-        + they can overlap and look ugly on smaller devices .. auto hide based on overlap? or just show half based on view width? remember last one and check for overlap?
         ? make lines visible only on history chart?
         
 History:

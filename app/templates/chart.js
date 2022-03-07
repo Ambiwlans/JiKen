@@ -1,6 +1,7 @@
 {% block chart %}
 <script>
 
+var lastVertXPx = 0;
 const verticalLinePlugin = {
     renderVerticalLine: function (chartInstance, xVal, text) {
         const yscale = chartInstance.scales['y-axis-0'];
@@ -10,22 +11,23 @@ const verticalLinePlugin = {
         var linecolour = '#267f00';
         if (xVal > {{pred[0]}}){linecolour = '#B40020'}
         
-        if (lineLeftOffset > xscale.right - 20){
-            lineLeftOffset = lineLeftOffset + 1000;
+        // Draw another line if last one was over 20px away and not within 20px of the edge
+        if (lineLeftOffset > lastVertXPx + 20 && lineLeftOffset < xscale.right - 20){
+            // render vertical line
+            context.beginPath();
+            
+            context.strokeStyle = linecolour;
+            context.moveTo(lineLeftOffset, yscale.top);
+            context.lineTo(lineLeftOffset, yscale.bottom);
+            context.stroke();
+            
+            lastVertXPx = lineLeftOffset;
+            
+            // write label
+            context.fillStyle = linecolour;
+            context.textAlign = 'center';
+            context.fillText(text, lineLeftOffset, (yscale.bottom - yscale.top) / 2 + yscale.top);        
         }
-        
-        // render vertical line
-        context.beginPath();
-        
-        context.strokeStyle = linecolour;
-        context.moveTo(lineLeftOffset, yscale.top);
-        context.lineTo(lineLeftOffset, yscale.bottom);
-        context.stroke();
-        
-        // write label
-        context.fillStyle = linecolour;
-        context.textAlign = 'center';
-        context.fillText(text, lineLeftOffset, (yscale.bottom - yscale.top) / 2 + yscale.top);
     },
     
     afterDatasetsDraw: function (chart, easing) {
