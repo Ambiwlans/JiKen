@@ -27,6 +27,7 @@
             	<a href="/"><img class="title-sm" src="/static/img/jiken.png" height="80px" width="200px"></a>
             	<a class="help_btn" data-toggle="modal" data-target="#helpModal"><i class="fas fa-question-circle fa-lg"></i></a>
         	</div>
+        	
         	<!-- Modal -->
         	<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalTitle" aria-hidden="true">
             	<div class="modal-dialog modal-dialog-centered" role="document">
@@ -37,6 +38,17 @@
                     </div>
             	</div>
         	</div>
+        	
+	    	<!-- Study Stats -->
+    		{% if s == 1 and cnt >= 10 %}
+    		<div class="container font-weight-bold">
+                <div class="row studystats justify-content-md-center">
+                    <div class="col col-sm-2">Reviewing:<br>{{active_cnt}}</div>
+                    <div class="col col-sm-2">Learned:<br><div class="good">{{learned_cnt}}</div></div> 
+                    <div class="col col-sm-2">Dropped:<br><div class="bad">{{dropped_cnt}}</div></div>  
+                </div>
+            </div>
+        	{% endif %}
         	
         	<!-- Flashcard -->    	
         	<div class="flashcard" onclick="flip()">
@@ -80,17 +92,6 @@
     		
     		<!-- Predictions -->    	
         	{% if cnt >= 10 %}
-
-    	    <!-- Study Stats -->
-    		{% if s == 1 %}
-    		<div class="container studystats font-weight-bold">
-                <div class="row justify-content-md-center">
-                    <div class="col col-sm-2">Reviewing:<br>{{active_cnt}}</div>
-                    <div class="col col-sm-2">Learned:<br><div class="good">{{learned_cnt}}</div></div> 
-                    <div class="col col-sm-2">Dropped:<br><div class="bad">{{dropped_cnt}}</div></div>  
-                </div>
-            </div>
-        	{% endif %}
         	
         	<div class="container-fluid pred">
             	<p class="pred-header">How Many You Know</p>

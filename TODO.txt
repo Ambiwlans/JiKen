@@ -4,8 +4,6 @@ CUR
      
 - manually add vocab for 50 common kanji (1hr?)
 
-- move study bar to above words? (and hide it preest)
-
 - regularization / error bounds
 
 - bold active tests in adminpage
