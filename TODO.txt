@@ -9,6 +9,8 @@ CUR
 - bold active tests in adminpage
 - make a flush redis button in admin
 
+- concat dT js
+
 +++++++++++
 MAIN
 +++++++++++
@@ -55,6 +57,7 @@ PR:
     ? medium blog post about it ... or just stuff into the github. Or add an about section?
     
 BUGS:
+    + Cookie “session” will be soon rejected because it has the “SameSite” attribute set to “None” or an invalid value, without the “secure” attribute. To know more about the “SameSite“ attribute, read https://developer.mozilla.org/docs/Web/HTTP/Headers/Set-Cookie/SameSite
     ? occassional timeouts since changing procfile to preload (only on jiken, not entest..?) (runs twice on opening?)
             
 BOTH/CORE:

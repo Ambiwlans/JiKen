@@ -94,7 +94,7 @@
             <div class="chart-container"><canvas id="histoChart"></canvas></div>
             <p><i>(You fall in the highlighted group)</i></p>
             
-            <!-- Study list -->
+            <!-- Missed Words Table -->
             {% if wronganswers|length > 0 %}
             <h3 class="text-left">Words you missed:</h3>
             <table id="missed_words_table" class="table">
@@ -156,16 +156,20 @@
 	{%- include 'chart.js' -%}
     {%- include 'hist.js' -%}
 
+    <!-- Missed Words Table -->
 	<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
     <script>
         $(document).ready(function() {
             if (screen.width < 500) {hiddencols=[2,3,4,5,7];}
             else {hiddencols=[3,4,5];}
             
-            $('#missed_words_table').DataTable( {
+            var table = $('#missed_words_table').DataTable( {
                 dom: 'Brtp',
                 "paging":   true,
                 "lengthChange": false,
@@ -205,6 +209,34 @@
                     columns: [2,3,4,5,7]
                 }]
             } );
+            
+            // Export button group
+            new $.fn.dataTable.Buttons( table, {
+                buttons: [
+                    {
+                        extend: 'copy',
+                        text: 'Click to Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'CSV'
+                    },
+                    {
+                        text: 'PDF',
+                        extend: 'pdf',
+                        title: 'JiKen Study List - {{(date|string)[:-3]}}',
+                        messageTop: 'Saved from {{ url_for(request.endpoint, **request.view_args) }} on on {{(date|string)[:-3]}}GMT.',
+                        exportOptions: {
+                            modifier: {
+                                columns: ':visible'
+                            }
+                        }
+                    }
+                ]
+            } );
+            table.buttons( 1, null ).container().appendTo(
+                table.table().container()
+            );
         } );
     </script>
 {% endblock %}
