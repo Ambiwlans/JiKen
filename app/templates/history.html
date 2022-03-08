@@ -163,10 +163,11 @@
 	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" src="{{url_for('static', filename='js/vfs_fonts.js')}}"></script>
     
     
     <script>
+        $.ajaxSetup({async:false});
+        
         $(document).ready(function() {
             if (screen.width < 500) {hiddencols=[2,3,4,5,7];}
             else {hiddencols=[3,4,5];}
@@ -246,11 +247,9 @@
             );
 
              function processDoc(doc) {
-                //
-                // https://pdfmake.github.io/docs/fonts/custom-fonts-client-side/
-                //
-                // Update pdfmake's global font list, using the fonts available in
-                // the customized vfs_fonts.js file (do NOT remove the Roboto default):
+                alert("Generating PDF may take a few seconds. Please wait.");
+                $.getScript("{{url_for('static', filename='js/vfs_fonts.js')}}");
+                
                 pdfMake.fonts = {
                   Roboto: {
                     normal: 'Roboto-Regular.ttf',
@@ -265,7 +264,7 @@
                     bolditalics: 'Meiryo.ttf'
                   }
                 };
-                // modify the PDF to use a different default font:
+                // modify the PDF to use a custom font:
                 doc.defaultStyle.font = "meiryo";
                 var i = 1;
               }
