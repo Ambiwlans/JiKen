@@ -4,6 +4,8 @@ CUR
      
 - manually add vocab for 50 common kanji (1hr?)
 
+- credit genanki in git
+
 Study list
     + make sort order better (handle the blanks and words corectly in levels)
         

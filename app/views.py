@@ -528,7 +528,7 @@ def anki_file(id):
     
     
     for i, r in wronganswers.iterrows():
-        my_deck.add_note(genanki.Note(model=my_model, fields=[html.escape(str(f).replace('<br>', '\n') or '') for f in [r.my_rank, r.kanji, r.meaning, r.onyomi, r.kunyomi, r.grade, r.jlpt, r.kanken, r.examples]]))
+        my_deck.add_note(genanki.Note(model=my_model, fields=[str(f or '') for f in [r.my_rank, r.kanji, r.meaning, r.onyomi, r.kunyomi, r.grade, r.jlpt, r.kanken, r.examples]]))
     
     
     tf = tempfile.NamedTemporaryFile(delete=False).name
