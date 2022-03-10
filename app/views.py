@@ -517,10 +517,10 @@ def anki_file(id):
       ],
       templates=[{
       'name': 'Card 1',
-      'qfmt': '<h1>{{Kanji}}</h1>',
+      'qfmt': '<h1 style="font-size: 100px; text-align:center;">{{Kanji}}</h1>',
       'afmt': '{{FrontSide}}<hr>\
-              <b>{{meaning}}</b><br>\
-              {{onyomi}}{{kunyomi}}<br>\
+              <div style="font-size: 20px; text-align:center;"><b>{{meaning}}</b><br><br>\
+              {{onyomi}} --- {{kunyomi}}</div><br>\
               {{examples}}<hr>\
               Grade: {{grade}}<br>\
               JLPT: {{jlpt}}<br>\
@@ -528,21 +528,15 @@ def anki_file(id):
     
     
     for i, r in wronganswers.iterrows():
-        my_deck.add_note(genanki.Note(model=my_model, fields=[html.escape(str(f) or '') for f in [r.my_rank, r.kanji, r.meaning, r.onyomi, r.kunyomi, r.grade, r.jlpt, r.kanken, r.examples]]))
+        my_deck.add_note(genanki.Note(model=my_model, fields=[html.escape(str(f).replace('<br>', '\n') or '') for f in [r.my_rank, r.kanji, r.meaning, r.onyomi, r.kunyomi, r.grade, r.jlpt, r.kanken, r.examples]]))
     
     
     tf = tempfile.NamedTemporaryFile(delete=False).name
-    
     genanki.Package(my_deck).write_to_file(tf)
     
     return send_file(tf, mimetype='application/apkg', as_attachment=True, attachment_filename='JiKen Study - #'+str(id)+'.apkg')
     
-    
-    
-#    response = send_file(tf, mimetype='application/apkg', as_attachment=True, attachment_filename='JiKen Study - #'+str(id)+'.apkg')
-#    response.headers["x-filename"] = 'JiKen Study - #'+str(id)+'.apkg'
-#    response.headers["Access-Control-Expose-Headers"] = 'x-filename'
-#    return response
+
     
     
     
