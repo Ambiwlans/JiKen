@@ -6,7 +6,7 @@
 """
 
 #Flask
-from flask import request, render_template, redirect, url_for, session, abort
+from flask import request, render_template, redirect, url_for, session, abort, send_file
 from flask import Blueprint, current_app
 
 bp = Blueprint('main', __name__)
@@ -19,6 +19,9 @@ from .models import TestLog, QuestionLog
 import pandas as pd
 import math
 import pickle
+import genanki
+import tempfile
+import html
 
 #Tools
 from app.utils import sigmoid, logit, sigmoid_cost_regularized
@@ -442,11 +445,110 @@ def history(id):
         pct_known_by_appearance = "{:.2f}".format(pct_known_by_appearance))
 
 
+@bp.route("/anki_file/<id>")
+def anki_file(id):
+    ###
+    ### Locate/Load test data
+    ###
+    
+    data = {}
+    datafound = False
 
+    #If test is in cache still, use that data.
+    for sess in current_app.config['SESSION_REDIS'].scan_iter("session:*"):
+        if datafound:
+            break
+        data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
+        try:
+            if data['TestLog']['id'] == int(id):
+                #print("Test found in cache")            
+                datafound = True
+                break
+        except:
+            pass
+        
+    #Otherwise, load data from Sql
+    if not datafound:
+        #print("Test not in cache")
+        data['TestLog'] = db.session.query(TestLog).filter(TestLog.id == id).first()
+        if not data['TestLog']:
+            #if it isn't in the DB either, 404 out, test not found.
+            abort(404, "Test not found.")
+        data['QuestionLog'] = db.session.query(QuestionLog).filter(QuestionLog.testlogid == id).all()
+        data['QuestionLog'] = pd.DataFrame([s.__dict__ for s in data['QuestionLog']])
+        #print("Test found in DB")
 
+    ###        
+    ### Prep output
+    ###
+    
+    try:
+        history = pd.merge(data['QuestionLog'], \
+                   pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')), \
+                   left_on=data['QuestionLog'].testmaterialid.astype(int), \
+                   right_on='id')
+    except:
+        history = pd.DataFrame(columns=['score','my_rank'])
+    
 
+    #Only wrong answers needed for study list    
+    wronganswers = history[history['score']==0].sort_values(by=['my_rank'], ascending=True)
+    
+    
+    ###
+    ### Anki Deck Building
+    ###
 
+    my_deck = genanki.Deck(2059400111, 'JiKen Study - #'+str(id))
 
-
-
+    my_model = genanki.Model(
+      1607392219,
+      'JiKen',
+      fields=[
+            {'name': 'my_rank'},
+            {'name': 'Kanji'},
+            {'name': 'meaning'},
+            {'name': 'onyomi'},
+            {'name': 'kunyomi'},
+            {'name': 'grade'},
+            {'name': 'jlpt'},
+            {'name': 'kanken'},
+            {'name': 'examples'}
+      ],
+      templates=[{
+      'name': 'Card 1',
+      'qfmt': '<h1>{{Kanji}}</h1>',
+      'afmt': '{{FrontSide}}<hr>\
+              <b>{{meaning}}</b><br>\
+              {{onyomi}}{{kunyomi}}<br>\
+              {{examples}}<hr>\
+              Grade: {{grade}}<br>\
+              JLPT: {{jlpt}}<br>\
+              Kanken: {{kanken}}<br>'}])
+    
+    
+    for i, r in wronganswers.iterrows():
+        my_deck.add_note(genanki.Note(model=my_model, fields=[html.escape(str(f) or '') for f in [r.my_rank, r.kanji, r.meaning, r.onyomi, r.kunyomi, r.grade, r.jlpt, r.kanken, r.examples]]))
+    
+    
+    tf = tempfile.NamedTemporaryFile(delete=False).name
+    
+    genanki.Package(my_deck).write_to_file(tf)
+    
+    return send_file(tf, mimetype='application/apkg', as_attachment=True, attachment_filename='JiKen Study - #'+str(id)+'.apkg')
+    
+    
+    
+#    response = send_file(tf, mimetype='application/apkg', as_attachment=True, attachment_filename='JiKen Study - #'+str(id)+'.apkg')
+#    response.headers["x-filename"] = 'JiKen Study - #'+str(id)+'.apkg'
+#    response.headers["Access-Control-Expose-Headers"] = 'x-filename'
+#    return response
+    
+    
+    
+    
+    
+    
+    
+    
 
