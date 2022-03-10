@@ -20,6 +20,7 @@ MAIN
 
 - bold active tests in adminpage
 - make a flush redis button in admin
+- switch to same anki id, and add some data to allow a building collection
 
 Front end:
     ? more details on error page
