@@ -27,7 +27,8 @@ The other algorithm ranks the difficulty of every kanji for future testing. If 1
 * APscheduler
 * Bootstrap
 * ChartJS
-
+* Genanki https://github.com/kerrickstaley/genanki (to generate anki files)
+* Datatables.js (for the missed word list)
 
 ## Contact/Bugs
 
