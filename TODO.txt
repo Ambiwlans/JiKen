@@ -1,18 +1,19 @@
 ###########
 CUR
 ########### 
-     
-- manually add vocab for 50 common kanji (1hr?)
 
-- credit genanki in git
+- vert line toggle buttons for other rankings (none, kyouiku, jlpt, kanken)
+
+- collect a bit more teest data: studymode? device. End time?
 
 Study list
     + make sort order better (handle the blanks and words corectly in levels)
+    - examples shows 'none' instead of a blank
         
 - concat dataTables js
 
-+ New reddit thread　(before doing this, do anki, and know how to avoid that double load issue?)
-+ tweets, msg some teaching sites to see if they're interested, hit up dms
++ New reddit thread
++ msg some teaching sites/twitters to see if they're interested, hit up dms
     
 +++++++++++
 MAIN
@@ -20,22 +21,16 @@ MAIN
 
 - bold active tests in adminpage
 - make a flush redis button in admin
-- switch to same anki id, and add some data to allow a building collection
 
 Front end:
     ? more details on error page
-    ? Language setting   
-    Main graph
-        - toggleable grade level vertbars for each grading type
-        ? make lines visible only on history chart?
+    ? Language setting
         
 History:
+    - switch to same anki id, and add some data to allow a building collection
     More Data
         ? time spent per question, total
         ? links to other tests with same IP. Use a cookie?
-        - prettier breakdown by levels (JLPT,N3)
-            - show estimated score per grade (loading bar? 92/120)
-            ? circle graphs for levels? meh.
 
 Study Mode:
     + setting for a max grade or jlpt level
@@ -57,11 +52,14 @@ PR:
     - basic seo
     ? medium blog post about it ... or just stuff into the github. Or add an about section?
     - ask youglish about ad hosts?
+    * tweets, msg some teaching sites to see if they're interested, hit up dms
+    * hit up reddit
     
 BUGS:
     + Cookie “session” will be soon rejected because it has the “SameSite” attribute set to “None” or an invalid value, without the “secure” attribute. To know more about the “SameSite“ attribute, read https://developer.mozilla.org/docs/Web/HTTP/Headers/Set-Cookie/SameSite
     ? occassional timeouts since changing procfile to preload (only on jiken, not entest..?) (runs twice on opening?)
     ? updater not updating meta vals correctly? (check entest code)        
+    
 BOTH/CORE:
     * review git log to find changes to push across
     * update FP notices, tweak config, push through L2r changes if needed
@@ -76,6 +74,8 @@ LATER/Low Prio
 +++++++++++
 MAYBE
 +++++++++++
+
+? Language settings
 
 From EN:
      ? the cur_pred stuff for now

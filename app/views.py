@@ -21,7 +21,7 @@ import math
 import pickle
 import genanki
 import tempfile
-import html
+#import html
 
 #Tools
 from app.utils import sigmoid, logit, sigmoid_cost_regularized
