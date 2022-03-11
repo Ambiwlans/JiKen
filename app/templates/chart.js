@@ -1,7 +1,6 @@
 {% block chart %}
 <script>
 
-var lastVertXPx = 0;
 const verticalLinePlugin = {
     renderVerticalLine: function (chartInstance, xVal, text) {
         const yscale = chartInstance.scales['y-axis-0'];
@@ -12,7 +11,7 @@ const verticalLinePlugin = {
         if (xVal > {{pred[0]}}){linecolour = '#B40020'}
         
         // Draw another line if last one was over 20px away and not within 20px of the edge
-        if (lineLeftOffset > lastVertXPx + 20 && lineLeftOffset < xscale.right - 20){
+        if (lineLeftOffset > lastVertXPx + 25 && lineLeftOffset < xscale.right - 20){
             // render vertical line
             context.beginPath();
             
@@ -37,11 +36,58 @@ const verticalLinePlugin = {
     }
 };
 
-Chart.plugins.register(verticalLinePlugin);
-          
+function makePrediction() {
+    var pred = []; 
+    for (var x = 0; x <= {{config['MAX_X']}} + 50; x = x + 50) {
+        y = 1 / (1 + 2**({{t}} * (x - {{a}})))
+        pred.push({x: x, y: y});
+    }
+    return pred;
+};
+
+function rightPoints(val) {
+    return {x: val[0], y: 1, kanji: val[1]};
+};
+
+function wrongPoints(val) {
+    return {x: val[0], y: 0, kanji: val[1]};
+};
+
+function update_vert_lines(achievement_type){
+    // select the set of vert lines
+    switch(achievement_type){
+    case 'kyouiku':    // default
+        vert_lines = [[80,"　 　Gr1"],[240,"　 　Gr2"],[440,"　 　Gr3"],[640,"　 　Gr4"],[825,"　 　Gr5"],[1026,"　 　Gr6"],[2136,"　 　常用"]];
+        break;
+    case 'jlpt':    
+        vert_lines = [[80,"　 　N5"],[250,"　 　N4"],[620,"　 　N3"],[1000,"　 　N2"],[2136,"　 　N1"]];
+        break;
+    case 'kanken':   
+        vert_lines = [[80,"　 　漢10"],[240,"　 　漢9"],[440,"　 　漢8"],[642,"　 　漢7"],[835,"　 　漢6"],[1026,"　 　漢5"],[1300,"　 　漢4"],[1600,"　 　漢3"],[1951,"　 　Pre-2"],[2136,"　 　漢2"],[2965,"　 　Pre-1"],[6300,"　 　漢1"]];
+        console.log('sel kanken');
+        break;
+    case 'none':    
+    default:
+        vert_lines = []
+        break;        
+    }
+    lastVertXPx = 0;
+    mainChart.destroy();
+    mainctx = document.getElementById('predChart').getContext('2d');
+    mainChart = makeChart();
+};
+
+
+// find the chart in dom and make it ... or remake it
 var prediction =  makePrediction();
-var ctx = document.getElementById('predChart').getContext('2d');
-var myLineChart = new Chart(ctx, {
+var lastVertXPx = 0;
+var vert_lines = [[80,"　 　Gr1"],[240,"　 　Gr2"],[440,"　 　Gr3"],[640,"　 　Gr4"],[825,"　 　Gr5"],[1026,"　 　Gr6"],[2136,"　 　常用"]];
+
+var mainctx = document.getElementById('predChart').getContext('2d');
+var mainChart = makeChart();
+
+function makeChart(){
+return new Chart(mainctx, {
     type: 'line',
     data: {
         datasets: [{
@@ -70,7 +116,8 @@ var myLineChart = new Chart(ctx, {
             pointRadius: 0
         }]
     },
-    lineAtxVal: [[80,"　 　Gr1"],[240,"　 　Gr2"],[440,"　 　Gr3"],[640,"　 　Gr4"],[825,"　 　Gr5"],[1026,"　 　Gr6"],[2136,"　 　常用"]],
+    plugins: [verticalLinePlugin],
+    lineAtxVal: vert_lines,
     options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -124,26 +171,7 @@ var myLineChart = new Chart(ctx, {
             duration: 0
         }
     }
-});
-
-//console.log({{ rightanswers|safe }}.forEach(rightPoints))
-
-function makePrediction() {
-    var pred = []; 
-    for (var x = 0; x <= {{config['MAX_X']}} + 50; x = x + 50) {
-        y = 1 / (1 + 2**({{t}} * (x - {{a}})))
-        pred.push({x: x, y: y});
-    }
-    return pred;
-};
-
-function rightPoints(val) {
-    return {x: val[0], y: 1, kanji: val[1]};
-};
-
-function wrongPoints(val) {
-    return {x: val[0], y: 0, kanji: val[1]};
-};
+});};
 
 </script>
 {% endblock chart %}

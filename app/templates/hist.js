@@ -1,8 +1,8 @@
 {% block chart %}
 <script>
 
-var ctx = document.getElementById('histoChart').getContext('2d');
-var myLineChart = new Chart(ctx, {
+var histoctx = document.getElementById('histoChart').getContext('2d');
+var myHisto = new Chart(histoctx, {
     type: 'bar',
     data: {
         labels: {{ hist|tojson|safe }}.map(histlabels),

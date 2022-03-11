@@ -2,14 +2,13 @@
 CUR
 ########### 
 
-- vert line toggle buttons for other rankings (none, kyouiku, jlpt, kanken)
-
-- collect a bit more teest data: studymode? device. End time?
+- collect a bit more test data: studymode? End time? (and add to history page)
 
 Study list
-    + make sort order better (handle the blanks and words corectly in levels)
-    - examples shows 'none' instead of a blank
-        
+    - make sort order better (handle the blanks and words corectly in levels)
+    + examples shows 'none' instead of a blank
+    - filter toggle for 'should study/all' (this should hold in downloads)
+    
 - concat dataTables js
 
 + New reddit thread
@@ -23,14 +22,10 @@ MAIN
 - make a flush redis button in admin
 
 Front end:
-    ? more details on error page
-    ? Language setting
         
 History:
     - switch to same anki id, and add some data to allow a building collection
-    More Data
-        ? time spent per question, total
-        ? links to other tests with same IP. Use a cookie?
+    ? links to other tests with same IP/device. Use a cookie?
 
 Study Mode:
     + setting for a max grade or jlpt level
@@ -38,15 +33,14 @@ Study Mode:
 Code Refactoring:
     - regularization / error bounds
     ? kanji->question meaning->answer etc.
-    + get rid of magic numbers, switch to config variables, clean CSS, redo comments
+    * get rid of magic numbers, switch to config variables, clean CSS, redo comments
     ? trim the req list further
     ? shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')? (more readable)
     - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
         
 DB:
     ? track user devices in testlog (better return user guessing)
-    - track study mode usage
-    - save est result to testlog (mildly more accurate than saving a,t)
+    ? save est result to testlog (mildly more accurate than saving a,t)
     
 PR:
     - basic seo
@@ -57,7 +51,7 @@ PR:
     
 BUGS:
     + Cookie “session” will be soon rejected because it has the “SameSite” attribute set to “None” or an invalid value, without the “secure” attribute. To know more about the “SameSite“ attribute, read https://developer.mozilla.org/docs/Web/HTTP/Headers/Set-Cookie/SameSite
-    ? occassional timeouts since changing procfile to preload (only on jiken, not entest..?) (runs twice on opening?)
+    ? occassional timeouts since changing procfile to preload (only on jiken, not entest..?) (runs twice on opening issue ... but may be better for high user load)
     ? updater not updating meta vals correctly? (check entest code)        
     
 BOTH/CORE:
@@ -68,20 +62,21 @@ BOTH/CORE:
 LATER/Low Prio
 +++++++++++
 
-- convert to android app
++ convert to android app
 ? jp vocab vers
+? Language settings
         
 +++++++++++
 MAYBE
 +++++++++++
 
-? Language settings
+? more details on error page
 
 From EN:
-     ? the cur_pred stuff for now
-     ? culm_pct ... don't need for kanji
+     ? the cur_pred stuff
+     ? culm_pct ... don't rly need for kanji
      ? scaler (could add and set to 1 but meh.)
-     
+         
 History:
     ? translate history page (not sure how it'd work for guests that don't speak jpns)
     ? hide graph on old history page (no points on graph), or say data deleted due to age, gen graph w/ no points?

@@ -20,7 +20,21 @@
     	<div class="chart-container">
             <canvas id="predChart"></canvas>
         </div>
-        
+        <div class="btn-group btn-group-sm btn-group-toggle chart-toggles" data-toggle="buttons">
+          <label class="btn btn-secondary achievement_type" id="none">
+            <input type="radio" autocomplete="off"> None
+          </label>
+          <label class="btn btn-secondary achievement_type active" id="kyouiku">
+            <input type="radio" autocomplete="off" checked> Kyouiku
+          </label>
+          <label class="btn btn-secondary achievement_type" id="jlpt">
+            <input type="radio" autocomplete="off"> JLPT
+          </label>
+          <label class="btn btn-secondary achievement_type" id="kanken">
+            <input type="radio" autocomplete="off"> Kanken
+          </label>
+        </div>
+
         <!-- Ad -->    	
         <hr>
         <!--div class="d-flex justify-content-center"><script data-cfasync='false' type='text/javascript' src='//p386432.clksite.com/adServe/banners?tid=386432_758560_2'></script></div-->
@@ -168,11 +182,16 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
     
-    
     <script>
         $.ajaxSetup({async:false});
         
         $(document).ready(function() {
+            // enable mainchart radio buttons
+            $('.achievement_type').on('click', function(event) {
+                update_vert_lines($(this)[0].id);
+            });
+            
+            // setup the datatable
             if (screen.width < 500) {hiddencols=[2,3,4,5,7];}
             else {hiddencols=[3,4,5];}
             
