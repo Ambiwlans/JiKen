@@ -136,7 +136,7 @@
                         <td class="mwt_jlpt">{{q[6]}}</td>
                         <td class="mwt_kanken">{{q[7]}}</td>
                         <td class="mwt_def"><b>{{q[2]}}</b></td>
-                        <td class="mwt_ex">{{q[8] | safe}}</td>
+                        <td class="mwt_ex">{{ q[8] | safe if q[8] is not none }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

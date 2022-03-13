@@ -6,7 +6,6 @@ CUR
 
 Study list
     - make sort order better (handle the blanks and words corectly in levels)
-    + examples shows 'none' instead of a blank
     - filter toggle for 'should study/all' (this should hold in downloads)
     
 - concat dataTables js
@@ -53,6 +52,7 @@ BUGS:
     + Cookie “session” will be soon rejected because it has the “SameSite” attribute set to “None” or an invalid value, without the “secure” attribute. To know more about the “SameSite“ attribute, read https://developer.mozilla.org/docs/Web/HTTP/Headers/Set-Cookie/SameSite
     ? occassional timeouts since changing procfile to preload (only on jiken, not entest..?) (runs twice on opening issue ... but may be better for high user load)
     ? updater not updating meta vals correctly? (check entest code)        
+    + vertbars vanish on mouseover
     
 BOTH/CORE:
     * review git log to find changes to push across
