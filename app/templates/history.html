@@ -185,6 +185,18 @@
     <script>
         $.ajaxSetup({async:false});
         
+        // Filter
+        var max_filter = 100000;
+        $.fn.dataTable.ext.search.push(
+            function( settings, data, dataIndex ) {
+            console.log(data[0]);
+                if ( data[0] <= max_filter){return true;}
+                return false;
+            }
+        );
+        
+        // Build the table
+        var table;
         $(document).ready(function() {
             // enable mainchart radio buttons
             $('.achievement_type').on('click', function(event) {
@@ -195,7 +207,7 @@
             if (screen.width < 500) {hiddencols=[2,3,4,5,7];}
             else {hiddencols=[3,4,5];}
             
-            var table = $('#missed_words_table').DataTable( {
+            table = $('#missed_words_table').DataTable( {
                 dom: 'Brtp',
                 "paging":   true,
                 "lengthChange": false,
@@ -203,7 +215,7 @@
                 "ordering": true,
                 "buttons": true,
                 "info":     false,
-                "searching": false,
+                "searching": true,
                 "order": [[0, "asc" ]],
                 columnDefs: [{
                     targets: 0,
@@ -231,6 +243,21 @@
                     visible: false
                 }],
                 buttons: [{
+                    text: 'Study List Only', 
+                    action: function(){
+                        if (this.text() == 'Study List Only'){
+                            this.text('All Missed');
+                            max_filter = {{pred[1]}};
+                            table.draw();
+                            }
+                        else {
+                            this.text('Study List Only');
+                            max_filter = 100000;
+                            table.draw();
+                            }
+                        }
+                },
+                {
                     extend: 'columnsToggle',
                     columns: [2,3,4,5,7]
                 }]
@@ -272,7 +299,8 @@
             table.buttons( 1, null ).container().appendTo(
                 table.table().container()
             );
-
+            
+            // PDF Proccessing
              function processDoc(doc) {
                 alert("Generating PDF may take a few seconds. Please wait.");
                 $.getScript("{{url_for('static', filename='js/vfs_fonts.js')}}");

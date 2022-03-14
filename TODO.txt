@@ -6,7 +6,6 @@ CUR
 
 Study list
     - make sort order better (handle the blanks and words corectly in levels)
-    - filter toggle for 'should study/all' (this should hold in downloads)
     
 - concat dataTables js
 
