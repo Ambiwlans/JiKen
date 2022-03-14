@@ -445,11 +445,12 @@ def history(id):
         pct_known_by_appearance = "{:.2f}".format(pct_known_by_appearance))
 
 
-@bp.route("/anki_file/<id>")
-def anki_file(id):
+@bp.route("/anki_file/<id>/<max_filter>")
+def anki_file(id, max_filter):
     ###
     ### Locate/Load test data
     ###
+    
     
     data = {}
     datafound = False
@@ -488,12 +489,13 @@ def anki_file(id):
                    left_on=data['QuestionLog'].testmaterialid.astype(int), \
                    right_on='id')
     except:
-        history = pd.DataFrame(columns=['score','my_rank'])
+        abort(500, "Anki test failed to generate.")
     
+    db.session.query(TestLog).filter(TestLog.id == id).first()
 
     #Only wrong answers needed for study list    
     wronganswers = history[history['score']==0].sort_values(by=['my_rank'], ascending=True)
-    
+    wronganswers = wronganswers[wronganswers['my_rank'] <= int(max_filter)]
     
     ###
     ### Anki Deck Building
@@ -522,6 +524,7 @@ def anki_file(id):
               <div style="font-size: 20px; text-align:center;"><b>{{meaning}}</b><br><br>\
               {{onyomi}} --- {{kunyomi}}</div><br>\
               {{examples}}<hr>\
+              Jiken Rank #{{my_rank}}\
               Grade: {{grade}}<br>\
               JLPT: {{jlpt}}<br>\
               Kanken: {{kanken}}<br>'}])
