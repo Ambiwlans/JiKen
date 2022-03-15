@@ -2,11 +2,11 @@
 CUR
 ########### 
 
-- collect a bit more test data: studymode? End time? (and add to history page)
++ find more users!
 
-Study list
-    - make sort order better (handle the blanks and words corectly in levels)
-    
+Study list - make sort order better (handle the blanks and words corectly in levels)
+    + skip repeats of last question in study mode
+        
 - concat dataTables js
 
 + New reddit thread
@@ -16,10 +16,9 @@ Study list
 MAIN
 +++++++++++
 
-- bold active tests in adminpage
-- make a flush redis button in admin
++ collect a bit more test data: studymode? End time? (and add to history page)
 
-Front end:
+Test Mode:
         
 History:
     - switch to same anki id, and add some data to allow a building collection
@@ -27,14 +26,21 @@ History:
 
 Study Mode:
     + setting for a max grade or jlpt level
+
+Admin:
+    - bold active tests in adminpage
+    ? make a flush redis button in admin
+    ? add a full reset fn to admin page (set config TEST_TIMEOUT to 0, force update)
     
 Code Refactoring:
-    - regularization / error bounds
+    - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
+    - switch from deprecated to_msgpack (use pyarrow?)
     ? kanji->question meaning->answer etc.
-    * get rid of magic numbers, switch to config variables, clean CSS, redo comments
     ? trim the req list further
     ? shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')? (more readable)
-    - rebuffer tests when opened in history to redis - save lots of sql calls (only bother if needed) - could also just up the linger time in redis - needs a new timestamp for 'old' tests (on creation?)
+
+Logic:
+    - revisit regularization again...
         
 DB:
     ? track user devices in testlog (better return user guessing)
@@ -44,24 +50,26 @@ DB:
 PR:
     - basic seo
     ? medium blog post about it ... or just stuff into the github. Or add an about section?
-    - ask youglish about ad hosts?
-    * tweets, msg some teaching sites to see if they're interested, hit up dms
-    * hit up reddit
     
 BUGS:
-    + Cookie “session” will be soon rejected because it has the “SameSite” attribute set to “None” or an invalid value, without the “secure” attribute. To know more about the “SameSite“ attribute, read https://developer.mozilla.org/docs/Web/HTTP/Headers/Set-Cookie/SameSite
-    ? occassional timeouts since changing procfile to preload (only on jiken, not entest..?) (runs twice on opening issue ... but may be better for high user load)
-    ? updater not updating meta vals correctly? (check entest code)        
     + vertbars vanish on mouseover
+    + Cookie “session” will be soon rejected because it has the “SameSite” attribute set to “None” or an invalid value, without the “secure” attribute. To know more about the “SameSite“ attribute, read https://developer.mozilla.org/docs/Web/HTTP/Headers/Set-Cookie/SameSite
+    + occassional timeouts since changing procfile to preload (only on jiken, not entest..?) (runs twice on opening issue ... but may be better for high user load)
+    ? updater not updating meta vals correctly? (check entest code)        
+    ? words at extremes aren't reshuffling w/ l2r (like entest)
     
-BOTH/CORE:
+CONTINUOUS:
     * review git log to find changes to push across
     * update FP notices, tweak config, push through L2r changes if needed
+    * get rid of magic numbers, switch to config variables, clean CSS, redo comments
+    * tweets, msg some teaching sites to see if they're interested, hit up dms
     
 +++++++++++
 LATER/Low Prio
 +++++++++++
 
+- eventually set it to autopush l2r (after some big growth and nothing breaks)
+- ask youglish about ad hosts? (after i have a userbase big enough)
 + convert to android app
 ? jp vocab vers
 ? Language settings
