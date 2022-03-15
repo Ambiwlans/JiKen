@@ -39,6 +39,7 @@ Code Refactoring:
 DB:
     ? track user devices in testlog (better return user guessing)
     ? save est result to testlog (mildly more accurate than saving a,t)
+    ? a bit more kanji data? (strokes etc.)
     
 PR:
     - basic seo

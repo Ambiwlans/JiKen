@@ -195,7 +195,6 @@
             }
         );
         
-        // Build the table
         var table;
         $(document).ready(function() {
             // enable mainchart radio buttons
@@ -277,7 +276,7 @@
                     {
                         extend: 'csv',
                         text: 'CSV',
-                        charset: 'utf-8',
+                        charset: 'utf-8'
                     },
                     {
                         text: 'PDF',
@@ -287,7 +286,7 @@
                         messageTop: 'Saved from {{ url_for(request.endpoint, **request.view_args) }} on on {{(date|string)[:-3]}}GMT.',
                         exportOptions: {
                             modifier: {
-                                columns: ':visible'
+                                columns: 'visible'
                             }
                         },
                         customize: function ( doc ) {

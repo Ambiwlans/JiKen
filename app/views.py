@@ -490,8 +490,6 @@ def anki_file(id, max_filter):
                    right_on='id')
     except:
         abort(500, "Anki test failed to generate.")
-    
-    db.session.query(TestLog).filter(TestLog.id == id).first()
 
     #Only wrong answers needed for study list    
     wronganswers = history[history['score']==0].sort_values(by=['my_rank'], ascending=True)
@@ -527,7 +525,7 @@ def anki_file(id, max_filter):
               Jiken Rank #{{my_rank}}\
               Grade: {{grade}}<br>\
               JLPT: {{jlpt}}<br>\
-              Kanken: {{kanken}}<br>'}])
+              Kanken: {{kanken}}'}])
     
     
     for i, r in wronganswers.iterrows():

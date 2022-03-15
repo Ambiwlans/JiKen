@@ -64,7 +64,6 @@ function update_vert_lines(achievement_type){
         break;
     case 'kanken':   
         vert_lines = [[80,"　 　漢10"],[240,"　 　漢9"],[440,"　 　漢8"],[642,"　 　漢7"],[835,"　 　漢6"],[1026,"　 　漢5"],[1300,"　 　漢4"],[1600,"　 　漢3"],[1951,"　 　Pre-2"],[2136,"　 　漢2"],[2965,"　 　Pre-1"],[6300,"　 　漢1"]];
-        console.log('sel kanken');
         break;
     case 'none':    
     default:
