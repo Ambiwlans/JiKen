@@ -204,7 +204,7 @@ def test():
     question_variability = current_app.config['TEST_VARIABLITY']
     if study: 
         active_cnt = len(session['Study_List'])
-        if len_history > 15:
+        if len_history > current_app.config['VARIABILITY_SHIFT']:
             question_variability = current_app.config['STUDY_VARIABLITY']
 
     if score is None:
