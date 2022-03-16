@@ -5,7 +5,6 @@ CUR
 + find more users!
 
 Study list - make sort order better (handle the blanks and words corectly in levels)
-    + skip repeats of last question in study mode
         
 - concat dataTables js
 

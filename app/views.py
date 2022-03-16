@@ -250,7 +250,8 @@ def test():
         
         if active_cnt > random.randrange(0, int(current_app.config['TGT_ACTIVE'])):
             x_id = int(session['Study_List'].iloc[random.randrange(0, active_cnt)]['testmaterialid'])
-            print(x_id)
+            while (x_id == testmaterialid) and (active_cnt > 1): # avoid repeats
+                x_id = int(session['Study_List'].iloc[random.randrange(0, active_cnt)]['testmaterialid'])
             newquestion = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))[pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))['id']==x_id].iloc[0]
             studyword = 1
         else:     
