@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="container text-center">
+		<a href="/"><img class="title-sm" src="{{ url_for('static', filename='img/jiken.png') }}"></a>
+		<p class="slogan">Test Your <em>Book's</em> Kanji</p>
+        
+        <br>
+        <h1>Book Check</h1>
+        <br><br>
+        
+        <p> Enter text here and get its kanji breakdown to see what the reading level is. Great for checking out books, but works well for website and anything else textual. 
+        If you have completed a test here, you can generate study lists for kanji that YOU will need to learn for the book, do drills here, or export to anki if you prefer.</p>
+        
+        <div class="container">
+            <!-- User Section -->
+            {% if test_num %}
+                <p> Comparing to test #{{test_num}}.</p>
+            {% else %}
+                <p> If you'd like to compare text to your personal knowledge level, do a test here: <a type="button" class="btn btn-success" id="new" role="btn" href="/test">New Test</a></p>
+                <!-- or enter your test link here -->
+            {% endif %}  
+
+            <!-- Form -->            
+    		<form>
+                <div class="mb-3 text-left">
+                    <label for="a" class="form-label">Kanji Knowledge Level:</label> <!-- cur val -->
+            		<input class="form-control" type="range" aria-label="default input" id="a" min="1" max="{{max_a}}" value={{a}}></input>
+                    <label for="t" class="form-label">Knowledge Variability:</label>
+            		<input class="form-control" type="range" aria-label="default input" id="t" min="0" max="100" value={{(t * 1000) | int}}></input>
+            		<label for="tgt_kpp" class="form-label">Fluency:</label>
+            		<input class="form-control" type="range" aria-label="default input" id="tgt_kpp" min="0.1" max="10" value=1></input>
+        		</div>
+                <div class="mb-3">
+                    <label for="txt" class="form-label">Enter text you want analyzed:</label>
+            		<textarea class="form-control" aria-label="With textarea" id="txt"></textarea>
+        		</div>
+        		<button type="button" class="btn btn-primary" id="subm">Analyze!</button>
+    		</form>
+    		
+    		<!-- Results --->
+    		<div class="text-left">
+        		<h3>Results:</h3>
+        		<p> Text's Kanji Level (using given target fluency): <span id="txt_a"></span></p>
+        		<p> Readability (For you): <span id='readability'></span> (You can read all but <span id="kpp"></span> kanji per page)</p>
+    		</div>
+    		
+    		<!-- Graph -->
+    		
+    		<!-- Study list -->
+    		<h3 class="text-left">Study list:</h3>
+    		
+    		<p id="studylist"></p>
+    		<br>
+    		<br>                
+    		
+	</div>
+
+{% endblock content %}
+
+{% block scripts %}
+    {{super()}}
+    <script> 
+    var tm = {{ tm|tojson|safe }};  //(rank, kanji)
+    var counts = Array(tm.length).fill(0);
+    
+    $('#subm').on('click', function(event) {
+        var input = $('#txt').val();
+        var initial_length = input.length;
+        var should_know = Math.floor(initial_length * .996);
+        var reading_level = 0;
+        var pred0 = parseInt($('#pred0').val());
+        var my_pct = 1;
+        var studylist = "";
+        counts.fill(0)
+        
+        console.log(input);
+        console.log(initial_length);
+        
+        // strip non-kanji
+        input = input.replace(/[^\u4e00-\u9faf|\u3400-\u4dbf]/g, "");
+        input_length = input.length;
+        console.log(input);
+        console.log(initial_length-input_length);
+        
+        var culm_count = initial_length-input_length;   // start count with all the stripped characters
+        
+        for (let i = 0; i < tm.length; i++) {
+            var t = input.split(tm[i][1]);
+            input = t.join('');
+            counts[i] = t.length - 1;
+            culm_count += t.length - 1;
+            //console.log(tm[i][0] + "-" + tm[i][1] + " - " + culm_count);
+            //console.log(input);
+            
+            if (culm_count >= should_know && reading_level == 0) {
+                reading_level = tm[i][0];
+                console.log(tm[i][0] + "-" + tm[i][1] + " - " + culm_count);
+                console.log('threshold met');
+                console.log(input);
+            }
+            
+            if (i >= pred0 && my_pct == 1) {
+                my_pct = culm_count / initial_length;
+                studylist = Array.from(new Set(input)).toString();
+                console.log(input);
+            }
+            
+            if (culm_count == initial_length){break;}
+        }
+        
+        console.log(reading_level);
+        $('#txt_a').html(reading_level);
+        $('#kpp').html(my_pct);
+        $('#studylist').html(studylist);
+    });
+    
+    </script>
+{% endblock %}

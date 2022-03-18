@@ -80,6 +80,7 @@ def forceupdate():
         upd(current_app)
         return("update success")
     return render_template('home.html')
+    
 
 ### GENERAL ROUTES
 
@@ -90,10 +91,7 @@ def test():
     ### Log Answer/Score
     ###
 
-    study = request.args.get('s')
-    if study is None: 
-        study = 0
-    study = int(study)
+    study = int(request.args.get('s') or 0)
     
     score = request.args.get('a')
     testmaterialid = request.args.get('q')
@@ -538,7 +536,54 @@ def anki_file(id, max_filter):
     
     return send_file(tf, mimetype='application/apkg', as_attachment=True, attachment_filename='JiKen Study - #'+str(id)+'.apkg')
     
-
+#
+# Bookcheck allows users to enter text and get back an analysis of text difficulty
+#    
+# Mostly done clientside (js), so not much is needed in python
+# can be accessed with or without a valid test
+#
+@bp.route("/bookcheck")
+def bookcheck():
+    test_num = int(request.args.get('test_num') or 0)
+    test_data = {}
+    
+    #If given a test number to look up
+    if test_num:
+        #If test is in cache still, scan through redis and use that data.
+        for sess in current_app.config['SESSION_REDIS'].scan_iter("session:*"):
+            if test_data:
+                break
+            tmp_data = pickle.loads(current_app.config['SESSION_REDIS'].get(sess))
+            try:
+                if tmp_data['TestLog']['id'] == int(id):          
+                    test_data = tmp_data
+                    break
+            except:
+                pass
+        #Otherwise, load data from Sql
+        if not test_data:
+            test_data['TestLog'] = db.session.query(TestLog).filter(TestLog.id == id).first()
+            if not test_data['TestLog']:
+                #if it isn't in the DB either, test not found.
+                test_num = 0
+            test_data['QuestionLog'] = db.session.query(QuestionLog).filter(QuestionLog.testlogid == id).all()
+            test_data['QuestionLog'] = pd.DataFrame([s.__dict__ for s in test_data['QuestionLog']])
+    
+    # default vals for a, t (cutoff needs to be done clientside to enable on the fly modification)
+    if test_num:
+        a = test_data['TestLog'].a 
+        t = test_data['TestLog'].t 
+    else:
+        a = int(current_app.config['SESSION_REDIS'].get('default_kanji') or 1500)
+        t = float(current_app.config['SESSION_REDIS'].get('default_tightness') or .01)
+        
+    # Get necessary kanji list / dictionary data    
+    tm = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')).sort_values(by=['my_rank'], ascending=True)
+    tm_list = [(r.my_rank, r.kanji) for i, r in tm.iterrows()]
+    
+    return render_template('bookcheck.html', tm = tm_list, \
+        test_num = test_num, a = a, t = t,
+        max_a = int(current_app.config['MAX_X'] or 6000))
     
     
     

@@ -2,14 +2,27 @@
 CUR
 ########### 
 
-+ find more users!
-
-Study list - make sort order better (handle the blanks and words corectly in levels)
-        
-- concat dataTables js
-
 + New reddit thread
 + msg some teaching sites/twitters to see if they're interested, hit up dms
++ find more users!
+
+- make mwl sort order better (handle the blanks and words corectly in levels)
+        
+- concat dataTables js gulp
+
+Book Check:
+    + generate a histogram for kanji distribution (if no test on file)
+        + generate a combined user test + book graph to show dist of known and not-known words
+    + generate a word list
+        - 'in book' and '<pred[2]' ... or hardest 20
+    + t/21312903/bookcheck for a user page
+    + /bookcheck for a generic non-user page
+        - have an insert test id/url that redirects to the user specific version
+    - add a slider for proficiency level (kanji perpage), and for the kanji knowledge level, and slope (the user page one just presets the a,t)
+    - generic page gets set to the default a,t
+    - word list still uses pred1, but 
+    + comments.... less horrible code/ui
+    + generate wordlist from after scan or .... add as you go until hitting the end rather than this map nonsense.
     
 +++++++++++
 MAIN
@@ -17,12 +30,33 @@ MAIN
 
 + collect a bit more test data: studymode? End time? (and add to history page)
 
+Book Check:
+    ? efficiency
+        - could do a map to get unique charas (no counts), then count backwards from rarest.... only look at rarest 50 found? ... better than checking every kanji as currently doing
+            - would not allow histograms ... but might be viable to let users have access?
+        + reanalysis (same text, different settings) should reuse old scan
+	- do a bunch of books, sites myself to make reccs in /history
+    	- new table, saves the kanji distribution #s
+        	- smallint * 7000 per book ... should be mostly 0s.
+
+DRILL Mode:
+	- start with a bunch of kanji, and drill ONLY those until complete
+	- 'drill from test results' lets you create a new drill from a /t/
+	- does not get saved
+	- needs a more sensible end state.
+    + how is the list data passed? list of ints should be pretty safe but need to check specs for url limit if i'm passing by param in url
+    
 Test Mode:
         
 History:
+    + book reccs
+        - amazon w/ referal code?
+        - have every book recc come with a histogram and user comparison
+        - select a few books for the milestone lines
     - switch to same anki id, and add some data to allow a building collection
     ? links to other tests with same IP/device. Use a cookie?
-
+    - rename vertlines milestone lines
+    
 Study Mode:
     + setting for a max grade or jlpt level
 
@@ -72,7 +106,8 @@ LATER/Low Prio
 + convert to android app
 ? jp vocab vers
 ? Language settings
-        
+- offer book level check to bookstores? schools?
+
 +++++++++++
 MAYBE
 +++++++++++
