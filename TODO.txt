@@ -11,12 +11,15 @@ CUR
 Book Check:
     - put a link from /history, /home
     - out_a should be based on % chance to know each kanji (currently just counting about the a)
+        - need to add sigmoid calc to js
     + generate a histogram for kanji distribution (if no test on file)
         + generate a combined user test + book graph to show dist of known and not-known words
-    - Wordlist 
+        - need to make histo generic
+    - Wordlist
         - use >30% know (currently using in_a straight)
         - limit to 50 kanji
         - switch to datatable
+            ? use generic datatable and put in a js file?
     
 +++++++++++
 MAIN

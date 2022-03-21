@@ -37,10 +37,10 @@
                     <label for="in_t" class="form-label">Knowledge Precision:</label>
             		<input class="form-control" type="range" id="in_t" min="0" max="10" value={{(t * 1000) | int}}></input>
             		<label for="in_kpp" class="form-label">Challenge Level:</label>  <label for="in_kpp" class="form-label" id="kkp_label">Average (Can read all but ~0.4 kanji per page)</label>
-            		<input class="form-control" type="range" id="in_kpp" min="-3" max="3" step="1" value=0></input>
+            		<input class="form-control" type="range" id="in_kpp" min="-4" max="4" step="1" value=0></input>
         		</div>
                 <div class="mb-3 text-left">
-                    <label for="in_txt" class="form-label">Text to analyze:</label>
+                    <label for="in_txt" class="form-label">Text to analyze (more pages -> more accurate):</label>
             		<textarea class="form-control" id="in_txt"></textarea>
         		</div>
         		<button type="button" class="btn btn-primary" id="analyze">Analyze!</button>
@@ -88,6 +88,9 @@
         
         var msg = '';
         switch(in_kpp_raw) {
+            case -4: 
+                msg = "Trivial";
+                break;
             case -3:
             case -2:
                 msg = "Very Readable";
@@ -101,8 +104,12 @@
             case 1:
                 msg = "Decent Challenge";
                 break;
-            default:
+            case 2:
+            case 3:
                 msg = "Very Challenging!"
+                break;
+            default:
+                msg = "Unreadable!"
         }
         
         var in_kpp = (2.5 ** (in_kpp_raw - 1)).toFixed(2);
