@@ -58,8 +58,8 @@
     		
     		<!-- Study list -->
     		<h3 class="text-left">Study list:</h3>
-    		
-    		<p id="studylist"></p>
+            <table id="study_table" class="table">
+            </table>
     		<br>
     		<br>                
     		
@@ -77,8 +77,18 @@
 
 {% block scripts %}
     {{super()}}
-    <script> 
     
+    <!-- Study Table -->
+	<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    
+    <script type="text/javascript" src="{{url_for('static', filename='js/study_table.js')}}"></script>
+    
+    <script> 
     // Form ui scripts
     $("#in_a").on("change input", function() {
         $("#a_label").html($(this).val())
@@ -118,6 +128,9 @@
         $("#kkp_label").html(msg)
     })
     
+    //
+    // Analyze
+    //
     var tm = {{ tm|tojson|safe }};  //(rank, kanji)
     const char_per_page = 300;
     $('#analyze').on('click', function(event) {
@@ -137,7 +150,7 @@
         var out_kpp = -1;
         
         
-        var studylist = "";
+        var studylist = [];
         
         var counts = Array(tm.length).fill(0);
         
@@ -170,24 +183,28 @@
                 out_kpp = "You can read all but ~" + out_kpp + "kanji per page";  
             }
             
-            // build a studylist
+            // collect words for studylist
             if (i >= in_a && counts[i] > 0) {
-                if (studylist == ""){
-                    studylist = tm[i][1];
-                }
-                else{
-                    studylist += ", " + tm[i][1];
-                }
+                studylist.push(tm[i]);
             }
             
             if (culm_count == initial_length){break;}
         }            
         
+        // request additional info for studylist (disabled until DB size is large enough to warrant switch)
+        // $.getJSON('/more_tm', {'my_ranks': studylist}, function (result) {make_wl(result)})
+        
+        make_wl(studylist);
+                    
         $('#out_a').html(out_a);
         $('#out_pct_k').html(out_pct_k);
         $('#out_kpp').html(out_kpp);
         $('#studylist').html(studylist);
     });
+    
+    function make_wl(studylist){
+        
+    }
     
     </script>
 {% endblock %}

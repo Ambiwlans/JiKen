@@ -585,8 +585,22 @@ def bookcheck():
         id = id, a = a, t = t,
         max_a = int(current_app.config['MAX_X'] or 6000))
     
-    
-    
+# allows initial wordlists to only have rank and kanji rather than sending full test_mat    
+# https://stackoverflow.com/questions/68266400/sending-plotly-charts-in-a-dictionary-via-jquery-getjson-in-a-flask-app
+# https://stackoverflow.com/questions/13081532/return-json-response-from-flask-view   
+# https://stackoverflow.com/questions/20001229/how-to-get-posted-json-in-flask   
+# https://towardsdatascience.com/using-python-flask-and-ajax-to-pass-information-between-the-client-and-server-90670c64d688   
+#@bp.route('/more_tm', methods=['POST', 'GET'])
+#def more_tm():
+#    my_ranks = request.args.get('my_ranks')
+#    
+#    print(my_ranks)
+#    
+#    tm = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')).sort_values(by=['my_rank'], ascending=True)
+#    tm_list = [(r.my_rank, r.kanji, r.meaning, r.onyomi, r.kunyomi, r.grade, r.jlpt, r.kanken, r.examples) for i, r in tm.iterrows()]
+#
+#    return tm_list
+#    
     
     
     

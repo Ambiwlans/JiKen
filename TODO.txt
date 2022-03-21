@@ -16,6 +16,7 @@ Book Check:
         + generate a combined user test + book graph to show dist of known and not-known words
         - need to make histo generic
     - Wordlist
+        - currently sends all test material ... should use kanji/my_rank first and then request other data as needed
         - use >30% know (currently using in_a straight)
         - limit to 50 kanji
         - switch to datatable
@@ -40,7 +41,6 @@ Test Mode:
         
 History:
     + book reccs
-        - amazon w/ referal code?
         - have every book recc come with a histogram and user comparison
         - select a few books for the milestone lines
     - switch to same anki id, and add some data to allow a building collection
@@ -70,9 +70,12 @@ DB:
     ? track user devices in testlog (better return user guessing)
     ? save est result to testlog (mildly more accurate than saving a,t)
     ? a bit more kanji data? (strokes etc.)
-	- scan a bunch of books, sites myself to make reccs in /history
-    	- new table, saves the kanji distribution #s
-        	- smallint * 7000 per book ... should be mostly 0s.    
+    - BC 
+        - revisit how i'd store books. full chara count is ~15kb/book as a ushort np array (too much... using sparse doesn't reliably save space) (normal python array is 61kb)
+        a abandon character data, just store the challenge scores
+        b save enough data for histograms (100 ints instead of 7000)
+        c save binary for each character ... no histograms, but can generate word lists still
+        
 PR:
     - basic seo
     ? medium blog post about it ... or just stuff into the github. Or add an about section?
@@ -100,7 +103,11 @@ LATER/Low Prio
 ? jp vocab vers
 ? Language settings
 - offer book level check to bookstores? schools?
-
+- Amazon Associates Program (needs 500+ views/day) (5%) ... kinokuniya (1%)
+    https://onemorecupof-coffee.com/best-book-affiliate-programs/
+    https://affiliate-program.amazon.com/help/node/topic/GRXPHT8U84RAYDXZ
+    https://store.kinokuniya.co.jp/user-guide/affiliate/
+    
 +++++++++++
 MAYBE
 +++++++++++
