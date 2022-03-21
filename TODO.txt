@@ -2,27 +2,24 @@
 CUR
 ########### 
 
-+ New reddit thread
-+ msg some teaching sites/twitters to see if they're interested, hit up dms
 + find more users!
-
-- make mwl sort order better (handle the blanks and words corectly in levels)
+    + New reddit thread
+    + msg some teaching sites/twitters to see if they're interested, hit up dms
         
 - concat dataTables js gulp
 
 Book Check:
+    - out_a should be based on % chance to know each kanji (currently just counting about the a)
     + generate a histogram for kanji distribution (if no test on file)
         + generate a combined user test + book graph to show dist of known and not-known words
-    + generate a word list
-        - 'in book' and '<pred[2]' ... or hardest 20
-    + t/21312903/bookcheck for a user page
-    + /bookcheck for a generic non-user page
+    + No-Test 
         - have an insert test id/url that redirects to the user specific version
-    - add a slider for proficiency level (kanji perpage), and for the kanji knowledge level, and slope (the user page one just presets the a,t)
-    - generic page gets set to the default a,t
-    - word list still uses pred1, but 
-    + comments.... less horrible code/ui
-    + generate wordlist from after scan or .... add as you go until hitting the end rather than this map nonsense.
+    + Yes-Test
+        + t/21312903/bookcheck for a user page
+    - Wordlist 
+        - use >30% know (currently using in_a straight)
+        - limit to 50 kanji
+        - switch to datatable
     
 +++++++++++
 MAIN
@@ -31,13 +28,6 @@ MAIN
 + collect a bit more test data: studymode? End time? (and add to history page)
 
 Book Check:
-    ? efficiency
-        - could do a map to get unique charas (no counts), then count backwards from rarest.... only look at rarest 50 found? ... better than checking every kanji as currently doing
-            - would not allow histograms ... but might be viable to let users have access?
-        + reanalysis (same text, different settings) should reuse old scan
-	- do a bunch of books, sites myself to make reccs in /history
-    	- new table, saves the kanji distribution #s
-        	- smallint * 7000 per book ... should be mostly 0s.
 
 DRILL Mode:
 	- start with a bunch of kanji, and drill ONLY those until complete
@@ -56,7 +46,8 @@ History:
     - switch to same anki id, and add some data to allow a building collection
     ? links to other tests with same IP/device. Use a cookie?
     - rename vertlines milestone lines
-    
+    - make mwl sort order better (handle the blanks and words corectly in levels)
+        
 Study Mode:
     + setting for a max grade or jlpt level
 
@@ -79,7 +70,9 @@ DB:
     ? track user devices in testlog (better return user guessing)
     ? save est result to testlog (mildly more accurate than saving a,t)
     ? a bit more kanji data? (strokes etc.)
-    
+	- scan a bunch of books, sites myself to make reccs in /history
+    	- new table, saves the kanji distribution #s
+        	- smallint * 7000 per book ... should be mostly 0s.    
 PR:
     - basic seo
     ? medium blog post about it ... or just stuff into the github. Or add an about section?

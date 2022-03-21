@@ -25,23 +25,24 @@
                 <div class="mb-3 text-left">
                     <label for="in_a" class="form-label">Kanji Knowledge Level:</label>  <label for="in_a" class="form-label" id="a_label">{{a}}</label> 
             		<input class="form-control" type="range" aria-label="default input" id="in_a" min="1" max="{{max_a}}" step="1" value={{a}}></input>
-                    <label for="in_t" class="form-label">Knowledge Variability:</label>
-            		<input class="form-control" type="range" aria-label="default input" id="in_t" min="0" max="100" value={{(t * 1000) | int}}></input>
-            		<label for="in_kpp" class="form-label">Readability (For you):</label>  <label for="in_kpp" class="form-label" id="kkp_label">Average (Can read all but ~0.35 kanji per page)</label>
+                    <label for="in_t" class="form-label">Knowledge Precision:</label>
+            		<input class="form-control" type="range" aria-label="default input" id="in_t" min="0" max="10" value={{(t * 1000) | int}}></input>
+            		<label for="in_kpp" class="form-label">Challenge Level:</label>  <label for="in_kpp" class="form-label" id="kkp_label">Average (Can read all but ~0.4 kanji per page)</label>
             		<input class="form-control" type="range" aria-label="default input" id="in_kpp" min="-3" max="3" step="1" value=0></input>
         		</div>
                 <div class="mb-3 text-left">
-                    <label for="txt" class="form-label">Text to analyze:</label>
+                    <label for="in_txt" class="form-label">Text to analyze:</label>
             		<textarea class="form-control" aria-label="With textarea" id="in_txt"></textarea>
         		</div>
-        		<button type="button" class="btn btn-primary" id="subm">Analyze!</button>
+        		<button type="button" class="btn btn-primary" id="analyze">Analyze!</button>
     		</form>
     		
     		<!-- Results --->
     		<div class="text-left">
         		<h3>Results:</h3>
-        		<p> How many kanji you should know for text to be readable: <span id="out_a"></span></p>
-        		<p> Readability (using selected Kanji Knowledge Level): <span id='out_readibility'></span> (Can read all but ~<span id="out_kpp">0.35</span> kanji per page)</p>
+        		<p> How many kanji you should know for text to be readable (at selected Challenge Level): <span id="out_a"></span></p>
+        		<p> Readability (at selected Kanji Knowledge Level): <span id="out_kpp"></span></p>
+        		<p> Fraction of text that is kanji: <span id="out_pct_k"></span></p>
     		</div>
     		
     		<!-- Graph -->
@@ -61,11 +62,12 @@
     {{super()}}
     <script> 
     
+    // Form ui scripts
     $("#in_a").on("change input", function() {
         $("#a_label").html($(this).val())
     })
     $("#in_kpp").on("change input", function() {
-        var in_kpp_raw = parseInt($(this).val());
+        var in_kpp_raw = parseInt($('#in_kpp').val());
         
         var msg = '';
         switch(in_kpp_raw) {
@@ -86,66 +88,80 @@
                 msg = "Very Challenging!"
         }
         
-        var in_kpp = (2 ** (in_kpp_raw - 1.5)).toFixed(2);
+        var in_kpp = (2.5 ** (in_kpp_raw - 1)).toFixed(2);
         
         msg = msg + " (Can read all but ~" + in_kpp + " kanji per page)";
         $("#kkp_label").html(msg)
     })
     
     var tm = {{ tm|tojson|safe }};  //(rank, kanji)
-    var counts = Array(tm.length).fill(0);
-    
-    $('#subm').on('click', function(event) {
+    const char_per_page = 300;
+    $('#analyze').on('click', function(event) {
     
         // Get and format vars
-        var input = $('#txt').val();
+        var in_a = parseInt($('#in_a').val());
+        var in_t = $('#in_t').val()/1000;
+        var in_kpp = (2.5 ** (parseInt($('#in_kpp').val()) - 1)).toFixed(2);
+        
+        var input = $('#in_txt').val();
         var initial_length = input.length;
-        var 
-        var should_know = Math.floor(initial_length * .996);
-        var reading_level = 0;
-        var pred0 = parseInt($('#pred0').val());
-        var my_pct = 1;
+        
+        var should_know_pct = 1-(in_kpp / char_per_page)
+        var should_know_cnt = Math.floor(initial_length * should_know_pct);
+        
+        var out_a = -1;
+        var out_kpp = -1;
+        
+        
         var studylist = "";
-        counts.fill(0)
         
-        console.log(input);
-        console.log(initial_length);
+        var counts = Array(tm.length).fill(0);
         
-        // strip non-kanji
+        // start count with all the non-kanji and strip them
         input = input.replace(/[^\u4e00-\u9faf|\u3400-\u4dbf]/g, "");
-        input_length = input.length;
-        console.log(input);
-        console.log(initial_length-input_length);
+        var out_pct_k = (1 - (initial_length - input.length)/initial_length).toFixed(2) + "%";
+        var culm_count = initial_length - input.length;
         
-        var culm_count = initial_length-input_length;   // start count with all the stripped characters
-        
+        // go through every kanji (in my_rank order) and strip them from input, tally them
         for (let i = 0; i < tm.length; i++) {
-            var t = input.split(tm[i][1]);
-            input = t.join('');
-            counts[i] = t.length - 1;
-            culm_count += t.length - 1;
-            //console.log(tm[i][0] + "-" + tm[i][1] + " - " + culm_count);
-            //console.log(input);
+            var tmp_split_array = input.split(tm[i][1]);
+            input = tmp_split_array.join('');
+            counts[i] = tmp_split_array.length - 1;
+            if (input == ""){break;}
+        }
+        
+        // rescan for counts (separate for future changes)
+        for (let i = 0; i < tm.length; i++) {
             
-            if (culm_count >= should_know && reading_level == 0) {
-                reading_level = tm[i][0];
-                console.log(tm[i][0] + "-" + tm[i][1] + " - " + culm_count);
-                console.log('threshold met');
-                console.log(input);
+            culm_count += counts[i];
+            
+            // given in_kpp (->should_know_cnt), how many kanji should you know
+            if (culm_count >= should_know_cnt && out_a == -1) {
+                out_a = tm[i][0];
             }
             
-            if (i >= pred0 && my_pct == 1) {
-                my_pct = culm_count / initial_length;
-                studylist = Array.from(new Set(input)).toString();
-                console.log(input);
+            // given # known kanji a, how hard is txt?
+            if (i >= in_a && out_kpp == -1) {
+                out_kpp = ((1 - (culm_count / initial_length)) * char_per_page).toFixed(2);
+                out_kpp = "You can read all but ~" + out_kpp + "kanji per page";  
+            }
+            
+            // build a studylist
+            if (i >= in_a && counts[i] > 0) {
+                if (studylist == ""){
+                    studylist = tm[i][1];
+                }
+                else{
+                    studylist += ", " + tm[i][1];
+                }
             }
             
             if (culm_count == initial_length){break;}
-        }
+        }            
         
-        console.log(reading_level);
-        $('#txt_a').html(reading_level);
-        $('#kpp').html(my_pct);
+        $('#out_a').html(out_a);
+        $('#out_pct_k').html(out_pct_k);
+        $('#out_kpp').html(out_kpp);
         $('#studylist').html(studylist);
     });
     
