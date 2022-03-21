@@ -542,13 +542,13 @@ def anki_file(id, max_filter):
 # Mostly done clientside (js), so not much is needed in python
 # can be accessed with or without a valid test
 #
-@bp.route("/bookcheck")
-def bookcheck():
-    test_num = int(request.args.get('test_num') or 0)
+@bp.route("/bookcheck/<id>")
+def bookcheck(id):
+    id = int(request.args.get('id') or 0)
     test_data = {}
     
     #If given a test number to look up
-    if test_num:
+    if id:
         #If test is in cache still, scan through redis and use that data.
         for sess in current_app.config['SESSION_REDIS'].scan_iter("session:*"):
             if test_data:
@@ -565,12 +565,12 @@ def bookcheck():
             test_data['TestLog'] = db.session.query(TestLog).filter(TestLog.id == id).first()
             if not test_data['TestLog']:
                 #if it isn't in the DB either, test not found.
-                test_num = 0
+                id = 0
             test_data['QuestionLog'] = db.session.query(QuestionLog).filter(QuestionLog.testlogid == id).all()
             test_data['QuestionLog'] = pd.DataFrame([s.__dict__ for s in test_data['QuestionLog']])
     
     # default vals for a, t (cutoff needs to be done clientside to enable on the fly modification)
-    if test_num:
+    if id:
         a = test_data['TestLog'].a 
         t = test_data['TestLog'].t 
     else:
@@ -581,8 +581,8 @@ def bookcheck():
     tm = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')).sort_values(by=['my_rank'], ascending=True)
     tm_list = [(r.my_rank, r.kanji) for i, r in tm.iterrows()]
     
-    return render_template('bookcheck.html', tm = tm_list, \
-        test_num = test_num, a = a, t = t,
+    return render_template('bookcheck.html', tm = tm_list, 
+        id = id, a = a, t = t,
         max_a = int(current_app.config['MAX_X'] or 6000))
     
     
