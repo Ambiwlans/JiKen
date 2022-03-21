@@ -542,8 +542,8 @@ def anki_file(id, max_filter):
 # Mostly done clientside (js), so not much is needed in python
 # can be accessed with or without a valid test
 #
-@bp.route("/bookcheck/<id>")
-def bookcheck(id):
+@bp.route("/bookcheck")
+def bookcheck():
     id = int(request.args.get('id') or 0)
     test_data = {}
     

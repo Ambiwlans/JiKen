@@ -9,13 +9,10 @@ CUR
 - concat dataTables js gulp
 
 Book Check:
+    - put a link from /history, /home
     - out_a should be based on % chance to know each kanji (currently just counting about the a)
     + generate a histogram for kanji distribution (if no test on file)
         + generate a combined user test + book graph to show dist of known and not-known words
-    + No-Test 
-        - have an insert test id/url that redirects to the user specific version
-    + Yes-Test
-        + t/21312903/bookcheck for a user page
     - Wordlist 
         - use >30% know (currently using in_a straight)
         - limit to 50 kanji

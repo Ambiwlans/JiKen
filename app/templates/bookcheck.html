@@ -13,10 +13,16 @@
         
         <div class="container">
             <!-- User Section -->
-            {% if test_num %}
-                <p> Comparing to test #{{test_num}}.</p>
+            {% if id %}
+                <p> Comparing to test #{{id}}.</p>
             {% else %}
-                <p> If you'd like to compare text to your personal knowledge level, do a test here: <a type="button" class="btn btn-success" id="new" role="btn" href="/test">New Test</a></p>
+                <p> If you'd like to compare text to your personal knowledge level: <a type="button" class="btn btn-success btn-sm" id="new" role="btn" href="/test">Do a Test!</a>
+                or 
+                <div class="input-group input-group-sm col-12">
+                    <input type="text" class="form-control" placeholder="Id #" id="in_id"></input>
+                    <button class="btn btn-success btn-sm" type="button" onclick="window.open('/bookcheck?id=' + $('#in_id').val(),'_self');">Go</button>
+                </div>
+                </p>
                 <!-- or enter your test link here -->
             {% endif %}  
 
@@ -24,15 +30,15 @@
     		<form>
                 <div class="mb-3 text-left">
                     <label for="in_a" class="form-label">Kanji Knowledge Level:</label>  <label for="in_a" class="form-label" id="a_label">{{a}}</label> 
-            		<input class="form-control" type="range" aria-label="default input" id="in_a" min="1" max="{{max_a}}" step="1" value={{a}}></input>
+            		<input class="form-control" type="range" id="in_a" min="1" max="{{max_a}}" step="1" value={{a}}></input>
                     <label for="in_t" class="form-label">Knowledge Precision:</label>
-            		<input class="form-control" type="range" aria-label="default input" id="in_t" min="0" max="10" value={{(t * 1000) | int}}></input>
+            		<input class="form-control" type="range" id="in_t" min="0" max="10" value={{(t * 1000) | int}}></input>
             		<label for="in_kpp" class="form-label">Challenge Level:</label>  <label for="in_kpp" class="form-label" id="kkp_label">Average (Can read all but ~0.4 kanji per page)</label>
-            		<input class="form-control" type="range" aria-label="default input" id="in_kpp" min="-3" max="3" step="1" value=0></input>
+            		<input class="form-control" type="range" id="in_kpp" min="-3" max="3" step="1" value=0></input>
         		</div>
                 <div class="mb-3 text-left">
                     <label for="in_txt" class="form-label">Text to analyze:</label>
-            		<textarea class="form-control" aria-label="With textarea" id="in_txt"></textarea>
+            		<textarea class="form-control" id="in_txt"></textarea>
         		</div>
         		<button type="button" class="btn btn-primary" id="analyze">Analyze!</button>
     		</form>
@@ -54,6 +60,14 @@
     		<br>
     		<br>                
     		
+            <!-- Buttons -->    	
+            {% if id %}
+            <div class="btn-toolbar float-right" role="toolbar">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Nav Button Block">
+                <a type="button" class="btn btn-success" id="new" role="btn" href="/t/{{id}}">Back to Test Results</a>
+            </div>
+            </div>
+            {% endif %}
 	</div>
 
 {% endblock content %}
