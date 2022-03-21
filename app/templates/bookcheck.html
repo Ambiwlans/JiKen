@@ -23,16 +23,16 @@
             <!-- Form -->            
     		<form>
                 <div class="mb-3 text-left">
-                    <label for="a" class="form-label">Kanji Knowledge Level:</label> <!-- cur val -->
-            		<input class="form-control" type="range" aria-label="default input" id="a" min="1" max="{{max_a}}" value={{a}}></input>
-                    <label for="t" class="form-label">Knowledge Variability:</label>
-            		<input class="form-control" type="range" aria-label="default input" id="t" min="0" max="100" value={{(t * 1000) | int}}></input>
-            		<label for="tgt_kpp" class="form-label">Fluency:</label>
-            		<input class="form-control" type="range" aria-label="default input" id="tgt_kpp" min="0.1" max="10" value=1></input>
+                    <label for="in_a" class="form-label">Kanji Knowledge Level:</label>  <label for="in_a" class="form-label" id="a_label">{{a}}</label> 
+            		<input class="form-control" type="range" aria-label="default input" id="in_a" min="1" max="{{max_a}}" step="1" value={{a}}></input>
+                    <label for="in_t" class="form-label">Knowledge Variability:</label>
+            		<input class="form-control" type="range" aria-label="default input" id="in_t" min="0" max="100" value={{(t * 1000) | int}}></input>
+            		<label for="in_kpp" class="form-label">Readability (For you):</label>  <label for="in_kpp" class="form-label" id="kkp_label">Average (Can read all but ~0.35 kanji per page)</label>
+            		<input class="form-control" type="range" aria-label="default input" id="in_kpp" min="-3" max="3" step="1" value=0></input>
         		</div>
-                <div class="mb-3">
-                    <label for="txt" class="form-label">Enter text you want analyzed:</label>
-            		<textarea class="form-control" aria-label="With textarea" id="txt"></textarea>
+                <div class="mb-3 text-left">
+                    <label for="txt" class="form-label">Text to analyze:</label>
+            		<textarea class="form-control" aria-label="With textarea" id="in_txt"></textarea>
         		</div>
         		<button type="button" class="btn btn-primary" id="subm">Analyze!</button>
     		</form>
@@ -40,8 +40,8 @@
     		<!-- Results --->
     		<div class="text-left">
         		<h3>Results:</h3>
-        		<p> Text's Kanji Level (using given target fluency): <span id="txt_a"></span></p>
-        		<p> Readability (For you): <span id='readability'></span> (You can read all but <span id="kpp"></span> kanji per page)</p>
+        		<p> How many kanji you should know for text to be readable: <span id="out_a"></span></p>
+        		<p> Readability (using selected Kanji Knowledge Level): <span id='out_readibility'></span> (Can read all but ~<span id="out_kpp">0.35</span> kanji per page)</p>
     		</div>
     		
     		<!-- Graph -->
@@ -60,12 +60,47 @@
 {% block scripts %}
     {{super()}}
     <script> 
+    
+    $("#in_a").on("change input", function() {
+        $("#a_label").html($(this).val())
+    })
+    $("#in_kpp").on("change input", function() {
+        var in_kpp_raw = parseInt($(this).val());
+        
+        var msg = '';
+        switch(in_kpp_raw) {
+            case -3:
+            case -2:
+                msg = "Very Readable";
+                break;
+            case -1:
+                msg = "Readable";
+                break;
+            case 0:
+                msg = "Average";
+                break;
+            case 1:
+                msg = "Decent Challenge";
+                break;
+            default:
+                msg = "Very Challenging!"
+        }
+        
+        var in_kpp = (2 ** (in_kpp_raw - 1.5)).toFixed(2);
+        
+        msg = msg + " (Can read all but ~" + in_kpp + " kanji per page)";
+        $("#kkp_label").html(msg)
+    })
+    
     var tm = {{ tm|tojson|safe }};  //(rank, kanji)
     var counts = Array(tm.length).fill(0);
     
     $('#subm').on('click', function(event) {
+    
+        // Get and format vars
         var input = $('#txt').val();
         var initial_length = input.length;
+        var 
         var should_know = Math.floor(initial_length * .996);
         var reading_level = 0;
         var pred0 = parseInt($('#pred0').val());
