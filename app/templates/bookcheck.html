@@ -14,23 +14,26 @@
         <div class="container">
             <!-- User Section -->
             {% if id %}
-                <p> Comparing to test #{{id}}.</p>
+                <p> Defaults from test <a href="/t/{{id}}">#{{id}}</a>.</p>
             {% else %}
-                <p> If you'd like to compare text to your personal knowledge level: <a type="button" class="btn btn-success btn-sm" id="new" role="btn" href="/test">Do a Test!</a>
-                or 
-                <div class="input-group input-group-sm col-12">
-                    <input type="text" class="form-control" placeholder="Id #" id="in_id"></input>
-                    <button class="btn btn-success btn-sm" type="button" onclick="window.open('/bookcheck?id=' + $('#in_id').val(),'_self');">Go</button>
-                </div>
-                </p>
-                <!-- or enter your test link here -->
+            <p>To compare text to your personal knowledge level:</p>
+            <form class="row align-items-center mb-3">
+            	<div class="col">
+            		<a id="new" role="btn" href="/test" type="button" class="btn btn-success btn-sm">New Test!</a></div>
+            	<div class="col">or</div>
+            	<div class="input-group input-group-sm col">
+            		<input type="text" class="form-control" placeholder="Old Test Id #" id="in_id">
+            		<button class="btn btn-success btn-sm" type="button" onclick="window.open('/bookcheck?id=' + $('#in_id').val(),'_self');">Go</button>
+            	</div>
+            </form>
             {% endif %}  
 
+            
             <!-- Form -->            
     		<form>
                 <div class="mb-3 text-left">
-                    <label for="in_a" class="form-label">Kanji Knowledge Level:</label>  <label for="in_a" class="form-label" id="a_label">{{a}}</label> 
-            		<input class="form-control" type="range" id="in_a" min="1" max="{{max_a}}" step="1" value={{a}}></input>
+                    <label for="in_a" class="form-label">Kanji Knowledge Level:</label>  <label for="in_a" class="form-label" id="a_label">{{a | int}}</label> 
+            		<input class="form-control" type="range" id="in_a" min="1" max="{{max_a}}" step="1" value={{a | int}}></input>
                     <label for="in_t" class="form-label">Knowledge Precision:</label>
             		<input class="form-control" type="range" id="in_t" min="0" max="10" value={{(t * 1000) | int}}></input>
             		<label for="in_kpp" class="form-label">Challenge Level:</label>  <label for="in_kpp" class="form-label" id="kkp_label">Average (Can read all but ~0.4 kanji per page)</label>
