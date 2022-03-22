@@ -4,6 +4,12 @@ function make_table(data, type='generic', id=0, date=0, lowerbound=0){
     if (screen.width < 500) {hiddencols=[2,3,4,5,7];}
     else {hiddencols=[3,4,5];}
     
+    if ($.fn.DataTable.isDataTable('#study_table')){
+        $('#study_table').DataTable().clear().destroy();
+        $('#study_table' + " tbody").empty();
+        $('#study_table' + " thead").empty();
+    }
+    
     table = $('#study_table').DataTable( {
         data: data,
         dom: 'Brtp',
