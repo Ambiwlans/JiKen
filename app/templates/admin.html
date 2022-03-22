@@ -10,6 +10,17 @@
 		<br>
 		<p><a href="/forceupdate?p={{p}}">Force update</a> - triggers logger (log test and l2r->redis) (this will only log inactive tests!)</p>
         <p><a href="/forcemetaupdate?p={{p}}">Force meta update</a> - recalc meta values, push redis L2R data to the server (and push live if set in config)</p>
+        
+        <form>
+        <div class="row text-left">
+            <label for="q_kanji" class="col-auto col-form-label form-label">Kanji to push:</label><input class="form-control col-1" type="text" id="q_kanji"></input>
+    		<label for="shiftsize" class="col-auto col-form-label form-label">How much:</label><input class="form-control col-2" type="range" id="shiftsize" min="0" max="1000" value=100></input>
+    		<label for="incdir" class="col-auto col-form-label form-label">Dir:</label><input class="form-control col-1" type="range" id="incdir" min="-1" max="1" step="2" value=-1></input>
+    		<button type="button" class="btn btn-primary" id="shove" onclick="window.open('/shift_rank?p={{p}}&q_kanji=' + $('#q_kanji').val() + '&shiftsize=' + $('#shiftsize').val() + '&incdir=' + $('#incdir').val(),'_self');">Push!</button>
+		</div>
+		</form>
+    		
+        <br><br>
         <p><a href="/bookcheck?p={{p}}">Bookcheck</a></p>
         <!--p><a href="/forcemetaupdate?p={{p}}">Force meta update</a> - recalc meta values, push redis L2R data to the server (and push live if set in config)</p-->
 		<br>
