@@ -11,7 +11,7 @@
         <p> Enter text here and get its kanji breakdown to see what the reading level is. Great for checking out books, but works well for website and anything else textual. 
         If you have completed a test here, you can generate study lists for kanji that YOU will need to learn for the book, do drills here, or export to anki if you prefer.</p>
         
-        <div class="container">
+        <div class="explanation container">
             <!-- User Section -->
             {% if id %}
                 <p> Defaults from test <a href="/t/{{id}}">#{{id}}</a>.</p>
@@ -49,9 +49,9 @@
     		<!-- Results --->
     		<div class="text-left">
         		<h3>Results:</h3>
-        		<p> How many kanji you should know for text to be readable (at selected Challenge Level): <span id="out_a"></span></p>
-        		<p> Readability (at selected Kanji Knowledge Level): <span id="out_kpp"></span></p>
-        		<p> Fraction of text that is kanji: <span id="out_pct_k"></span></p>
+        		<p> How many kanji you need to know to read the text <i>(at selected Challenge Level)</i>: <b><span id="out_a"></span></b></p>
+        		<p> Readability <i>(at selected Kanji Knowledge Level)</i>: <b><span id="out_kpp"></span></b></p>
+        		<p> Fraction of text that is kanji: <b><span id="out_pct_k"></span></b></p>
     		</div>
     		
     		<!-- Graph -->
@@ -155,7 +155,7 @@
         
         // start count with all the non-kanji and strip them
         input = input.replace(/[^\u4e00-\u9faf|\u3400-\u4dbf]/g, "");
-        var out_pct_k = (1 - (initial_length - input.length)/initial_length).toFixed(2) + "%";
+        var out_pct_k = parseInt((1 - (initial_length - input.length)/initial_length) * 100) + "%";
         var culm_count = initial_length - input.length;
         
         // go through every kanji (in my_rank order) and strip them from input, tally them
@@ -176,11 +176,12 @@
                 out_a = tm[i][0];
             }
             
-            // given # known kanji a, how hard is txt?
+            // given # known kanji a, how many do you NOT know?
             if (i >= in_a && out_kpp == -1) {
                 out_kpp = ((1 - (culm_count / initial_length)) * char_per_page).toFixed(2);
-                out_kpp = "You can read all but ~" + out_kpp + "kanji per page";  
+                out_kpp = "You can read all but ~" + out_kpp + " kanji per page";  
             }
+            
             
             // collect words for studylist
             if (i >= in_a && counts[i] > 0) {
@@ -189,6 +190,7 @@
             
             if (culm_count == initial_length){break;}
         }            
+        if (out_kpp == -1){out_kpp = "You can read every kanji in this text";}
         
         // request additional info for studylist (disabled until DB size is large enough to warrant switch)
         // $.getJSON('/more_tm', {'my_ranks': studylist}, function (result) {make_wl(result)})

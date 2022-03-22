@@ -8,7 +8,10 @@ CUR
         
 - concat dataTables js gulp
 
+- manually push a few kanji ranks down for 'easy' ones found in bookcheck
+
 Book Check:
+    - what fraction of the text and fraction of the kanji (as they appear, and unique) can user read?
     - put a link from /history, /home
     - out_a should be based on % chance to know each kanji (currently just counting about the a)
         - need to add sigmoid calc to js
@@ -16,11 +19,8 @@ Book Check:
         + generate a combined user test + book graph to show dist of known and not-known words
         - need to make histo generic
     - Wordlist
-        - currently sends all test material ... should use kanji/my_rank first and then request other data as needed
         - use >30% know (currently using in_a straight)
-        - limit to 50 kanji
-        - switch to datatable
-            ? use generic datatable and put in a js file?
+        - export currently uses garbage data for test #, etc.
     
 +++++++++++
 MAIN
@@ -29,7 +29,9 @@ MAIN
 + collect a bit more test data: studymode? End time? (and add to history page)
 
 Book Check:
-
+    - Wordlist
+        - currently sends all test material ... should use kanji/my_rank first and then request other data as needed
+        
 DRILL Mode:
 	- start with a bunch of kanji, and drill ONLY those until complete
 	- 'drill from test results' lets you create a new drill from a /t/
