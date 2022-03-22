@@ -127,7 +127,6 @@ function make_table(data, type='generic', id=0, date=0, lowerbound=0){
 var max_filter = 100000;
 $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
-    console.log(data[0]);
         if ( data[0] <= max_filter){return true;}
         return false;
     }
