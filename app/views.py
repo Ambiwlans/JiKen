@@ -46,11 +46,9 @@ def notfound_error(e):
 #    return "404 Page not found. Contact <a href='https://github.com/Ambiwlans' target='_blank'>Ambiwlans</a> or return to the <a href='/'>home page</a>.", 404
     return render_template('home.html')
 
-@bp.route("/")
-def home():
-    return render_template('home.html')
-
+##########################################
 ### ADMIN ROUTES
+##########################################
 
 @bp.route("/adminpanel")
 def adminpanel():
@@ -82,7 +80,61 @@ def forceupdate():
     return render_template('home.html')
     
 
+#
+# Pushes rank changes to redis (will update to sql next metaupdate)
+#    
+@bp.route("/shift_rank")
+def shift_rank():
+    if request.args.get('p') != current_app.config['SECRET_KEY']:    
+        return render_template('home.html')
+    
+    q_kanji = (request.args.get('q_kanji') or 0)
+    shiftsize = int(request.args.get('bump') or 0)
+    incdir = int(request.args.get('incdir') or 0)
+    if (q_kanji == 0) or (shiftsize == 0) or (incdir == 0):
+        return render_template('home.html')
+    
+    tm = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial'))
+    ttm = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TempTestMaterial'))
+    
+    q_id = tm[tm['kanji'] == q_kanji].iloc[0].id
+    q_L2rank = ttm[ttm['id'] == q_id].iloc[0].L2R_my_rank
+    print(f"Bumping: #{q_id} {q_kanji}, q_L2rank={q_L2rank}, incdir={incdir}, shiftsize={shiftsize}")
+        
+    import pprint
+    print("ranks (before):")
+    pprint.pprint(ttm.loc[ttm['L2R_my_rank'].between(q_L2rank + ((incdir * shiftsize) - shiftsize)/2, 
+        q_L2rank + ((incdir * shiftsize) + shiftsize)/2), 'L2R_my_rank'])
+    
+    #correct for edge cases
+    if (q_L2rank + shiftsize > len(ttm)):
+        shiftsize = len(ttm) - q_L2rank - 1
+    if (q_L2rank - shiftsize < 1):
+        shiftsize = q_L2rank - 1
+    
+    # reverse increment each question down the line
+    ttm.loc[ttm['L2R_my_rank'].between(q_L2rank + ((incdir * shiftsize) - shiftsize)/2, 
+        q_L2rank + ((incdir * shiftsize) + shiftsize)/2), 'L2R_my_rank'] -= incdir
+        
+    # increment the target question
+    ttm.loc[ttm['id'] == int(q_id),'L2R_my_rank'] = int(q_L2rank + (incdir * shiftsize))
+    
+    print("ranks (after):")
+    pprint.pprint(ttm.loc[ttm['L2R_my_rank'].between(q_L2rank + ((incdir * shiftsize) - shiftsize)/2, 
+        q_L2rank + ((incdir * shiftsize) + shiftsize)/2), 'L2R_my_rank'])
+    #Update the redis
+    current_app.config['SESSION_REDIS'].set('TempTestMaterial', ttm.to_msgpack(compress='zlib'))
+    db.session.commit()
+                    
+    return("update success")
+
+##########################################
 ### GENERAL ROUTES
+##########################################
+
+@bp.route("/")
+def home():
+    return render_template('home.html')
 
 @bp.route("/test")
 def test():
