@@ -13,7 +13,7 @@ bp = Blueprint('main', __name__)
 
 #DB
 from app import db
-from .models import TestLog, QuestionLog
+from .models import TestLog, QuestionLog, TestMaterial, TempTestMaterial
 
 #Data Handling
 import pandas as pd
@@ -54,30 +54,36 @@ def notfound_error(e):
 def adminpanel():
     if request.args.get('p') != current_app.config['SECRET_KEY']:    
         return render_template('home.html')
+    
     recent_t_ids = db.session.query(TestLog.id).order_by(TestLog.id.desc()).limit(5).all() or 0
     recent_t_ids = [r for r, in recent_t_ids]
-    return render_template('admin.html', p = request.args.get('p'), \
+    
+    return render_template('admin.html', p = request.args.get('p'), msg = request.args.get('msg'),\
         hist = list(zip(pd.read_msgpack(current_app.config['SESSION_REDIS'].get('Hist')).index,pd.read_msgpack(current_app.config['SESSION_REDIS'].get('Hist')))), \
         pred = [int(current_app.config['SESSION_REDIS'].get('avg_known') or 0)],
         recent_t_ids = recent_t_ids)
     
 @bp.route("/forcemetaupdate")
 def forcemetaupdate():
+    if request.args.get('p') != current_app.config['SECRET_KEY']:    
+        return render_template('home.html')
+    
     print("Force metaupdate attempt")
-    if request.args.get('p') == current_app.config['SECRET_KEY']:
-        from app.updater import update_meta as mupd
-        mupd(current_app)
-        return("metaupdate success")
-    return render_template('home.html')
+    from app.updater import update_meta as mupd
+    mupd(current_app)
+    
+    return redirect(url_for('.adminpanel', p = request.args.get('p'), msg = "Force metaupdate Success"))
 
 @bp.route("/forceupdate")
 def forceupdate():
+    if request.args.get('p') != current_app.config['SECRET_KEY']:    
+        return render_template('home.html')
+    
     print("Force update attempt")
-    if request.args.get('p') == current_app.config['SECRET_KEY']:
-        from app.updater import update_TestQuestionLogs as upd
-        upd(current_app)
-        return("update success")
-    return render_template('home.html')
+    from app.updater import update_TestQuestionLogs as upd
+    upd(current_app)
+    
+    return redirect(url_for('.adminpanel', p = request.args.get('p'), msg = "Force Update Success"))
     
 
 #
@@ -126,7 +132,7 @@ def shift_rank():
     current_app.config['SESSION_REDIS'].set('TempTestMaterial', ttm.to_msgpack(compress='zlib'))
     db.session.commit()
                     
-    return("update success")
+    return redirect(url_for('.adminpanel', p = request.args.get('p'), msg = "Rank Shifted!"))
 
 ##########################################
 ### GENERAL ROUTES

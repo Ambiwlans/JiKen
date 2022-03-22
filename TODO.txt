@@ -10,8 +10,6 @@ CUR
 
 - manually push a few kanji ranks down for 'easy' ones found in bookcheck
 
-- admin buttons should just do a toast msg instead of loading dead pg
-
 Book Check:
     - what fraction of the text and fraction of the kanji (as they appear, and unique) can user read?
     - put a link from /history, /home
