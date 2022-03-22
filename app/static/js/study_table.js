@@ -1,6 +1,6 @@
 // setup the datatable
 
-function make_table(data, type=0, id=0, date=0, lowerbound=0){
+function make_table(data, type='generic', id=0, date=0, lowerbound=0){
     if (screen.width < 500) {hiddencols=[2,3,4,5,7];}
     else {hiddencols=[3,4,5];}
     

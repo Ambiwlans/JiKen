@@ -579,7 +579,7 @@ def bookcheck():
         
     # Get necessary kanji list / dictionary data    
     tm = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TestMaterial')).sort_values(by=['my_rank'], ascending=True)
-    tm_list = [(r.my_rank, r.kanji) for i, r in tm.iterrows()]
+    tm_list = [(r.my_rank, r.kanji, r.meaning, r.onyomi, r.kunyomi, r.grade, r.jlpt, r.kanken, r.examples) for i, r in tm.iterrows()]
     
     return render_template('bookcheck.html', tm = tm_list, 
         id = id, a = a, t = t,

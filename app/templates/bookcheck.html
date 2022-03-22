@@ -194,7 +194,8 @@
         // request additional info for studylist (disabled until DB size is large enough to warrant switch)
         // $.getJSON('/more_tm', {'my_ranks': studylist}, function (result) {make_wl(result)})
         
-        make_wl(studylist);
+        
+        make_table(studylist,'generic',{{id}},"{{(date|string)[:-3]}}");
                     
         $('#out_a').html(out_a);
         $('#out_pct_k').html(out_pct_k);
@@ -202,9 +203,11 @@
         $('#studylist').html(studylist);
     });
     
-    function make_wl(studylist){
-        
-    }
-    
     </script>
 {% endblock %}
+
+
+
+
+
+
