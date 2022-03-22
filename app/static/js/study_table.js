@@ -1,10 +1,11 @@
 // setup the datatable
 
-function make_table(data=0, type=0, id=0, date=0, lowerbound=0){
+function make_table(data, type=0, id=0, date=0, lowerbound=0){
     if (screen.width < 500) {hiddencols=[2,3,4,5,7];}
     else {hiddencols=[3,4,5];}
     
     table = $('#study_table').DataTable( {
+        data: data,
         dom: 'Brtp',
         "paging":   true,
         "lengthChange": false,
@@ -14,6 +15,24 @@ function make_table(data=0, type=0, id=0, date=0, lowerbound=0){
         "info":     false,
         "searching": true,
         "order": [[0, "asc" ]],
+        columns: [
+            {title: 'Difficulty&nbsp;#', classname: 'st_id', 
+                data: function(row){return row[0];}},
+            {title: '字', className: 'st_q', 
+                data: function(row){return '<a href="https://jisho.org/search/'+ row[1] +'%23kanji" class="review" target="_blank" rel="noopener noreferrer">' + row[1] + '</a>';}},
+            {title: 'Readings', className: 'st_yomi', 
+                data: function(row){return row[3] + '<br>' + row[4];}},
+            {title: 'Grade', className: 'st_gr', 
+                data: function(row){return row[5];}},
+            {title: 'JLPT', className: 'st_jlpt', 
+                data: function(row){return row[6];}},
+            {title: '漢検', className: 'st_kanken', 
+                data: function(row){return row[7];}},
+            {title: 'Meanings', className: 'st_def', 
+                data: function(row){return '<b>'+row[2]+'</b>';}},
+            {title: 'Examples', className: 'st_ex', 
+                data: function(row){return row[8];}}
+        ],
         columnDefs: [{
             targets: 0,
             render: $.fn.dataTable.render.number(',', '.', 0, '#')

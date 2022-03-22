@@ -116,30 +116,6 @@
             {% if wronganswers|length > 0 %}
             <h3 class="text-left">Words you missed:</h3>
             <table id="study_table" class="table">
-                <thead><tr>
-                    <th>Difficulty&nbsp;#</th>
-                    <th>字</th>
-                    <th>Readings</th>
-                    <th>Grade</th>
-                    <th>JLPT</th>
-                    <th>漢検</th>
-                    <th>Meanings</th>
-                    <th>Examples</th>
-                </tr></thead>
-                <tbody>
-                    {% for q in wronganswers %}
-                    <tr>
-                        <td class="st_numb">{{(q[0])|int}}</td>
-                        <td class="st_q"><a href="https://jisho.org/search/{{q[1]}}%23kanji" class="review" target="_blank" rel="noopener noreferrer">{{q[1]}}</a></td>
-                        <td class="st_yomi">{{q[3]}}<br>{{q[4]}}</td>
-                        <td class="st_gr">{{q[5]}}</td>
-                        <td class="st_jlpt">{{q[6]}}</td>
-                        <td class="st_kanken">{{q[7]}}</td>
-                        <td class="st_def"><b>{{q[2]}}</b></td>
-                        <td class="st_ex">{{ q[8] | safe if q[8] is not none }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
             </table>
             {% endif %}
             
@@ -186,14 +162,16 @@
     <script>
         $.ajaxSetup({async:false});
         
+        var None = null;
         var table;
+        var data = {{wronganswers | tojson | safe}};
         $(document).ready(function() {
             // enable mainchart radio buttons
             $('.achievement_type').on('click', function(event) {
                 update_vert_lines($(this)[0].id);
             });
             
-            make_table(0,0,{{id}},"{{(date|string)[:-3]}}",{{pred[2]}});
+            make_table(data,0,{{id}},"{{(date|string)[:-3]}}",{{pred[2]}});
         } );
     </script>
     
