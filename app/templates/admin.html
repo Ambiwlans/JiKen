@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 	<div class="container text-center">
-		<a href="/"><img class="title-lg" src="{{ url_for('static', filename='img/jiken.png') }}"></a>
+		<a href="/"><img class="title-sm" src="{{ url_for('static', filename='img/jiken.png') }}"></a>
 		<p class="slogan">Test Your Kanji</p>
-		<br>
 		<br>
 		<h1> Admin Panel </h1>
 		<br>
 		<br>
 		{% if msg %}
-		<container><p><mark><b>{{msg}}</b></mark></p></container-->
+		<container><p><mark><b> --  {{msg}}  -- </b></mark></p></container-->
 		<br>
 		{% endif %}
 		
