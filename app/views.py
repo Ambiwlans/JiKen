@@ -111,7 +111,7 @@ def shift_rank():
         return render_template('home.html')
     
     q_kanji = (request.args.get('q_kanji') or 0)
-    shiftsize = int(request.args.get('bump') or 0)
+    shiftsize = int(request.args.get('shiftsize') or 0)
     incdir = int(request.args.get('incdir') or 0)
     if (q_kanji == 0) or (shiftsize == 0) or (incdir == 0):
         return render_template('home.html')
