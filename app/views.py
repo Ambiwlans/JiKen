@@ -84,7 +84,23 @@ def forceupdate():
     upd(current_app)
     
     return redirect(url_for('.adminpanel', p = request.args.get('p'), msg = "Force Update Success"))
+
+@bp.route("/reset_redis")
+def reset_redis():
+    if request.args.get('p') != current_app.config['SECRET_KEY']:    
+        return render_template('home.html')
     
+    # flush all
+    current_app.config['SESSION_REDIS'].flushall()
+    
+    current_app.config['SESSION_REDIS'].set('cur_testlog_id', db.session.query(TestLog).order_by('id').all()[-1].id + 1)
+        
+    current_app.config['SESSION_REDIS'].set('TestMaterial', pd.read_sql(db.session.query(TestMaterial).statement,db.engine).to_msgpack(compress='zlib'))
+    current_app.config['SESSION_REDIS'].set('TempTestMaterial', pd.read_sql(db.session.query(TempTestMaterial).statement,db.engine).to_msgpack(compress='zlib'))
+    
+    print("Reset Redis")
+    return redirect(url_for('.adminpanel', p = request.args.get('p'), msg = "Redis Reset!"))
+
 
 #
 # Pushes rank changes to redis (will update to sql next metaupdate)
