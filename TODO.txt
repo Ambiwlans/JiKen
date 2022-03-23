@@ -8,11 +8,8 @@ CUR
         
 - concat dataTables js gulp
 
-- manually push a few kanji ranks down for 'easy' ones found in bookcheck
-
 Book Check:
-    - what fraction of the text and fraction of the kanji (as they appear, and unique) can user read?
-    - put a link from /history, /home
+    + put a link from /history, /home
     - out_a should be based on % chance to know each kanji (currently just counting about the a)
         - need to add sigmoid calc to js
     + generate a histogram for kanji distribution (if no test on file)
@@ -21,6 +18,9 @@ Book Check:
     - Wordlist
         - use >30% know (currently using in_a straight)
         - export currently uses garbage data for test #, etc.
+        - remove study list button
+        ? show all kanji in text button
+        - add a counts column (will this break formatting?)
     
 +++++++++++
 MAIN

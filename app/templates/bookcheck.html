@@ -32,11 +32,11 @@
             <!-- Form -->            
     		<form>
                 <div class="mb-3 text-left">
-                    <label for="in_a" class="form-label">Kanji Knowledge Level:</label>  <label for="in_a" class="form-label" id="a_label">{{a | int}}</label> 
+                    <label for="in_a" class="form-label">Kanji Knowledge Level:</label>  <b><label for="in_a" class="form-label" id="a_label">{{a | int}}</label> </b>
             		<input class="form-control" type="range" id="in_a" min="1" max="{{max_a}}" step="1" value={{a | int}}></input>
                     <label for="in_t" class="form-label">Knowledge Precision:</label>
             		<input class="form-control" type="range" id="in_t" min="0" max="10" value={{(t * 1000) | int}}></input>
-            		<label for="in_kpp" class="form-label">Challenge Level:</label>  <label for="in_kpp" class="form-label" id="kkp_label">Average (Can read all but ~0.4 kanji per page)</label>
+            		<label for="in_kpp" class="form-label">Challenge Level:</label>  <b><label for="in_kpp" class="form-label" id="kkp_label">Average (Can read all but ~0.4 kanji per page)</label></b>
             		<input class="form-control" type="range" id="in_kpp" min="-4" max="4" step="1" value=0></input>
         		</div>
                 <div class="mb-3 text-left">
@@ -51,7 +51,8 @@
         		<h3>Results:</h3>
         		<p> How many kanji you need to know to read the text <i>(at selected Challenge Level)</i>: <b><span id="out_a"></span></b></p>
         		<p> Readability <i>(at selected Kanji Knowledge Level)</i>: <b><span id="out_kpp"></span></b></p>
-        		<p> Fraction of text that is kanji: <b><span id="out_pct_k"></span></b></p>
+        		<p> Fraction of text that is kanji (novels are typically 15~30%): <b><span id="out_pct_k"></span></b></p>
+        		<p> Kanji count: <b><span id="out_uniq_kcount"></span></b></p>
     		</div>
     		
     		<!-- Graph -->
@@ -152,6 +153,8 @@
         var studylist = [];
         
         var counts = Array(tm.length).fill(0);
+        var uniquecount = 0;
+        var knownuniquecount = 0;
         
         // start count with all the non-kanji and strip them
         input = input.replace(/[^\u4e00-\u9faf|\u3400-\u4dbf]/g, "");
@@ -171,6 +174,14 @@
             
             culm_count += counts[i];
             
+            // count unique kanji
+            if (counts[i] > 0){ 
+                uniquecount++;
+                if (i < in_a){
+                    knownuniquecount++;
+                }
+            }
+            
             // given in_kpp (->should_know_cnt), how many kanji should you know
             if (culm_count >= should_know_cnt && out_a == -1) {
                 out_a = tm[i][0];
@@ -179,7 +190,7 @@
             // given # known kanji a, how many do you NOT know?
             if (i >= in_a && out_kpp == -1) {
                 out_kpp = ((1 - (culm_count / initial_length)) * char_per_page).toFixed(2);
-                out_kpp = "You can read all but ~" + out_kpp + " kanji per page";  
+                out_kpp = "You can read all but ~" + out_kpp + " kanji per page. (" + (100 * out_kpp / char_per_page).toFixed(2) + "% of characters)";  
             }
             
             
@@ -198,9 +209,11 @@
         
         make_table(studylist,'generic',{{id}},"{{(date|string)[:-3]}}");
                     
+                    
         $('#out_a').html(out_a);
         $('#out_pct_k').html(out_pct_k);
         $('#out_kpp').html(out_kpp);
+        $('#out_uniq_kcount').html("You can read " + knownuniquecount + " of the " + uniquecount + " unique kanji that appear in this text.");
         $('#studylist').html(studylist);
     });
     
