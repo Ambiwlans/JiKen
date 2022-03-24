@@ -68,7 +68,21 @@ return new Chart(mainctx, {
                 stacked: true
             }],
             yAxes: [{
-                stacked: true
+                stacked: true,
+                type: 'logarithmic',
+                ticks: {
+                     min: 1,
+                     max: 100000,
+                     callback: function (value, index, values) {
+                         if (value === 100000) return "100K";
+                         if (value === 10000) return "10K";
+                         if (value === 1000) return "1K";
+                         if (value === 100) return "100";
+                         if (value === 10) return "10";
+                         if (value === 1) return "1";
+                         return null;
+                     }
+                }
             }]
         },
         legend: {
