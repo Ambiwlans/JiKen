@@ -85,6 +85,8 @@ function make_table(data, type='generic', id=0, date=0, lowerbound=0){
         }]
     } );
     
+    if (type = 'generic'){ table.button(0).remove();}
+    
     // Export button group
     new $.fn.dataTable.Buttons( table, {
         buttons: [

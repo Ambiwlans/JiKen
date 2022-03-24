@@ -9,14 +9,13 @@ CUR
 - concat dataTables js gulp
 
 Book Check:
-    - test big book on phone for speed
+    - bug - some rare kanji show as known on histo?
     + put a link from /history, /home
     - out_a should be based on % chance to know each kanji (currently just counting about the a)
         - need to add sigmoid calc to js
     - Wordlist
         - use >30% know (currently using in_a straight)
         - export currently uses garbage data for test #, etc.
-        - remove study list button
         ? show all kanji in text button
         - add a counts column (will this break formatting?)
             - could always have an empty hidden column and show it in bc only
