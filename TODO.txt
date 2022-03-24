@@ -9,28 +9,30 @@ CUR
 - concat dataTables js gulp
 
 Book Check:
+    - test big book on phone for speed
     + put a link from /history, /home
     - out_a should be based on % chance to know each kanji (currently just counting about the a)
         - need to add sigmoid calc to js
-    + generate a histogram for kanji distribution (if no test on file)
-        + generate a combined user test + book graph to show dist of known and not-known words
-        - need to make histo generic
     - Wordlist
         - use >30% know (currently using in_a straight)
         - export currently uses garbage data for test #, etc.
         - remove study list button
         ? show all kanji in text button
         - add a counts column (will this break formatting?)
-    
+            - could always have an empty hidden column and show it in bc only
+        ? find outlier words (significantly more common in text than frequency rate)
+        
 +++++++++++
 MAIN
 +++++++++++
 
+- disable tooltips for preediction line
 + collect a bit more test data: studymode? End time? (and add to history page)
 
 Book Check:
     - Wordlist
-        - currently sends all test material ... should use kanji/my_rank first and then request other data as needed
+        ? currently sends all test material (2mb?)... should use kanji/my_rank first and then request other data as needed (meh)
+            ? could send in a script so it only loads once ... but then my_ranks will be wrong
         
 DRILL Mode:
 	- start with a bunch of kanji, and drill ONLY those until complete

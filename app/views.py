@@ -33,7 +33,7 @@ from scipy.integrate import quad
 import datetime
 
 ##########################################
-### ROUTES
+### ERROR ROUTES
 ##########################################
 
 @bp.errorhandler(500)
@@ -661,7 +661,7 @@ def bookcheck():
     
     return render_template('bookcheck.html', tm = tm_list, 
         id = id, a = a, t = t,
-        max_a = int(current_app.config['MAX_X'] or 6000))
+        hist_bins = current_app.config['HIST_BINS'])
     
 # allows initial wordlists to only have rank and kanji rather than sending full test_mat    
 # https://stackoverflow.com/questions/68266400/sending-plotly-charts-in-a-dictionary-via-jquery-getjson-in-a-flask-app

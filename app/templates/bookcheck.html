@@ -33,7 +33,7 @@
     		<form>
                 <div class="mb-3 text-left">
                     <label for="in_a" class="form-label">Kanji Knowledge Level:</label>  <b><label for="in_a" class="form-label" id="a_label">{{a | int}}</label> </b>
-            		<input class="form-control" type="range" id="in_a" min="1" max="{{max_a}}" step="1" value={{a | int}}></input>
+            		<input class="form-control" type="range" id="in_a" min="1" max="{{config['MAX_X']}}" step="1" value={{a | int}}></input>
                     <label for="in_t" class="form-label">Knowledge Precision:</label>
             		<input class="form-control" type="range" id="in_t" min="0" max="10" value={{(t * 1000) | int}}></input>
             		<label for="in_kpp" class="form-label">Challenge Level:</label>  <b><label for="in_kpp" class="form-label" id="kkp_label">Average (Can read all but ~0.4 kanji per page)</label></b>
@@ -46,6 +46,11 @@
         		<button type="button" class="btn btn-primary" id="analyze">Analyze!</button>
     		</form>
     		
+    		<!-- Graph -->
+        	<div class="chart-container">
+                <canvas id="predChart"></canvas>
+            </div>
+        
     		<!-- Results --->
     		<div class="text-left">
         		<h3>Results:</h3>
@@ -54,8 +59,6 @@
         		<p> Fraction of text that is kanji (novels are typically 15~30%): <b><span id="out_pct_k"></span></b></p>
         		<p> Kanji count: <b><span id="out_uniq_kcount"></span></b></p>
     		</div>
-    		
-    		<!-- Graph -->
     		
     		<!-- Study list -->
     		<h3 class="text-left">Study list:</h3>
@@ -77,6 +80,8 @@
 
 {% block scripts %}
     {{super()}}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    {%- include 'bcchart.js' -%}
     
     <!-- Study Table -->
 	<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
@@ -131,13 +136,21 @@
     //
     // Analyze
     //
-    var tm = {{ tm|tojson|safe }};  //(rank, kanji)
+    const tm = {{ tm|tojson|safe }};  //(rank, kanji)
     const char_per_page = 300;
+    
+    var mainctx = document.getElementById('predChart').getContext('2d');    
+    var mainChart
+    
+    var in_a, in_t, max_x;
+    var counts = [];
+    
     $('#analyze').on('click', function(event) {
     
         // Get and format vars
-        var in_a = parseInt($('#in_a').val());
-        var in_t = $('#in_t').val()/1000;
+        in_a = parseInt($('#in_a').val());
+        in_t = $('#in_t').val()/1000;
+        max_x = 0;
         var in_kpp = (2.5 ** (parseInt($('#in_kpp').val()) - 1)).toFixed(2);
         
         var input = $('#in_txt').val();
@@ -152,7 +165,7 @@
         
         var studylist = [];
         
-        var counts = Array(tm.length).fill(0);
+        counts = Array(tm.length).fill(0);
         var uniquecount = 0;
         var knownuniquecount = 0;
         
@@ -199,7 +212,10 @@
                 studylist.push(tm[i]);
             }
             
-            if (culm_count == initial_length){break;}
+            if (culm_count == initial_length){
+                max_x = i;
+                break;
+            }
         }            
         if (out_kpp == -1){out_kpp = "You can read every kanji in this text";}
         
@@ -208,7 +224,10 @@
         
         
         make_table(studylist,'generic',{{id}},"{{(date|string)[:-3]}}");
-                    
+        
+        // Make chart
+        makeHistoData(max_x, {{hist_bins}});
+        mainChart = makeChart();        
                     
         $('#out_a').html(out_a);
         $('#out_pct_k').html(out_pct_k);
