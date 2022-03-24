@@ -14,6 +14,10 @@ var binlabels = [];
 function makeHistoData(max_x = 7000, bin_cnt = 100) {
     var binsize = parseInt(Math.ceil((max_x / bin_cnt)/100)*100);
     var cur_bin = -1;
+    pred = [];
+    right_cnt_binned = [];
+    wrong_cnt_binned = [];
+    binlabels = [];
     
     // calc for every kanji (could be more cost efficient)
     for (var x = 0; x <= max_x + binsize; x++) {
