@@ -140,7 +140,7 @@
     const char_per_page = 300;
     
     var mainctx = document.getElementById('predChart').getContext('2d');    
-    var mainChart
+    var mainChart;
     
     var in_a, in_t, max_x;
     var counts = [];
@@ -227,6 +227,10 @@
         
         // Make chart
         makeHistoData(max_x, {{hist_bins}});
+        if (mainChart){
+            mainChart.destroy();
+            mainctx = document.getElementById('predChart').getContext('2d');
+        }
         mainChart = makeChart();        
                     
         $('#out_a').html(out_a);
