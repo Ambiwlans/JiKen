@@ -8,27 +8,34 @@
         <h1>Book Check</h1>
         <br><br>
         
-        <p> Enter text here and get its kanji breakdown to see what the reading level is. Great for checking out books, but works well for website and anything else textual. 
+        <!-- Intro -->
+        <p class="lead"> Enter text and get its kanji breakdown to see what the reading level is. Great for checking out books, but works well for websites and anything else textual. 
         If you have completed a test here, you can generate study lists for kanji that YOU will need to learn for the book, do drills here, or export to anki if you prefer.</p>
+        <ul class="explanation">
+          <li> Play with the dials manually to get a better idea of what you should be studying.</li>
+          <li> Longer texts work better than short ones.</li>
+          <li> This isn't <i>exactly</i> reading difficulty. There are plenty of hard words that use common kanji.</li>
+          <li> This works poorly in determining the difficulty of jargon heavy medical or ancient texts, but the wordlist is still useful.</li>
+        </ul>
         
-        <div class="explanation container">
-            <!-- User Section -->
-            {% if id %}
-                <p> Defaults from test <a href="/t/{{id}}">#{{id}}</a>.</p>
-            {% else %}
-            <p>To compare text to your personal knowledge level:</p>
-            <form class="row align-items-center mb-3">
-            	<div class="col">
-            		<a id="new" role="btn" href="/test" type="button" class="btn btn-success btn-sm">New Test!</a></div>
-            	<div class="col">or</div>
-            	<div class="input-group input-group-sm col">
-            		<input type="text" class="form-control" placeholder="Old Test Id #" id="in_id">
-            		<button class="btn btn-success btn-sm" type="button" onclick="window.open('/bookcheck?id=' + $('#in_id').val(),'_self');">Go</button>
-            	</div>
-            </form>
-            {% endif %}  
-
+        <!-- User Section -->
+        {% if id %}
+            <p> Defaults from test <a href="/t/{{id}}">#{{id}}</a>.</p>
+        {% else %}
+        <p>To compare text to your personal knowledge level:</p>
+        <form class="row align-items-center mb-3">
+        	<div class="col">
+        		<a id="new" role="btn" href="/test" type="button" class="btn btn-success btn-sm">New Test!</a></div>
+        	<div class="col">or</div>
+        	<div class="input-group input-group-sm col">
+        		<input type="text" class="form-control" placeholder="Old Test Id #" id="in_id">
+        		<button class="btn btn-success btn-sm" type="button" onclick="window.open('/bookcheck?id=' + $('#in_id').val(),'_self');">Go</button>
+        	</div>
+        </form>
+        {% endif %}  
             
+        <div class="explanation container">
+
             <!-- Form -->            
     		<form>
                 <div class="mb-3 text-left">
@@ -45,7 +52,8 @@
         		</div>
         		<button type="button" class="btn btn-primary" id="analyze">Analyze!</button>
     		</form>
-    		
+    	</div>
+    	<div id="results" class="explanation container" style="display: none">
     		<!-- Graph -->
         	<div class="chart-container">
                 <canvas id="predChart"></canvas>
@@ -74,6 +82,7 @@
             </div>
             </div>
             {% endif %}
+        </div>
 	</div>
 
 {% endblock content %}
@@ -238,6 +247,7 @@
         $('#out_kpp').html(out_kpp);
         $('#out_uniq_kcount').html("You can read " + knownuniquecount + " of the " + uniquecount + " unique kanji that appear in this text.");
         $('#studylist').html(studylist);
+        $('#results').show();
     });
     
     </script>
