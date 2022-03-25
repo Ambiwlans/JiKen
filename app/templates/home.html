@@ -12,7 +12,7 @@
 		<br>
 		
         <!-- Notice --> 
-        <container><p><mark><b>NEW:</b> <i>Vocab</i> examples now appear on cards!</mark></p></container-->
+        <container><p><mark><b>NEW:</b> <i><a href="/bookcheck">Book Check</a></i> lets you analyze books/text and builds a custom study list.</mark></p></container-->
         <container><p><mark><b>NEW:</b> <i>Anki!</i> You can now download an anki deck or pdf study list from your results page.</mark></p></container-->
         <container><p><mark><b>ENTest:</b> <a href="https://enken.herokuapp.com/">Test your English vocabulary here!</a>!</mark></p></container-->
         
@@ -30,21 +30,28 @@
         	</div></div>
         </div></div>
         </container>
-        <br>
 
-		<!-- Explanation --> 
+		<br><hr>
+
+		<!-- Button Block --> 
+		<a id="start_test" class="btn btn-success btn-lg" role="btn" href="/test?s=0">START TEST</a>
+		<p>Answer 10 questions and find out how many kanji you know. (Answer more for higher accuracy)</p>	
 		<div class="explanation">
     		<p>Answer <b>10</b> to start. Keep going for a more accurate estimate!</p>
         	<p>Controls: <b>[←]</b> Know, <b>[→]</b> Don't Know, <b>[↓]</b>/<b>[TAP]</b>&nbsp;Flip&nbsp;card</p>
-        	<p>Study Mode reviews words you've missed as you go.</p>
-		</div>	
+		</div>
+    	
+    	<br>
 		
-		<!-- Button Block --> 
-		<p>
-    		<a id="start_test" class="btn btn-success btn-lg" role="btn" href="/test?s=0">START TEST</a>
-    		<br><br>
-    		<a id="start_study" class="btn btn-warning btn-lg" role="btn" href="/test?s=1">STUDY MODE</a>
-		</p>
+		<a id="start_study" class="btn btn-warning btn-lg" role="btn" href="/test?s=1">STUDY MODE</a>
+		<p>Starts with a basic 10 question test and then it drills you on kanji you should be studying.</p>	
+    	
+		<hr>
+		
+		<a role="btn" href="/bookcheck" class="btn btn-info btn-lg" id="start_test">BOOK CHECK</a>
+        <p>Input text, a website, or a book, and get a kanji analysis, telling you the reading level of the book, building personalized study lists and more.</p>
+    	
+		<hr><br>
 		
 		<!-- Outro -->	
 		<div class="outro">
