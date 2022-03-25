@@ -179,7 +179,7 @@
         
         // start count with all the non-kanji and strip them
         input = input.replace(/[^\u4e00-\u9faf|\u3400-\u4dbf]/g, "");
-        var out_pct_k = parseInt((1 - (initial_length - input.length)/initial_length) * 100) + "%";
+        var out_pct_k = Math.floor((1 - (initial_length - input.length)/initial_length) * 100) + "%";
         var culm_count = initial_length - input.length;
         
         // go through every kanji (in my_rank order) and strip them from input, tally them

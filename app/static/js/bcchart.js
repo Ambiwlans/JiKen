@@ -9,7 +9,7 @@ var binlabels = [];
 
 
 function makeHistoData(max_x = 7000, bin_cnt = 100) {
-    var binsize = parseInt(Math.ceil((max_x / bin_cnt)/100)*100);
+    var binsize = Math.floor(Math.ceil((max_x / bin_cnt)/100)*100);
     var cur_bin = -1;
     pred = [];
     right_cnt_binned = [];
@@ -23,8 +23,8 @@ function makeHistoData(max_x = 7000, bin_cnt = 100) {
         // push new bins as needed
         if (!(x % binsize)){
             if (cur_bin >= 0){
-                right_cnt_binned[cur_bin] = parseInt(right_cnt_binned[cur_bin]);
-                wrong_cnt_binned[cur_bin] = parseInt(wrong_cnt_binned[cur_bin]);
+                right_cnt_binned[cur_bin] = Math.round(right_cnt_binned[cur_bin]);
+                wrong_cnt_binned[cur_bin] = Math.round(wrong_cnt_binned[cur_bin]);
             }
             cur_bin++;
             binlabels[cur_bin] = x;

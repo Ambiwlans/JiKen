@@ -9,7 +9,6 @@ CUR
 - concat dataTables js gulp
 
 Book Check:
-    + bug - some rare kanji show as known on histo? ! Even get them showing up in ez kanji when raising the knowledge very high
     Wordlist
         - use >30% know (currently using in_a straight)
         - export currently uses garbage data for test #, etc.
@@ -27,6 +26,8 @@ MAIN
 Book Check:
     - out_a should be based on % chance to know each kanji (currently just counting about the a)
     Chart
+        - toggle logarithmic mode (or turn on only when there are over 100 in a group)
+        + only show log level ticks as needed.
         ? better max cutoff?
     Wordlist
         ? show all kanji in text button
