@@ -9,7 +9,7 @@ CUR
 - concat dataTables js gulp
 
 Book Check:
-    - bug - some rare kanji show as known on histo?
+    + bug - some rare kanji show as known on histo? ! Even get them showing up in ez kanji when raising the knowledge very high
     Wordlist
         - use >30% know (currently using in_a straight)
         - export currently uses garbage data for test #, etc.
