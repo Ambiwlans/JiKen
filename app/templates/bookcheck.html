@@ -67,7 +67,14 @@
                 <input type="radio" autocomplete="off" > Logarithmic
               </label>
             </div>
-            
+            <div class="btn-group btn-group-sm btn-group-toggle chart-toggles2" data-toggle="buttons">
+              <label class="btn btn-secondary chart_toggle2 active" id="count">
+                <input type="radio" autocomplete="off" checked> Kanji Count
+              </label>
+              <label class="btn btn-secondary chart_toggle2" id="unique">
+                <input type="radio" autocomplete="off" > Unique Kanji
+              </label>
+            </div>
     		<!-- Stats --->
     		<div class="text-left">
         		<h3>Results:</h3>
@@ -176,7 +183,45 @@
         mainctx = document.getElementById('predChart').getContext('2d');
         mainChart = makeChart();
     });
-            
+    
+    $('.chart_toggle2').on('click', function(event) {
+        if ($(this)[0].id == 'unique'){
+            data = {
+                labels: binlabels,
+                datasets: [{
+                    type: 'bar',
+                    label: 'Unknown',
+                    backgroundColor: '#B40020',
+                    data: wrong_uni_binned
+                },{
+                    type: 'bar',
+                    label: 'Known',
+                    backgroundColor: '#267f00',
+                    data: right_uni_binned
+                }]
+            };
+        }
+        else {
+            data = {
+                labels: binlabels,
+                datasets: [{
+                    type: 'bar',
+                    label: 'Unknown',
+                    backgroundColor: '#B40020',
+                    data: wrong_cnt_binned
+                },{
+                    type: 'bar',
+                    label: 'Known',
+                    backgroundColor: '#267f00',
+                    data: right_cnt_binned
+                }]
+            };
+        }
+        mainChart.destroy();
+        mainctx = document.getElementById('predChart').getContext('2d');
+        mainChart = makeChart();
+    });
+    
     //
     // Analyze
     //
