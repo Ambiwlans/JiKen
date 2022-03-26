@@ -44,6 +44,10 @@ function makeHistoData(max_x = 7000, bin_cnt = 100) {
         right_uni_binned[cur_bin] += y;
         wrong_uni_binned[cur_bin] += (1 - y);
     }
+    right_cnt_binned[cur_bin] = Math.round(right_cnt_binned[cur_bin]);
+    wrong_cnt_binned[cur_bin] = Math.round(wrong_cnt_binned[cur_bin]);
+    right_uni_binned[cur_bin] = Math.round(right_uni_binned[cur_bin]);
+    wrong_uni_binned[cur_bin] = Math.round(wrong_uni_binned[cur_bin]);
     
     data = {
         labels: binlabels,
