@@ -13,14 +13,15 @@ function make_table(data, type='generic', id=0, date=0, lowerbound=0){
     table = $('#study_table').DataTable( {
         data: data,
         dom: 'Brtp',
-        "paging":   true,
+        "paging": true,
         "lengthChange": false,
         "pageLength": 10,
         "ordering": true,
         "buttons": true,
-        "info":     false,
+        "info": false,
         "searching": true,
         "order": [[0, "asc" ]],
+        "autoWidth": false,
         columns: [
             {title: 'Difficulty&nbsp;#', classname: 'st_id', 
                 data: function(row){return row[0];}},

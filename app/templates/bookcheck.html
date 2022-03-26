@@ -52,6 +52,8 @@
         		<button type="button" class="btn btn-primary" id="analyze">Analyze!</button>
     		</form>
     	</div>
+    	
+    	<!-- Results --->
     	<div id="results" class="explanation container" style="display: none">
     		<!-- Graph -->
         	<div class="chart-container">
@@ -66,7 +68,7 @@
               </label>
             </div>
             
-    		<!-- Results --->
+    		<!-- Stats --->
     		<div class="text-left">
         		<h3>Results:</h3>
         		<p> How many kanji you need to know to read the text <i>(at selected Challenge Level)</i>: <b><span id="out_a"></span></b></p>
@@ -267,6 +269,7 @@
         
         
         make_table(studylist,'generic',{{id}},"{{(date|string)[:-3]}}");
+        table.columns.adjust();
         
         // Make chart
         makeHistoData(max_x, {{hist_bins}});
