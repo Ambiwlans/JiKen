@@ -57,7 +57,15 @@
         	<div class="chart-container">
                 <canvas id="predChart"></canvas>
             </div>
-        
+            <div class="btn-group btn-group-sm btn-group-toggle chart-toggles" data-toggle="buttons">
+              <label class="btn btn-secondary chart_toggle active" id="linear">
+                <input type="radio" autocomplete="off" checked> Linear
+              </label>
+              <label class="btn btn-secondary chart_toggle" id="logarithmic">
+                <input type="radio" autocomplete="off" > Logarithmic
+              </label>
+            </div>
+            
     		<!-- Results --->
     		<div class="text-left">
         		<h3>Results:</h3>
@@ -140,7 +148,33 @@
         msg = msg + " (Can read all but ~" + in_kpp + " kanji per page)";
         $("#kkp_label").html(msg)
     })
-    
+    $('.chart_toggle').on('click', function(event) {
+        if ($(this)[0].id == 'logarithmic'){
+            scaletype = [{                
+                type: 'logarithmic',
+                ticks: {
+                     min: 0,
+                     max: 100000,
+                     callback: function (value, index, values) {
+                         if (value === 100000) return "100K";
+                         if (value === 10000) return "10K";
+                         if (value === 1000) return "1K";
+                         if (value === 100) return "100";
+                         if (value === 10) return "10";
+                         if (value === 1) return "1";
+                         if (value === 0) return "0";
+                         return null;
+                     }
+                }}];
+        }
+        else {
+            scaletype = [{type: 'linear'}];
+        }
+        mainChart.destroy();
+        mainctx = document.getElementById('predChart').getContext('2d');
+        mainChart = makeChart();
+    });
+            
     //
     // Analyze
     //
@@ -149,6 +183,7 @@
     
     var mainctx = document.getElementById('predChart').getContext('2d');    
     var mainChart;
+    var scaletype = [{type: 'linear'}];
     
     var in_a, in_t, max_x;
     var counts = [];
