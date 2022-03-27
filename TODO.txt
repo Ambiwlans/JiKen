@@ -8,17 +8,11 @@ CUR
         
 - concat dataTables js gulp
 
-Book Check:
-    Chart
-        + radio button select between 6 graphs
-            - raw count OR know OR don't know
-            - raw count or unique kanji
-        + give ticks as needed
-    Wordlist
-        - use >30% know (currently using in_a straight)
-        - export currently uses garbage data for test #, etc.
-        - add a counts column (will this break formatting?)
-            - could always have an empty hidden column and show it in bc only
+Wordlist
+    - use >30% know (currently using in_a straight)
+    - export currently uses garbage data for test #, etc.
+    - add a counts column (will this break formatting?)
+        - could always have an empty hidden column and show it in bc only
         
         
 +++++++++++
@@ -31,6 +25,7 @@ MAIN
 Book Check:
     - out_a should be based on % chance to know each kanji (currently just counting about the a)
     Chart
+        - ticks as needed
         ? scale height for each tick needed beyond 7 (0~32) by + 20px
         ? better max cutoff?
     Wordlist

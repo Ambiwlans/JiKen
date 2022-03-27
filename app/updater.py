@@ -116,7 +116,10 @@ def update_TestQuestionLogs(app):
                 ### L2R Adjustments (To the redis)
                 ###
                 
-#                print("L2R")                    
+                # Don't L2R wicked outliers
+                if addTest.a < 50 or addTest.a > 7000 or addTest.number_of_questions < 20:
+                    continue
+                
                 temptestmat = pd.read_msgpack(current_app.config['SESSION_REDIS'].get('TempTestMaterial'))
                 max_rank = len(temptestmat)
                 
