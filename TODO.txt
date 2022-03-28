@@ -3,18 +3,8 @@ CUR
 ########### 
 
 + find more users!
-    + New reddit thread
     + msg some teaching sites/twitters to see if they're interested, hit up dms
-        
-- concat dataTables js gulp
-
-Wordlist
-    - use >30% know (currently using in_a straight)
-    - export currently uses garbage data for test #, etc.
-    - add a counts column (will this break formatting?)
-        - could always have an empty hidden column and show it in bc only
-        
-        
+   
 +++++++++++
 MAIN
 +++++++++++
@@ -23,13 +13,19 @@ MAIN
 + collect a bit more test data: studymode? End time? (and add to history page)
 
 Book Check:
+    + Remove the challenge selection and instead calc all 5 and display them in the results
     - out_a should be based on % chance to know each kanji (currently just counting about the a)
     Chart
         - ticks as needed
         ? scale height for each tick needed beyond 7 (0~32) by + 20px
         ? better max cutoff?
+        - bug - radio buttons should reset on 'analyze'
     Wordlist
-        ? show all kanji in text button
+    - use >30% know (currently using in_a straight)
+    - export currently uses garbage data for test #, etc.
+    - add a counts column (will this break formatting?)
+        - could always have an empty hidden column and show it in bc only    
+    ? show all kanji in text button
         ? find outlier words (significantly more common in text than frequency rate)
         ? currently sends all test material (2mb?)... should use kanji/my_rank first and then request other data as needed (meh)
             ? could send in a script so it only loads once ... but then my_ranks will be wrong
@@ -47,6 +43,7 @@ History:
     + book reccs
         - have every book recc come with a histogram and user comparison
         - select a few books for the milestone lines
+        - links to jpdb.io. Don't be a salty bitch.
     - switch to same anki id, and add some data to allow a building collection
     ? links to other tests with same IP/device. Use a cookie?
     - rename vertlines milestone lines
@@ -68,7 +65,9 @@ Code Refactoring:
     ? shorten queries 'loads(current_app.config['SESSION_REDIS'].get('TestMaterial'),db.metadata,db.session)' -> lred('TestMaterial')? (more readable)
 
 Logic:
-    - revisit regularization again...
+    - revisit regularization again... use the binning technique and and bounds from ENT
+        - bounds should also involve slope ....
+            - maybe ML it out (need to track a AND t after each question)
         
 DB:
     ? track user devices in testlog (better return user guessing)
@@ -81,6 +80,7 @@ DB:
         c save binary for each character ... no histograms, but can generate word lists still
         
 PR:
+    + new reddit thread
     - basic seo
     ? medium blog post about it ... or just stuff into the github. Or add an about section?
     
