@@ -41,7 +41,7 @@ MarkupSafe==1.1.1
 mysqlclient==1.4.2.post1
 nbconvert==6.5.1
 nbformat==4.4.0
-numpy==1.16.2
+numpy==1.22.0
 numpydoc==0.9.1
 packaging==19.1
 pandas==0.25.3
