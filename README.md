@@ -1,13 +1,13 @@
 # JiKen
 
-[JiKen](https://jiken.herokuapp.com/) is a simple kanji quiz that uses statistics and machine learning to accurately and quickly predict a user's knowledge level. I always found it tedious to get a good read of my current kanji level while studying using existing tests which either take forever or are terribly innaccurate so I made this.
+[JiKen](https://jiken.fly.dev/) is a simple kanji quiz that uses statistics and machine learning to accurately and quickly predict a user's knowledge level. I always found it tedious to get a good read of my current kanji level while studying using existing tests which either take forever or are terribly innaccurate so I made this.
 
 The name JiKen is a bit of a play on words/kanji. It could be read as 字検 (letter test, similar to 漢検 the infamous official kanji test) or 事件 (incident). I left it in romaji for the ambiguity. KTest was just a working title, and kind of lame.
 
 ## Host/Location
 
-# https://jiken.herokuapp.com/
-* Using Heroku as a webhost, ClearDB for MySQL, HerokuRedis for sessions.
+# https://jiken.fly.dev/
+* Using Fly as a webhost, ClearDB for MySQL, HerokuRedis for sessions.
 
 ## Math
 
