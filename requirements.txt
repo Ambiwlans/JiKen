@@ -65,7 +65,7 @@ python-dateutil==2.8.0
 python-editor==1.0.4
 pytz==2019.2
 pyzmq==18.1.0
-redis==3.3.11
+redis==4.5.3
 requests
 rope==0.14.0
 rsa==4.7
