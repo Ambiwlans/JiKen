@@ -1,1 +1,2 @@
-web: gunicorn jiken:app --preload
+# Modify this Procfile to fit your needs
+web: gunicorn jiken:app

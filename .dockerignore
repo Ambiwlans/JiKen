@@ -1,0 +1,7 @@
+# Ignore by default
+*
+
+# Exceptions:
+!requirements.txt
+!*.py
+!app

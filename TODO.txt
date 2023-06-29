@@ -114,6 +114,7 @@ CONTINUOUS:
 LATER/Low Prio
 +++++++++++
 
+- fail gracefully when hitting the 3000 call limit on sql host ... or switch to fly/postgre
 - eventually set it to autopush l2r (after some big growth and nothing breaks)
 - ask youglish about ad hosts? (after i have a userbase big enough)
 + convert to android app
