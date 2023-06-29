@@ -2,9 +2,6 @@
 CUR
 ########### 
 
-+ fix urls to new site (and generic)
-	- mention in the front page descriptor
-	
 + 'api' ... have a view that spits out the datafile for current kanji ... json or readable table
 	- add references to this
 
