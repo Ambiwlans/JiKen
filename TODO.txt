@@ -2,10 +2,6 @@
 CUR
 ########### 
 
-+ move SQL DB again
-
-+ ensure compatibility with switch to non-static ip on fly
-
 + 'api' ... have a view that spits out the datafile for current kanji ... json or readable table
 	- add references to this
 

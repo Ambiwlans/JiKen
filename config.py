@@ -21,7 +21,7 @@ class DevelopmentConfig:
     SECRET_KEY = os.environ.get('DB_SECRET_KEY') or "Ionceateawholeham"
     
     # SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = os.environ.get('CLEARDB_DATABASE_URL').replace('?reconnect=true','?charset=utf8mb4')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DB_URL').replace('?reconnect=true','?charset=utf8mb4')
     SQLALCHEMY_ENGINE_OPTIONS = {
             'pool_recycle':60
             }
@@ -69,7 +69,7 @@ class DeploymentConfig:
     SECRET_KEY = os.environ.get('DB_SECRET_KEY')
     
     # SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = os.environ.get('CLEARDB_DATABASE_URL').replace('?reconnect=true','?charset=utf8mb4')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DB_URL').replace('?reconnect=true','?charset=utf8mb4')
     SQLALCHEMY_ENGINE_OPTIONS = {
             'pool_recycle':60
             }

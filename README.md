@@ -7,7 +7,7 @@ The name JiKen is a bit of a play on words/kanji. It could be read as 字検 (le
 ## Host/Location
 
 # https://jiken.fly.dev/
-* Using Fly as a webhost, ClearDB for MySQL, Redislabs for sessions.
+* Using Fly as a webhost, PlanetScale for MySQL, Redislabs for sessions.
 
 ## Math
 
